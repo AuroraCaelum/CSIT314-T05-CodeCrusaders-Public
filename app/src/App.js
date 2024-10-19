@@ -23,3 +23,17 @@
 // }
 
 // export default App;
+const express = require('express');
+const app = express();
+const userAccountController = require('./controller/UserAccountController');
+
+app.use(express.json());
+
+// User authentication routes
+app.post('/register', userAccountController.register);
+app.post('/login', userAccountController.login);
+app.post('/logout', userAccountController.logout);
+
+app.listen(5000, () => {
+    console.log('Server is running on port 5000');
+});
