@@ -48,7 +48,7 @@ class UserProfileController {
 
     // Suspend user's profile
     async suspendUserProfile(req, res) {
-        
+
         try {
             const profile = new UserProfile(); // Assuming constructor still needed
             const success = await profile.suspendUserProfile(); // No need for profileId
@@ -72,7 +72,17 @@ class UserProfileController {
             res.status(500).json({ error: error.message });
         }
     }
+
+    static async getUserProfiles() {
+        try {
+            const userProfiles = await UserProfile.getUserProfiles();
+            return userProfiles;
+        } catch (error) {
+            console.log("Error:", error);
+            throw error;
+        }
+    }
 }
 
-export default new UserProfileController();
+export default UserProfileController;
 

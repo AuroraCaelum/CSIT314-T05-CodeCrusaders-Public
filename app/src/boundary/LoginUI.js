@@ -1,29 +1,44 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import './LoginUI.css';
-import './../controller/UserAuthController';
-import UserAuthController from "./../controller/UserAuthController";
+import UserAuthController from "../controller/UserAuthController";
+import UserProfileController from "../controller/UserProfileController";
 
 function LoginUI() {
     const [userProfile, setUserProfile] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [userProfiles, setUserProfiles] = useState([]);
+
+    useEffect(() => {
+        const fetchUserProfiles = async () => {
+            const snapshot = await UserProfileController.getUserProfiles();
+            if (snapshot !== null) {
+                const userData = snapshot.docs.map(doc => ({
+                    pName: doc.data().name,
+                    type: doc.data().typeOfUser
+                }));
+                setUserProfiles(userData);
+            }
+        };
+
+        fetchUserProfiles();
+    }, []);
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        console.log(
-            "Username:",
-            username,
-            "Password:",
-            password,
-            "UserProfile:",
-            userProfile,
-        );
-        const userAuthController = new UserAuthController();
-        const loginSuccess = await userAuthController.authenticateLogin(username, password, userProfile);
-        if (loginSuccess) {
-            alert("Login successful");
+        if (userProfile === "") {
+            alert("Please select user profile.")
+        } else if (username === "" || password === "") {
+            alert("Please fill up username/password.")
         } else {
-            alert("Login failed");
+            const userAuthController = new UserAuthController();
+            const loginSuccess = await userAuthController.authenticateLogin(username, password, userProfile);
+            if (loginSuccess) {
+                alert("Login successful");
+                window.open('/usermanagement', "_self")
+            } else {
+                alert("Invalid username/password. Please try again.");
+            }
         }
     };
 
@@ -41,10 +56,9 @@ function LoginUI() {
                     className="input"
                 >
                     <option value="">Select</option>
-                    <option value="UserAdmin">UserAdmin</option>
-                    <option value="Buyer">Buyer</option>
-                    <option value="Seller">Seller</option>
-                    <option value="Agent">Agent</option>
+                    {userProfiles.map((profile) => (
+                        <option value={profile.type}>{profile.pName}</option>
+                    ))}
                 </select>
                 <label htmlFor="userId">User ID:</label>
                 <input
