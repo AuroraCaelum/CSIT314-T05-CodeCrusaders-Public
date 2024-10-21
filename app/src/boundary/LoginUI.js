@@ -1,22 +1,30 @@
 import React, { useState } from "react";
-import './LoginUI.css'; 
+import './LoginUI.css';
+import './../controller/UserAuthController';
+import UserAuthController from "./../controller/UserAuthController";
 
 function LoginUI() {
-    const [loginAs, setLoginAs] = useState("");
-    const [userId, setUserId] = useState("");
+    const [userProfile, setUserProfile] = useState("");
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
-        // Handle login logic
         console.log(
-            "Login as:",
-            loginAs,
-            "User ID:",
-            userId,
+            "Username:",
+            username,
             "Password:",
-            password
+            password,
+            "UserProfile:",
+            userProfile,
         );
+        const userAuthController = new UserAuthController();
+        const loginSuccess = await userAuthController.authenticateLogin(username, password, userProfile);
+        if (loginSuccess) {
+            alert("Login successful");
+        } else {
+            alert("Login failed");
+        }
     };
 
     return (
@@ -28,12 +36,12 @@ function LoginUI() {
                 <label htmlFor="loginAs">Login As</label>
                 <select
                     id="loginAs"
-                    value={loginAs}
-                    onChange={(e) => setLoginAs(e.target.value)}
+                    value={userProfile}
+                    onChange={(e) => setUserProfile(e.target.value)}
                     className="input"
                 >
                     <option value="">Select</option>
-                    <option value="Admin">Admin</option>
+                    <option value="UserAdmin">UserAdmin</option>
                     <option value="Buyer">Buyer</option>
                     <option value="Seller">Seller</option>
                     <option value="Agent">Agent</option>
@@ -41,9 +49,9 @@ function LoginUI() {
                 <label htmlFor="userId">User ID:</label>
                 <input
                     type="text"
-                    id="userId"
-                    value={userId}
-                    onChange={(e) => setUserId(e.target.value)}
+                    id="username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                     className="input"
                     placeholder="Enter your user ID"
                 />

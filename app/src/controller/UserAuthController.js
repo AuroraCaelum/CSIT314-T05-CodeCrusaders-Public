@@ -1,39 +1,46 @@
 import User from '../entity/UserAccount';
+// import Cookies from 'js-cookie';
 
 class UserAuthController {
-    
+    constructor() {
+        this.authenticateLogin = this.authenticateLogin.bind(this);
+        this.logout = this.logout.bind(this);
+    }
 
     // Login 
-    async authenticateLogin(req, res) {
-        const { username, password, userProfile } = req.body;
+    async authenticateLogin(username, password, userProfile) {
+        // const { username, password, userProfile } = req.body;
         try {
             const user = new User(null, null, null, password, null, userProfile, username);
-            
-            // Attempt to login with username and password
-            const loginSuccess = await user.login(password);
 
-            // Check if login was successful and userProfile (role) matches
-            if (loginSuccess && user.userProfile === userProfile) {
-                res.status(200).json({ message: 'Login successful', user });
-            } else {
-                res.status(401).json({ message: 'Invalid login credentials or role' });
+            // Attempt to login with username and password
+            const loginSuccess = await user.authenticateLogin(username, password, userProfile);
+
+            if (loginSuccess) {
+                console.log("Login successful");
+                return true;
             }
+            console.log("Login failed");
+            return false;
         } catch (error) {
-            res.status(500).json({ error: error.message });
+            console.error("Error logging in:", error);
+            return false;
         }
     }
 
     // Logout
-    async logout(req, res) {
+    async logout() {
         try {
-            const user = new User(); 
-            await user.logout();
-            res.status(200).json({ message: 'Logout successful' });
+            // Cookies.remove('username');
+            // Cookies.remove('userProfile');
+            console.log("Logout successful");
+            return true;
         } catch (error) {
-            res.status(500).json({ error: error.message });
+            console.error("Error logging out:", error);
+            return false;
         }
     }
 
 }
 
-export default new UserAuthController();
+export default UserAuthController;
