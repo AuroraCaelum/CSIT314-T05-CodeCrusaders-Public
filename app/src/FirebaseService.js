@@ -1,17 +1,17 @@
 import { db } from './firebase';  // Only import db for Firestore operations
-import { 
-    collection, 
-    doc, 
-    setDoc, 
-    getDoc, 
-    updateDoc, 
-    query, 
-    where, 
-    getDocs 
+import {
+    collection,
+    doc,
+    setDoc,
+    getDoc,
+    updateDoc,
+    query,
+    where,
+    getDocs
 } from 'firebase/firestore';
 
 class FirebaseService {
-    
+
     // Create a new document in Firestore
     async addDocument(collectionName, docId, data) {
         try {
@@ -43,7 +43,7 @@ class FirebaseService {
     async searchByFields(collectionName, fields) {
         try {
             let q = collection(db, collectionName);
-            
+
             // Add where clauses for each field dynamically
             for (const [field, value] of Object.entries(fields)) {
                 q = query(q, where(field, '==', value));

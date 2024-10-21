@@ -1,8 +1,7 @@
-import FirebaseService from './FirebaseService';
-import Cookies from 'js-cookie';
+import FirebaseService from '../FirebaseService';
+
 class UserAccount {
     constructor(email, fName, lName, password, phoneNum, userProfile, username) {
-
         this.email = email;
         this.fName = fName;
         this.lName = lName;
@@ -31,21 +30,27 @@ class UserAccount {
         }
     }
 
-    async login() {
+    async authenticateLogin(username, password, userProfile) {
         try {
             // Search for the user by username in Firestore
-            const userData = await this.firebaseService.searchByFields('UserAccount', { username: this.username });
+            const userData = await this.firebaseService.getDocument('UserAccount', username);
+            console.log("User data:", userData);
+            console.log("Params:", username, password, userProfile);
 
-            if (userData && userData.length > 0) {
-                const user = userData[0];
+            if (userData && userData.username === username) {
 
                 // Check if password matches
-                if (user.password === this.password) {
+                if (userData.password === password) {
                     // Save username and userProfile in cookies for session management
-                    Cookies.set('username', user.username);
-                    Cookies.set('userProfile', user.userProfile);
-                    console.log("Login successful");
-                    return true;
+                    // Cookies.set('username', user.username);
+                    // Cookies.set('userProfile', user.userProfile);
+                    if (userData.userProfile === userProfile) {
+                        console.log("Login successful");
+                        return true;
+                    } else {
+                        console.log("User profile does not match");
+                        return false;
+                    }
                 } else {
                     console.log("Incorrect password");
                     return false;
@@ -56,18 +61,6 @@ class UserAccount {
             }
         } catch (error) {
             console.error("Error logging in:", error);
-            return false;
-        }
-    }
-
-    async logout() {
-        try {
-            Cookies.remove('username');
-            Cookies.remove('userProfile');
-            console.log("Logout successful");
-            return true;
-        } catch (error) {
-            console.error("Error logging out:", error);
             return false;
         }
     }
