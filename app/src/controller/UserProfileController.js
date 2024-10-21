@@ -1,56 +1,81 @@
-import User from '../entity/UserAccount';
+import UserProfile from '../entity/UserProfile';
 
 class UserProfileController {
 
-    // Get current user's profile
-    async getProfile(req, res) {
-        const { userId } = req.params;  // Assuming userId is passed in the URL
+    // Create user profile, takes in profileName, description, profileType, returns bool
+    async createUserProfile(req, res) {
+        const { description, name, typeOfUser, profileId } = req.body;
         try {
-            const user = new User(userId);
-            const userData = await user.getUserData();  
-            res.status(200).json(userData);
+            const profile = new UserProfile(description, name, typeOfUser);
+            const success = await profile.saveProfile(profileId);
+            if (success) {
+                res.status(201).json({ message: 'UserProfile created successfully', success: true });
+            } else {
+                res.status(500).json({ message: 'Failed to create UserProfile', success: false });
+            }
         } catch (error) {
-            res.status(500).json({ error: 'Failed to retrieve user profile' });
+            res.status(500).json({ error: error.message, success: false });
         }
     }
 
-    // Update user's profile
-    async updateProfile(req, res) {
-        const { userId } = req.params;
-        const { name, email, role } = req.body; 
+    // View current user's profile, takes in profileId, returns profile details
+    async viewUserProfile(req, res) {
+        const { profileId } = req.params;
         try {
-            const user = new User(userId);
-            await user.updateUserData({ name, email, role });  
-            res.status(200).json({ message: 'Profile updated successfully' });
+            const profile = new UserProfile();
+            const profileData = await profile.getProfile(profileId);
+            res.status(200).json(profileData);
         } catch (error) {
-            res.status(500).json({ error: 'Failed to update profile' });
+            res.status(500).json({ error: error.message });
         }
     }
 
-    // Delete user's account
-    async deleteAccount(req, res) {
-        const { userId } = req.params;
+    // Update user's profile, takes in fields of profileName, description, profileType, returns bool
+    async updateUserProfile(req, res) {
+        const { profileId } = req.params;
+        const { description, name, typeOfUser } = req.body;
+        const newProfileData = { description, name, typeOfUser };
+
         try {
-            const user = new User(userId);
-            await user.deleteAccount(); 
-            res.status(200).json({ message: 'User account deleted successfully' });
+            const profile = new UserProfile();
+            const success = await profile.updateProfile(profileId, newProfileData);
+            if (success) {
+                res.status(200).json({ message: 'UserProfile updated successfully', success: true });
+            } else {
+                res.status(500).json({ message: 'Failed to update UserProfile', success: false });
+            }
         } catch (error) {
-            res.status(500).json({ error: 'Failed to delete account' });
+            res.status(500).json({ error: error.message, success: false });
         }
     }
 
-    // Change user's password
-    async changePassword(req, res) {
-        const { userId } = req.params;
-        const { newPassword } = req.body;  
+    // Suspend user's profile, takes in profileId
+    async suspendUserProfile(req, res) {
+        const { profileId } = req.params;
         try {
-            const user = new User(userId);
-            await user.changePassword(newPassword);  
-            res.status(200).json({ message: 'Password changed successfully' });
+            const profile = new UserProfile();
+            const success = await profile.suspendProfile(profileId);
+            if (success) {
+                res.status(200).json({ message: 'UserProfile suspended successfully', success: true });
+            } else {
+                res.status(500).json({ message: 'Failed to suspend UserProfile', success: false });
+            }
         } catch (error) {
-            res.status(500).json({ error: 'Failed to change password' });
+            res.status(500).json({ error: error.message, success: false });
+        }
+    }
+
+    // Search for user's profile, takes in profileName, returns profile details
+    async searchUserProfile(req, res) {
+        const { profileName } = req.params;
+        try {
+            const profile = await UserProfile.searchProfileByName(profileName);
+            res.status(200).json(profile);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
         }
     }
 }
 
 export default new UserProfileController();
+
