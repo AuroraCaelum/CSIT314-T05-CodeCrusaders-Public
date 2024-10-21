@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import './LoginUI.css'; 
 
 function LoginUI() {
     const [loginAs, setLoginAs] = useState("");
@@ -19,17 +20,17 @@ function LoginUI() {
     };
 
     return (
-        <div style={styles.container}>
-            <h2 style={styles.title}>CODE CRUSADERS</h2>
-            <h3 style={styles.subtitle}>USED CAR SELLING SERVICE</h3>
+        <div className="loginContainer">
+            <h2 className="title">CODE CRUSADERS</h2>
+            <h3 className="subtitle">USED CAR SELLING SERVICE</h3>
 
-            <form style={styles.form} onSubmit={handleLogin}>
+            <form className="form" onSubmit={handleLogin}>
                 <label htmlFor="loginAs">Login As</label>
                 <select
                     id="loginAs"
                     value={loginAs}
                     onChange={(e) => setLoginAs(e.target.value)}
-                    style={styles.input}
+                    className="input"
                 >
                     <option value="">Select</option>
                     <option value="Admin">Admin</option>
@@ -43,7 +44,7 @@ function LoginUI() {
                     id="userId"
                     value={userId}
                     onChange={(e) => setUserId(e.target.value)}
-                    style={styles.input}
+                    className="input"
                     placeholder="Enter your user ID"
                 />
                 <label htmlFor="password">Password:</label>
@@ -52,59 +53,15 @@ function LoginUI() {
                     id="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    style={styles.input}
+                    className="input"
                     placeholder="Enter your password"
                 />
-                <button type="submit" style={styles.button}>
+                <button type="submit" className="button">
                     Login
                 </button>
             </form>
         </div>
     );
-}
-
-const styles = {
-    container: {
-        fontFamily: "Arial, sans-serif",
-        width: "400px",
-        margin: "100px auto",
-        padding: "20px",
-        border: "1px solid #ccc",
-        borderRadius: "10px",
-        backgroundColor: "#f9f9f9",
-        textAlign: "center",
-    },
-    title: {
-        fontSize: "24px",
-        fontWeight: "bold",
-        marginBottom: "10px",
-    },
-    subtitle: {
-        fontSize: "18px",
-        fontWeight: "normal",
-        marginBottom: "20px",
-    },
-    form: {
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-    },
-    input: {
-        width: "80%",
-        padding: "10px",
-        margin: "10px 0",
-        borderRadius: "5px",
-        border: "1px solid #ccc",
-    },
-    button: {
-        width: "80%",
-        padding: "10px",
-        borderRadius: "5px",
-        border: "none",
-        backgroundColor: "#333",
-        color: "#fff",
-        cursor: "pointer",
-    },
 };
 
 export default LoginUI;
