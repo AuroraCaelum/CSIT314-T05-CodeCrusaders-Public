@@ -1,9 +1,4 @@
-import { auth, db } from './firebase';  // Importing initialized auth and db from firebase.js
-import { 
-    createUserWithEmailAndPassword, 
-    signInWithEmailAndPassword, 
-    signOut 
-} from 'firebase/auth';
+import { db } from './firebase';  // Only import db for Firestore operations
 import { 
     collection, 
     doc, 
@@ -17,7 +12,7 @@ import {
 
 class FirebaseService {
     
-    // Create 
+    // Create a new document in Firestore
     async addDocument(collectionName, docId, data) {
         try {
             await setDoc(doc(db, collectionName, docId), data);
@@ -28,7 +23,7 @@ class FirebaseService {
         }
     }
 
-    // Read 
+    // Read a document from Firestore
     async getDocument(collectionName, docId) {
         try {
             const docSnap = await getDoc(doc(db, collectionName, docId));
@@ -44,7 +39,7 @@ class FirebaseService {
         }
     }
 
-    // Read 
+    // Search documents in Firestore by specific fields
     async searchByFields(collectionName, fields) {
         try {
             let q = collection(db, collectionName);
@@ -64,46 +59,13 @@ class FirebaseService {
         }
     }
 
-    // Update 
+    // Update a document in Firestore
     async updateDocument(collectionName, docId, newData) {
         try {
             await updateDoc(doc(db, collectionName, docId), newData);
             console.log(`Document with ID: ${docId} updated successfully in ${collectionName}`);
         } catch (error) {
             console.error("Error updating document:", error);
-            throw error;
-        }
-    }
-
-    // Register a new user 
-    async registerUser(email, password) {
-        try {
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-            return userCredential.user;  // Returns the user object with UID
-        } catch (error) {
-            console.error("Error registering user:", error);
-            throw error;
-        }
-    }
-
-    // Log in a user
-    async login(email, password) {
-        try {
-            const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            return userCredential.user;  // Returns the user object with UID
-        } catch (error) {
-            console.error("Error logging in:", error);
-            throw error;
-        }
-    }
-
-    // Log out the current user
-    async logoutUser() {
-        try {
-            await signOut(auth);
-            console.log("Logout successful");
-        } catch (error) {
-            console.error("Error logging out:", error);
             throw error;
         }
     }

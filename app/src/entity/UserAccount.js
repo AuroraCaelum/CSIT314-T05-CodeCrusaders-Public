@@ -1,5 +1,5 @@
 import FirebaseService from './FirebaseService';
-
+import Cookies from 'js-cookie';
 class UserAccount {
     constructor(email, fName, lName, password, phoneNum, userProfile, username) {
 
@@ -13,56 +13,46 @@ class UserAccount {
         this.firebaseService = new FirebaseService();
     }
     // Create a new user account and save
-    async createUserAccount(password) {
-        try {
-            const user = await this.firebaseService.registerUser(this.email, password);
-            this.userId = user.uid;
-            await this.saveToDB();
-        } catch (error) {
-            console.error("Error registering user:", error);
-        }
-    }
-
-    async saveToDB() {
+    async createUserAccount() {
         try {
             const userData = {
                 email: this.email,
                 fName: this.fName,
                 lName: this.lName,
-                password : this.password,
+                password: this.password,  // Store password in Firestore
                 phoneNum: this.phoneNum,
                 userProfile: this.userProfile,
                 username: this.username
             };
-            // Add user to the 'users' collection in Firestore
-            await this.firebaseService.addDocument('UserAccount', this.userId, userData);
-            console.log("User saved to Firestore");
+            await this.firebaseService.addDocument('UserAccount', this.username, userData);
+            console.log("User account created and saved to Firestore");
         } catch (error) {
-            console.error("Error saving user to Firestore:", error);
+            console.error("Error creating user account:", error);
         }
     }
 
-    async login(password) {
+    async login() {
         try {
-            // Fetch user by username
-            const userData = await this.firebaseService.searchByField('UserAccount', {
-                username: this.username,
-                userProfile: this.userProfile
-            });
+            // Search for the user by username in Firestore
+            const userData = await this.firebaseService.searchByFields('UserAccount', { username: this.username });
 
             if (userData && userData.length > 0) {
-                const user = userData[0]; // Get the first match
-                // Compare passwords
-                if (user.password === password) {
-                    // Assign user data to the instance
-                    this.assignUserData(user);
-                    this.userId = user.userId;
-                    return true; // Login successful
+                const user = userData[0];
+
+                // Check if password matches
+                if (user.password === this.password) {
+                    // Save username and userProfile in cookies for session management
+                    Cookies.set('username', user.username);
+                    Cookies.set('userProfile', user.userProfile);
+                    console.log("Login successful");
+                    return true;
                 } else {
-                    return false; // Incorrect password
+                    console.log("Incorrect password");
+                    return false;
                 }
             } else {
-                return false; // Username or userProfile not found
+                console.log("User not found");
+                return false;
             }
         } catch (error) {
             console.error("Error logging in:", error);
@@ -72,52 +62,24 @@ class UserAccount {
 
     async logout() {
         try {
-            await this.firebaseService.logoutUser();
+            Cookies.remove('username');
+            Cookies.remove('userProfile');
             console.log("Logout successful");
             return true;
         } catch (error) {
             console.error("Error logging out:", error);
-            return false
+            return false;
         }
-    }
-
-    // Fetch and return user data 
-    async getUserData() {
-        try {
-            const userData = await this.firebaseService.getDocument('UserAccount', this.userId);
-            if (userData) {
-                // Assign fetched data to the class instance
-                this.fName = userData.fName;
-                this.lName = userData.lName;
-                this.phoneNum = userData.phoneNum;
-                this.password = userData.password;
-                this.email = userData.email;
-                this.userProfile = userData.userProfile;
-                this.username = userData.username;
-                return userData;
-            } else {
-                throw new Error("User data not found");
-            }
-        } catch (error) {
-            console.error("Error fetching user data:", error);
-            throw error;
-        }
-    }
-    assignUserData(userData) {
-        this.fName = userData.fName;
-        this.lName = userData.lName;
-        this.phoneNum = userData.phoneNum;
-        this.password = userData.password;
-        this.email = userData.email;
-        this.userProfile = userData.userProfile;
-        this.username = userData.username;
     }
 
     // View user account information by userId
-    static async viewUserAccount(userId) {
+    static async viewUserAccount(username) {
         try {
-            const userData = await FirebaseService.getDocument('UserAccount', userId);
+            // Fetch user data from Firestore using username
+            const userData = await FirebaseService.getDocument('UserAccount', username);
+
             if (userData) {
+                console.log("User data:", userData);
                 return userData;
             } else {
                 throw new Error("User not found");
@@ -167,4 +129,4 @@ class UserAccount {
     }
 }
 
-export default User;
+export default UserAccount;
