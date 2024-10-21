@@ -2,25 +2,22 @@ import User from '../entity/UserAccount';
 
 class UserAuthController {
     
-    // Register a new user
-    async register(req, res) {
-        const { name, email, password, role } = req.body;
-        try {
-            const user = new User(null, name, email, role);
-            await user.register(password);
-            res.status(201).json({ message: 'User registered successfully', user });
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    }
 
     // Login 
-    async login(req, res) {
-        const { email, password } = req.body;
+    async authenticateLogin(req, res) {
+        const { username, password, userProfile } = req.body;
         try {
-            const user = new User(null, null, email);
-            await user.login(password);
-            res.status(200).json({ message: 'Login successful', user });
+            const user = new User(null, null, null, password, null, userProfile, username);
+            
+            // Attempt to login with username and password
+            const loginSuccess = await user.login(password);
+
+            // Check if login was successful and userProfile (role) matches
+            if (loginSuccess && user.userProfile === userProfile) {
+                res.status(200).json({ message: 'Login successful', user });
+            } else {
+                res.status(401).json({ message: 'Invalid login credentials or role' });
+            }
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
