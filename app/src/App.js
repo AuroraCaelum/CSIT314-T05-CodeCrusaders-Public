@@ -1,39 +1,37 @@
 // import logo from './logo.svg';
-// import './App.css';
+import './App.css';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           Edit <code>src/App.js</code> and save to reload.
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
+import LoginUI from './boundary/LoginUI';
+import UserManagementUI from './boundary/UserManagementUI';
+import UserAccountManagementUI from './boundary/UserAccountManagementUI';
+import UserProfileManagementUI from './boundary/UserProfileManagementUI';
 
-// export default App;
-const express = require('express');
-const app = express();
-const userAccountController = require('./controller/UserAccountController');
+function App() {
+    return (
+        <Router>
+            <Routes>
+                <Route path="/" element={<LoginUI />} />
+                <Route path="/usermanagement" element={<UserManagementUI />} />
+                <Route path="/useraccountmanagement" element={<UserAccountManagementUI />} />
+                <Route path="/userprofilemanagement" element={<UserProfileManagementUI />} />
+            </Routes>
+        </Router>
+    );
+}
 
-app.use(express.json());
+export default App;
+// const express = require('express');
+// const app = express();
+// const userAccountController = require('./controller/UserAccountController');
 
-// User authentication routes
-app.post('/register', userAccountController.register);
-app.post('/login', userAccountController.login);
-app.post('/logout', userAccountController.logout);
+// app.use(express.json());
 
-app.listen(5000, () => {
-    console.log('Server is running on port 5000');
-});
+// // User authentication routes
+// app.post('/register', userAccountController.register);
+// app.post('/login', userAccountController.login);
+// app.post('/logout', userAccountController.logout);
+
+// app.listen(5000, () => {
+//     console.log('Server is running on port 5000');
+// });
