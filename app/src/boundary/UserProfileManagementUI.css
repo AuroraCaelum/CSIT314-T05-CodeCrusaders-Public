@@ -1,0 +1,91 @@
+.container {
+    font-family: Arial, sans-serif;
+    width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+}
+
+.header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.profile-picture {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #ccc;
+}
+
+.username {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.logout-button {
+    padding: 8px 16px;
+    border-radius: 5px;
+    background-color: #333;
+    color: #fff;
+    cursor: pointer;
+    border: none;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.search-input {
+    padding: 8px;
+    width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.search-button, .create-button {
+    padding: 8px 16px;
+    border-radius: 5px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.user-table {
+    margin-top: 20px;
+    border-top: 1px solid #ccc;
+}
+
+.table-header, .table-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+}
+
+.table-header {
+    font-weight: bold;
+    border-bottom: 1px solid #ccc;
+}
+
+.table-row {
+    border-bottom: 1px solid #eee;
+    align-items: center;
+}
+
+.inspect-button {
+    padding: 5px 10px;
+    background-color: #333;
+    color: #fff;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}

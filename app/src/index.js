@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import LoginUI from './boundary/LoginUI';
 import UserManagementUI from './boundary/UserManagementUI';
+import UserAccountManagementUI from './boundary/UserAccountManagementUI';
+import UserProfileManagementUI from './boundary/UserProfileManagementUI';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -10,6 +12,8 @@ root.render(
   <React.StrictMode>
     <LoginUI />
     <UserManagementUI />
+    <UserAccountManagementUI />
+    <UserProfileManagementUI />
   </React.StrictMode>
 );
 
