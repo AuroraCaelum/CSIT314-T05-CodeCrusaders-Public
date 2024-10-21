@@ -2,12 +2,12 @@ import UserProfile from '../entity/UserProfile';
 
 class UserProfileController {
 
-    // Create user profile, takes in profileName, description, profileType, returns bool
+    // Create user profile, takes in profileName, description, profileType
     async createUserProfile(req, res) {
-        const { description, name, typeOfUser, profileId } = req.body;
+        const { description, name, typeOfUser } = req.body;
         try {
             const profile = new UserProfile(description, name, typeOfUser);
-            const success = await profile.saveProfile(profileId);
+            const success = await profile.createUserProfile(); // Changed method call to reflect new implementation
             if (success) {
                 res.status(201).json({ message: 'UserProfile created successfully', success: true });
             } else {
@@ -18,27 +18,24 @@ class UserProfileController {
         }
     }
 
-    // View current user's profile, takes in profileId, returns profile details
+    // View current user's profile
     async viewUserProfile(req, res) {
-        const { profileId } = req.params;
+        const { profileName } = req.params; // This should correspond to typeOfUser now
         try {
-            const profile = new UserProfile();
-            const profileData = await profile.getProfile(profileId);
+            const profile = new UserProfile(); // Assuming constructor is still needed
+            const profileData = await profile.viewUserProfile(profileName); // Change to viewUserProfile
             res.status(200).json(profileData);
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
     }
 
-    // Update user's profile, takes in fields of profileName, description, profileType, returns bool
+    // Update user's profile
     async updateUserProfile(req, res) {
-        const { profileId } = req.params;
         const { description, name, typeOfUser } = req.body;
-        const newProfileData = { description, name, typeOfUser };
-
         try {
-            const profile = new UserProfile();
-            const success = await profile.updateProfile(profileId, newProfileData);
+            const profile = new UserProfile(description, name, typeOfUser); // Pass data to constructor
+            const success = await profile.updateUserProfile(); // Adjusted to use type as ID
             if (success) {
                 res.status(200).json({ message: 'UserProfile updated successfully', success: true });
             } else {
@@ -49,12 +46,12 @@ class UserProfileController {
         }
     }
 
-    // Suspend user's profile, takes in profileId
+    // Suspend user's profile
     async suspendUserProfile(req, res) {
-        const { profileId } = req.params;
+        
         try {
-            const profile = new UserProfile();
-            const success = await profile.suspendProfile(profileId);
+            const profile = new UserProfile(); // Assuming constructor still needed
+            const success = await profile.suspendUserProfile(); // No need for profileId
             if (success) {
                 res.status(200).json({ message: 'UserProfile suspended successfully', success: true });
             } else {
@@ -65,11 +62,11 @@ class UserProfileController {
         }
     }
 
-    // Search for user's profile, takes in profileName, returns profile details
+    // Search for user's profile
     async searchUserProfile(req, res) {
         const { profileName } = req.params;
         try {
-            const profile = await UserProfile.searchProfileByName(profileName);
+            const profile = await UserProfile.searchUserProfile(profileName); // Adjusted to correct method
             res.status(200).json(profile);
         } catch (error) {
             res.status(500).json({ error: error.message });
