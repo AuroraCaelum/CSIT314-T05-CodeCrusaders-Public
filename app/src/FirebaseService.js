@@ -39,6 +39,22 @@ class FirebaseService {
         }
     }
 
+    // Get a whole documents in Firestore
+    async getDocuments(collectionName) {
+        try {
+            const docSnap = await getDocs(collection(db, collectionName));
+            if (docSnap) {
+                return docSnap;
+            } else {
+                console.log("No such document!");
+                return null;
+            }
+        } catch (error) {
+            console.error("Error getting document:", error);
+            throw error;
+        }
+    }
+
     // Search documents in Firestore by specific fields
     async searchByFields(collectionName, fields) {
         try {

@@ -1,22 +1,49 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import Cookies from "js-cookie";
 import "./UserAccountManagementUI.css";
+import UserAuthController from "../controller/UserAuthController";
+import UserProfileController from "../controller/UserProfileController";
 
 function UserProfileManagementUI() {
-    const [username] = useState("AdminUser");
+    const [username] = useState(Cookies.get("username"));
     const [searchUsername, setSearchUsername] = useState("");
-    const users = [
-        { pName: "Used Car Agent", description: "User car agent who br...", type: "Used Car Agent" },
-        { pName: "Seller", description: "Who wants to sell a used car", type: "Seller" },
-        { pName: "Buyer", description: "Who wants to buy a used car", type: "Buyer" },
-        { pName: "Admin", description: "Administrator who m...", type: "Admin" },
-    ];
+    const [userProfiles, setUserProfiles] = useState([
+        { pName: "Loading...", description: "Loading...", type: "Loading..." }
+    ]);
+
+    useEffect(() => {
+        const fetchUserProfiles = async () => {
+            const snapshot = await UserProfileController.getUserProfiles();
+            if (snapshot !== null) {
+                const userData = snapshot.docs.map(doc => ({
+                    pName: doc.data().name,
+                    description: (doc.data().description).substring(0, 25) + "...",
+                    type: doc.data().typeOfUser
+                }));
+                setUserProfiles(userData);
+            }
+        };
+
+        fetchUserProfiles();
+    }, []);
+
+    if (Cookies.get("userProfile") !== "UserAdmin") {
+        window.open("/", "_self")
+    }
 
     const handleCreateProfile = () => {
         alert("Redirecting to Profile Creation Page...");
     };
 
-    const handleLogout = () => {
-        alert("Logging out...");
+    const handleLogout = async () => {
+        const userAuthController = new UserAuthController();
+        const logout = await userAuthController.logout();
+        if (logout) {
+            alert("Logout success");
+            window.open("/", "_self")
+        } else {
+            alert("Logout failed");
+        }
     };
 
     const handleSearch = (e) => {
@@ -29,7 +56,7 @@ function UserProfileManagementUI() {
             <div className="header">
                 <img
                     className="profile-picture"
-                    src="path_to_profile_picture"
+                    src={"https://placehold.co/40x40?text=" + Cookies.get("username")}
                     alt="Profile"
                 />
                 <span className="username">{username}</span>
@@ -61,7 +88,7 @@ function UserProfileManagementUI() {
                     <span>Type:</span>
                     <span></span>
                 </div>
-                {users.map((user) => (
+                {userProfiles.map((user) => (
                     <div key={user.username} className="table-row">
                         <span>{user.pName}</span>
                         <span>{user.description}</span>

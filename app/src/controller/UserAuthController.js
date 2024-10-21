@@ -1,5 +1,5 @@
 import User from '../entity/UserAccount';
-// import Cookies from 'js-cookie';
+import Cookies from 'js-cookie';
 
 class UserAuthController {
     constructor() {
@@ -17,6 +17,8 @@ class UserAuthController {
             const loginSuccess = await user.authenticateLogin(username, password, userProfile);
 
             if (loginSuccess) {
+                Cookies.set('username', username);
+                Cookies.set('userProfile', userProfile);
                 console.log("Login successful");
                 return true;
             }
@@ -31,8 +33,8 @@ class UserAuthController {
     // Logout
     async logout() {
         try {
-            // Cookies.remove('username');
-            // Cookies.remove('userProfile');
+            Cookies.remove('username');
+            Cookies.remove('userProfile');
             console.log("Logout successful");
             return true;
         } catch (error) {
