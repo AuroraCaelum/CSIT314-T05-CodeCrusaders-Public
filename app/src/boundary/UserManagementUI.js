@@ -1,51 +1,45 @@
 import React, { useState } from "react";
 
 function UserManagementUI() {
-    const [searchUsername, setSearchUsername] = useState("");
+    const [username] = useState("AdminUser")
 
-    const handleSearch = (e) => {
-        e.preventDefault();
-        // Add logic to handle searching the username
-        console.log("Searched Username:", searchUsername);
+    const handleAccountManagement = () => {
+        console.log("User Account Management");
+        alert("Redirecting to User Account Management Page...");
     };
 
-    const handleCreateAccount = () => {
-        // Add logic to handle account creation
-        console.log("Create User Account");
-        alert("Redirecting to Account Creation Page...");
+    const handleAccountProfile = () => {
+        console.log("User Profile Management");
+        alert("Redirecting to User Profile Management Page...");
     };
 
-    const handleCreateProfile = () => {
-        // Add logic to handle profile creation
-        console.log("Create User Profile");
-        alert("Redirecting to Profile Creation Page...");
-    };
+    const handleLogout = () => {
+        console.log("Logging out");
+        alert("Logging out...")
+    }
 
     return (
         <div style={styles.container}>
-            <h2 style={styles.title}>User Management Page</h2>
-
-            {/* Username Search Bar */}
-            <div style={styles.searchContainer}>
-                <input
-                    type="text"
-                    placeholder="Search by username"
-                    value={searchUsername}
-                    onChange={(e) => setSearchUsername(e.target.value)}
-                    style={styles.searchBar}
-                />
-                <button onClick={handleSearch} style={styles.searchButton}>
-                    Search
+            <div style={styles.header}>
+            <div style={styles.userInfo}>
+                    <img 
+                        src="https://via.placeholder.com/40" 
+                        alt="Profile" 
+                        style={styles.profilePicture} 
+                    />
+                    <span style={styles.username}>{username}</span>
+                </div>                
+                <button onClick={handleLogout} style={styles.logoutButton}>
+                    Logout
                 </button>
             </div>
-
-            {/* Create User Account and Profile Buttons */}
             <div style={styles.buttonContainer}>
-                <button onClick={handleCreateAccount} style={styles.actionButton}>
-                    Create User Account
+                <button onClick={handleAccountManagement} style={styles.actionButton}>
+                    User Account Management
                 </button>
-                <button onClick={handleCreateProfile} style={styles.actionButton}>
-                    Create User Profile
+
+                <button onClick={handleAccountProfile} style={styles.actionButton}>
+                    User Profile Management
                 </button>
             </div>
         </div>
@@ -55,6 +49,7 @@ function UserManagementUI() {
 const styles = {
     container: {
         fontFamily: "Arial, sans-serif",
+        height: "150px",
         width: "600px",
         margin: "50px auto",
         padding: "30px",
@@ -63,35 +58,38 @@ const styles = {
         backgroundColor: "#f9f9f9",
         textAlign: "center",
     },
-    title: {
-        fontSize: "28px",
-        fontWeight: "bold",
-        marginBottom: "20px",
-    },
-    searchContainer: {
+    header: {
         display: "flex",
-        justifyContent: "center",
+        justifyContent: "flex-end",
+        alignItems: "center",
         marginBottom: "20px",
     },
-    searchBar: {
-        width: "70%",
-        padding: "10px",
-        marginRight: "10px",
-        borderRadius: "5px",
-        border: "1px solid #ccc",
+    userInfo: {
+        display: "flex",
+        alignItems: "center",
+        marginRight: "20px",
     },
-    searchButton: {
-        padding: "10px 20px",
+    profilePicture: {
+        width: "40px",
+        height: "40px",
+        borderRadius: "50%",
+        marginRight: "10px",
+    },
+    username: {
+        fontSize: "16px",
+        fontweight: "bold",
+    },
+    logoutButton: {
+        padding: "8px 16px",
         borderRadius: "5px",
-        border: "none",
-        backgroundColor: "#333",
-        color: "#fff",
+        backgroundColor: "#FFFFFF",
+        color: "fff",
         cursor: "pointer",
     },
     buttonContainer: {
         display: "flex",
         justifyContent: "space-between",
-        marginTop: "20px",
+        marginTop: "60px",
     },
     actionButton: {
         width: "45%",
