@@ -12,18 +12,18 @@ class UserAccount {
         this.firebaseService = new FirebaseService();
     }
     // Create a new user account and save
-    async createUserAccount() {
+    async createUserAccount(fName, lName, username, password, phoneNum, email, userProfile) {
         try {
             const userData = {
-                email: this.email,
-                fName: this.fName,
-                lName: this.lName,
-                password: this.password,  // Store password in Firestore
-                phoneNum: this.phoneNum,
-                userProfile: this.userProfile,
-                username: this.username
+                email: email,
+                fName: fName,
+                lName: lName,
+                password: password,
+                phoneNum: phoneNum,
+                userProfile: userProfile,
+                username: username
             };
-            await this.firebaseService.addDocument('UserAccount', this.username, userData);
+            await this.firebaseService.addDocument('UserAccount', username, userData);
             console.log("User account created and saved to Firestore");
         } catch (error) {
             console.error("Error creating user account:", error);
@@ -85,20 +85,32 @@ class UserAccount {
 
 
     // Update user account with new data
-    async updateUserAccount(newData) {
+    static async updateUserAccount(username, fName, lName, password, phoneNum, email, userProfile) {
         try {
-            await this.firebaseService.updateUserAccount('UserAccount', this.userId, newData);
-            Object.assign(this, newData);
+            const newData = {
+                email: email,
+                fName: fName,
+                lName: lName,
+                password: password,
+                phoneNum: phoneNum,
+                userProfile: userProfile,
+                username: username
+            };
+            // await this.firebaseService.updateUserAccount('UserAccount', this.username, newData);
+            // Object.assign(this, newData);
+            await FirebaseService.updateDocument('UserAccount', username, newData);
             console.log("User account updated successfully");
+            return true;
         } catch (error) {
             console.error("Error updating user data:", error);
+            return false;
         }
     }
 
     // Suspend user account
-    async suspendUserAccount() {
+    async suspendUserAccount(username) {
         try {
-            await this.firebaseService.updateDocument('UserAccount', this.userId, { suspended: true });
+            await this.firebaseService.updateDocument('UserAccount', username, { suspended: true });
             console.log("User account suspended successfully");
         } catch (error) {
             console.error("Error suspending user account:", error);
@@ -109,7 +121,8 @@ class UserAccount {
     static async searchUserAccount(username) {
         try {
             // Search for a user in Firestore by the username field
-            const userData = await FirebaseService.searchByField('UserAccount', 'username', username);
+            // const userData = await FirebaseService.searchByField('UserAccount', 'username', username);
+            const userData = await FirebaseService.getDocument('UserAccount', username);
             if (userData && userData.length > 0) {
                 return userData[0]; // Assuming usernames are unique
             } else {
@@ -117,6 +130,18 @@ class UserAccount {
             }
         } catch (error) {
             console.error("Error searching for user:", error);
+            throw error;
+        }
+    }
+
+    static async getUserAccountList() {
+        try {
+            const firebaseService = new FirebaseService();
+            const userData = await firebaseService.getDocuments('UserAccount');
+            console.log(userData);
+            return userData;
+        } catch (error) {
+            console.error("Error:", error);
             throw error;
         }
     }

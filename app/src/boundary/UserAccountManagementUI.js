@@ -1,22 +1,49 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import Cookies from "js-cookie";
 import "./UserAccountManagementUI.css";
+import UserAuthController from "../controller/UserAuthController";
+import UserAccountController from "../controller/UserAccountController";
 
 function UserAccountManagementUI() {
-    const [username] = useState("AdminUser");
+    const [username] = useState(Cookies.get("username"));
     const [searchUsername, setSearchUsername] = useState("");
-    const users = [
-        { name: "Alice", username: "alice001", profile: "Used Car Agent" },
-        { name: "Bob", username: "bob.the.builder", profile: "Seller" },
-        { name: "Jeremy", username: "jeremy001", profile: "Buyer" },
-        { name: "Lily", username: "lilywhite", profile: "Admin" },
-    ];
+    const [users, setUsers] = useState([
+        { name: "Loading...", username: "Loading...", profile: "Loading..." }
+    ]);
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            const snapshot = await UserAccountController.getUserAccountList();
+            if (snapshot !== null) {
+                const userData = snapshot.docs.map(doc => ({
+                    name: doc.data().fName + " " + doc.data().lName,
+                    username: doc.data().username,
+                    profile: doc.data().userProfile
+                }));
+                setUsers(userData);
+            }
+        };
+
+        fetchUsers();
+    }, []);
+
+    if (Cookies.get("userProfile") !== "UserAdmin") {
+        window.open("/", "_self")
+    }
 
     const handleCreateAccount = () => {
         alert("Redirecting to Account Creation Page...");
     };
 
-    const handleLogout = () => {
-        alert("Logging out...");
+    const handleLogout = async () => {
+        const userAuthController = new UserAuthController();
+        const logout = await userAuthController.logout();
+        if (logout) {
+            alert("Logout success");
+            window.open("/", "_self")
+        } else {
+            alert("Logout failed");
+        }
     };
 
     const handleSearch = (e) => {
@@ -29,7 +56,7 @@ function UserAccountManagementUI() {
             <div className="header">
                 <img
                     className="profile-picture"
-                    src="path_to_profile_picture"
+                    src={"https://placehold.co/40x40?text=" + Cookies.get("username")}
                     alt="Profile"
                 />
                 <span className="username">{username}</span>
