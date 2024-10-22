@@ -1,4 +1,4 @@
-import FirebaseService from "./FirebaseService";
+import FirebaseService from "../FirebaseService";
 
 class UserProfile {
     constructor(description, name, type) {
@@ -97,6 +97,17 @@ class UserProfile {
         }
     }
 
+    static async getUserProfiles() {
+        try {
+            const firebaseService = new FirebaseService();
+            const userData = await firebaseService.getDocuments('UserProfile');
+            console.log(userData);
+            return userData;
+        } catch (error) {
+            console.error("Error:", error);
+            throw error;
+        }
+    }
 }
 
 export default UserProfile;

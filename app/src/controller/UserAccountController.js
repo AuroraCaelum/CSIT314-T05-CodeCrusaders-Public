@@ -1,63 +1,75 @@
-import User from '../entity/UserAccount';
+import UserAccount from '../entity/UserAccount';
 
 class UserAccountController {
-    
+
     // Register a new user
-    async createUserAccount(req, res) {
-        const { email, fName, lName, password, phoneNum, userProfile, username } = req.body;
+    async createUserAccount(fName, lName, username, password, phoneNum, email, userProfile) {
         try {
-            const user = new User(email, fName, lName, password, phoneNum, userProfile, username);
-            await user.createUserAccount(password);
-            res.status(201).json({ message: 'User registered successfully', user });
+            // const user = new UserAccount(email, fName, lName, password, phoneNum, userProfile, username);
+            await UserAccount.createUserAccount(email, fName, lName, password, phoneNum, userProfile, username);
+            return true;
         } catch (error) {
-            res.status(500).json({ error: error.message });
+            return false;
         }
     }
 
-    async viewUserAccount(req, res) {
-        const { username  } = req.params;
+    async viewUserAccount(username) {
+        // const { username } = req.params;
         try {
-            const user = new User(null, null, null, null, null, null, username); // Initialize User with username
-            const userData = await user.getUserData(); // Fetch user data by username
-            res.status(200).json(userData);
+            // const user = new UserAccount(null, null, null, null, null, null, username); // Initialize User with username
+            const userAccount = await UserAccount.viewUserAccount(); // Fetch user data by username
+            return userAccount;
         } catch (error) {
-            res.status(500).json({ error: 'Failed to retrieve user account: ' + error.message });
+            return null;
         }
     }
 
-    async updateUserAccount(req, res) {
-        const { email, fName, lName, phoneNum, userProfile, username } = req.body;
+    async updateUserAccount(username, fName, lName, password, phoneNum, email, userProfile) {
+        // const { email, fName, lName, phoneNum, userProfile, username } = req.body;
         try {
-            const user = new User(email, fName, lName, phoneNum, userProfile, username);
-            const newData = { email, fName, lName, phoneNum, userProfile, username };
-            await user.updateUserAccount(newData); 
-
-            res.status(200).json({ message: 'User account updated successfully' });
+            // const user = new UserAccount(email, fName, lName, phoneNum, userProfile, username);
+            // const newData = { email, fName, lName, phoneNum, userProfile, username };
+            await UserAccount.updateUserAccount(username, fName, lName, password, phoneNum, email, userProfile);
+            return true;
         } catch (error) {
-            res.status(500).json({ error: 'Failed to update user account' });
-        }
-    }
-    
-    async suspendUserAccount(req, res) {
-        const { username  } = req.params;
-        try {
-            const user = new User(null, null, null, null, null, null, username); // Initialize User with username
-            await user.suspendUserAccount(); // Call the suspension method
-            res.status(200).json({ message: 'User account suspended successfully' });
-        } catch (error) {
-            res.status(500).json({ error: 'Failed to suspend user account: ' + error.message });
+            return false;
         }
     }
 
-    async searchUserAccount(req, res) {
-        const { username } = req.params;
+    async suspendUserAccount(username) {
+        // const { username } = req.params;
         try {
-            const userData = await User.searchUserAccount(username); // Call the static method to search by username
-            res.status(200).json(userData);
+            // const user = new UserAccount(null, null, null, null, null, null, username); // Initialize User with username
+            await UserAccount.suspendUserAccount(username); // Call the suspension method
+            // res.status(200).json({ message: 'User account suspended successfully' });
+            return true;
         } catch (error) {
-            res.status(500).json({ error: 'Failed to search user account: ' + error.message });
+            // res.status(500).json({ error: 'Failed to suspend user account: ' + error.message });
+            return false;
+        }
+    }
+
+    async searchUserAccount(username) {
+        // const { username } = req.params;
+        try {
+            const userAccount = await UserAccount.searchUserAccount(username); // Call the static method to search by username
+            // res.status(200).json(userData);
+            return userAccount;
+        } catch (error) {
+            // res.status(500).json({ error: 'Failed to search user account: ' + error.message });
+            return null;
+        }
+    }
+
+    static async getUserAccountList() {
+        try {
+            const userList = await UserAccount.getUserAccountList();
+            return userList;
+        } catch (error) {
+            console.log("Error:", error);
+            throw error;
         }
     }
 }
 
-export default new UserAccountController();
+export default UserAccountController;
