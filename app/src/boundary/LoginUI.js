@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import './LoginUI.css';
 import UserAuthController from "../controller/UserAuthController";
-import UserProfileController from "../controller/UserProfileController";
 
 import Swal from 'sweetalert2';
 
@@ -13,7 +12,7 @@ function LoginUI() {
 
     useEffect(() => {
         const fetchUserProfiles = async () => {
-            const snapshot = await UserProfileController.getUserProfiles();
+            const snapshot = await UserAuthController.getUserProfiles();
             if (snapshot !== null) {
                 const userData = snapshot.docs.map(doc => ({
                     pName: doc.data().name,

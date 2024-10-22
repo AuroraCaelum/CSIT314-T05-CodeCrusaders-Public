@@ -1,4 +1,5 @@
-import User from '../entity/UserAccount';
+import UserAccount from '../entity/UserAccount';
+import UserProfile from '../entity/UserProfile';
 import Cookies from 'js-cookie';
 
 class UserAuthController {
@@ -7,11 +8,20 @@ class UserAuthController {
         this.logout = this.logout.bind(this);
     }
 
+    static async getUserProfiles() {
+        try {
+            const profiles = await UserProfile.getUserProfiles();
+            return profiles;
+        } catch (error) {
+            return null;
+        }
+    }
+
     // Login 
     async authenticateLogin(username, password, userProfile) {
         // const { username, password, userProfile } = req.body;
         try {
-            const user = new User(null, null, null, password, null, userProfile, username);
+            const user = new UserAccount(null, null, null, password, null, userProfile, username);
 
             // Attempt to login with username and password
             const loginSuccess = await user.authenticateLogin(username, password, userProfile);
