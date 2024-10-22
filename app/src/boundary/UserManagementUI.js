@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Cookies from "js-cookie";
 import './UserManagementUI.css';
-import UserAuthController from "../controller/UserAuthController";
+import { UserLogoutController } from "../controller/UserAuthController";
 
 import Swal from 'sweetalert2';
 
@@ -23,7 +23,7 @@ function UserManagementUI() {
     };
 
     const handleLogout = async () => {
-        const userAuthController = new UserAuthController();
+        const userAuthController = new UserLogoutController();
         const logout = await userAuthController.logout();
         if (logout) {
             Swal.fire({
@@ -49,14 +49,14 @@ function UserManagementUI() {
     return (
         <div className="umContainer">
             <div className="umHeader">
-            <div className="umUserInfo">
-                    <img 
+                <div className="umUserInfo">
+                    <img
                         src={"https://placehold.co/40x40?text=" + Cookies.get("username")}
-                        alt="Profile" 
-                        className="umProfilePicture" 
+                        alt="Profile"
+                        className="umProfilePicture"
                     />
                     <span className="umUsername">{username}</span>
-                </div>                
+                </div>
                 <button onClick={handleLogout} className="umLogoutButton">
                     Logout
                 </button>
