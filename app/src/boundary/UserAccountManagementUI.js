@@ -34,7 +34,81 @@ function UserAccountManagementUI() {
     }
 
     const handleCreateAccount = () => {
-        alert("Redirecting to Account Creation Page...");
+        let firstNameInput, lastNameInput, usernameInput, passwordInput, phoneInput, emailInput, userProfileInput;
+
+        Swal.fire({
+            title: 'Create Account',
+            html: `
+                <input type="text" id="firstName" class="swal2-input" placeholder="First Name">
+                <input type="text" id="lastName" class="swal2-input" placeholder="Last Name">
+                <input type="text" id="username" class="swal2-input" placeholder="Username">
+                <input type="password" id="password" class="swal2-input" placeholder="Password">
+                <input type="text" id="phone" class="swal2-input" placeholder="Phone Number">
+                <input type="email" id="email" class="swal2-input" placeholder="Email">
+                <select id="userProfile" class="swal2-input">
+                    <option value="">Select User Profile</option>
+                    <option value="Buyer">Buyer</option>
+                    <option value="Seller">Seller</option>
+                    <option value="UsedCarAgent">Used Car Agent</option>
+                    <option value="UserAdmin">User Admin</option>
+                </select>
+            `,
+            confirmButtonText: 'Create Account',
+            focusConfirm: false,
+            didOpen: () => {
+                const popup = Swal.getPopup();
+                firstNameInput = popup.querySelector('#firstName');
+                lastNameInput = popup.querySelector('#lastName');
+                usernameInput = popup.querySelector('#username');
+                passwordInput = popup.querySelector('#password');
+                phoneInput = popup.querySelector('#phone');
+                emailInput = popup.querySelector('#email');
+                userProfileInput = popup.querySelector('#userProfile');
+
+                const handleEnterKey = (event) => {
+                    if (event.key === 'Enter') {
+                        Swal.clickConfirm();
+                    }
+                };
+
+                firstNameInput.onkeyup = handleEnterKey;
+                lastNameInput.onkeyup = handleEnterKey;
+                usernameInput.onkeyup = handleEnterKey;
+                passwordInput.onkeyup = handleEnterKey;
+                phoneInput.onkeyup = handleEnterKey;
+                emailInput.onkeyup = handleEnterKey;
+                userProfileInput.onkeyup = handleEnterKey;
+            },
+            preConfirm: () => {
+                const firstName = firstNameInput.value;
+                const lastName = lastNameInput.value;
+                const username = usernameInput.value;
+                const password = passwordInput.value;
+                const phone = phoneInput.value;
+                const email = emailInput.value;
+                const userProfile = userProfileInput.value;
+
+                if (!firstName || !lastName || !username || !password || !phone || !email || !userProfile) {
+                    Swal.showValidationMessage(`Please fill in all the fields`);
+                }
+
+                return { firstName, lastName, username, password, phone, email, userProfile };
+            },
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const { firstName, lastName, username, password, phone, email, userProfile } = result.value;
+                console.log('New Account Details:', {
+                    firstName,
+                    lastName,
+                    username,
+                    password,
+                    phone,
+                    email,
+                    userProfile
+                });
+                // Add logic here to handle account creation, like sending data to an API
+            }
+        });
     };
 
     const handleLogout = async () => {

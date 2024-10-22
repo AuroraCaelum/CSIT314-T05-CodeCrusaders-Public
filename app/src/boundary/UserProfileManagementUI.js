@@ -34,7 +34,56 @@ function UserProfileManagementUI() {
     }
 
     const handleCreateProfile = () => {
-        alert("Redirecting to Profile Creation Page...");
+        let profileNameInput, descriptionInput, typeInput;
+        Swal.fire({
+            title: 'Create Profile',
+            html: `
+                <input type="text" id="profileName" class="swal2-input" placeholder="profile name">
+                <input type="text" id="description" class="swal2-input" placeholder="description">
+                <input type="text" id="type" class="swal2-input" placeholder="type">
+            `,
+            confirmButtonText: 'Create Profile',
+            focusConfirm: false,
+            didOpen: () => {
+                const popup = Swal.getPopup();
+                profileNameInput = popup.querySelector('#profileName');
+                descriptionInput = popup.querySelector('#description');
+                typeInput = popup.querySelector('#type');
+
+                const handleEnterKey = (event) => {
+                    if (event.key === 'Enter') {
+                        Swal.clickConfirm();
+                    }
+                };
+
+                profileNameInput.onkeyup = handleEnterKey;
+                descriptionInput.onkeyup = handleEnterKey;
+                typeInput.onkeyup = handleEnterKey;
+
+            },
+            preConfirm: () => {
+                const profileName = profileNameInput.value;
+                const description = descriptionInput.value;
+                const type = typeInput.value;
+
+                if (!profileName || !description || !type) {
+                    Swal.showValidationMessage(`Please fill in all the fields`);
+                }
+
+                return { profileName, description, type };
+            },
+
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const { profileName, description, type } = result.value;
+                console.log('New Account Details:', {
+                    profileName,
+                    description,
+                    type
+                });
+                // Add logic here to handle account creation, like sending data to an API
+            }
+        });
     };
 
     const handleLogout = async () => {
