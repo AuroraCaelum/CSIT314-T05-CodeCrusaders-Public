@@ -3,6 +3,8 @@ import './LoginUI.css';
 import UserAuthController from "../controller/UserAuthController";
 import UserProfileController from "../controller/UserProfileController";
 
+import Swal from 'sweetalert2';
+
 function LoginUI() {
     const [userProfile, setUserProfile] = useState("");
     const [username, setUsername] = useState("");
@@ -27,17 +29,45 @@ function LoginUI() {
     const handleLogin = async (e) => {
         e.preventDefault();
         if (userProfile === "") {
-            alert("Please select user profile.")
+            Swal.fire({
+                position: "center",
+                title: 'Invalid Input',
+                icon: 'error',
+                text: 'Please select user profile.',
+                confirmButtonText: 'OK',
+                timer: 1500
+            });
         } else if (username === "" || password === "") {
-            alert("Please fill up username/password.")
+            Swal.fire({
+                position: "center",
+                title: 'Invalid Input',
+                icon: 'error',
+                text: 'Please fill up username/password.',
+                confirmButtonText: 'OK',
+                timer: 1500
+            });
         } else {
             const userAuthController = new UserAuthController();
             const loginSuccess = await userAuthController.authenticateLogin(username, password, userProfile);
             if (loginSuccess) {
-                alert("Login successful");
-                window.open('/usermanagement', "_self")
+                Swal.fire({
+                    position: "center",
+                    title: 'Login Successful',
+                    icon: 'success',
+                    confirmButtonText: 'OK',
+                    timer: 1500
+                }).then(() => {
+                    window.open('/usermanagement', "_self")
+                });
             } else {
-                alert("Invalid username/password. Please try again.");
+                Swal.fire({
+                    position: "center",
+                    title: 'Login Failed',
+                    icon: 'error',
+                    text: 'Invalid username/password. Please try again.',
+                    confirmButtonText: 'OK',
+                    timer: 1500
+                });
             }
         }
     };
