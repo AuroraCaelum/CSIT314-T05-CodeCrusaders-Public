@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./UserAccountManagementUI.css";
+import "./UserProfileManagementUI.css";
 
 function UserProfileManagementUI() {
     const [username] = useState("AdminUser");
@@ -25,48 +25,50 @@ function UserProfileManagementUI() {
     };
 
     return (
-        <div className="container">
-            <div className="header">
-                <img
-                    className="profile-picture"
-                    src="path_to_profile_picture"
-                    alt="Profile"
-                />
-                <span className="username">{username}</span>
-                <button onClick={handleLogout} className="logout-button">
+        <div className="upmContainer">
+            <div className="upmHeader">
+                <div className="upmProfile-picture">
+                    <img
+                        src="path_to_profile_picture"
+                        alt="Profile"
+                    />
+                    <span className="upmUsername">{username}</span>
+                </div>
+                <button onClick={handleLogout} className="upmLogout-button">
                     Logout
                 </button>
             </div>
-            <div className="search-bar">
+
+            <div className="upmSearch-bar">
                 <form onSubmit={handleSearch}>
                     <input
                         type="text"
                         placeholder="Search by username"
                         value={searchUsername}
                         onChange={(e) => setSearchUsername(e.target.value)}
-                        className="search-input"
+                        //className="search-input"
                     />
-                    <button type="submit" className="search-button">
+                    <button type="submit" className="upmSearch-button">
                         Search
                     </button>
                 </form>
-                <button onClick={handleCreateProfile} className="create-button">
+                <button onClick={handleCreateProfile} className="upmCreate-button">
                     Create user profile
                 </button>
             </div>
-            <div className="user-table">
-                <div className="table-header">
+            <div className="upmUser-table">
+                <div className="upmTable-header">
                     <span>Profile Name:</span>
                     <span>Description:</span>
                     <span>Type:</span>
                     <span></span>
                 </div>
                 {users.map((user) => (
-                    <div key={user.username} className="table-row">
+                    <div key={user.username} className="upmTable-row">
                         <span>{user.pName}</span>
                         <span>{user.description}</span>
                         <span>{user.type}</span>
-                        <button className="inspect-button">Inspect</button>
+                        <button className="upmInspect-button">Inspect</button>
                     </div>
                 ))}
             </div>

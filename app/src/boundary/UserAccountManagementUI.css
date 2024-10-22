@@ -1,6 +1,6 @@
-.container {
+.uamContainer {
     font-family: Arial, sans-serif;
-    width: 800px;
+    width: 80%;
     margin: 50px auto;
     padding: 20px;
     border: 1px solid #ccc;
@@ -8,28 +8,29 @@
     background-color: #f9f9f9;
 }
 
-.header {
+.uamHeader {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
-    gap: 10px;
     margin-bottom: 20px;
 }
 
-.profile-picture {
+.uamProfile-picture {
     width: 40px;
     height: 40px;
     border-radius: 50%;
     background-color: #ccc;
 }
 
-.username {
+.uamUsername {
     font-size: 16px;
     font-weight: bold;
+    margin-left: 55px;
 }
 
-.logout-button {
+.uamLogout-button {
     padding: 8px 16px;
+    border: none;
     border-radius: 5px;
     background-color: #333;
     color: #fff;
@@ -37,55 +38,59 @@
     border: none;
 }
 
-.search-bar {
+.uamSearch-bar {
     display: flex;
-    align-items: center;
-    gap: 10px;
+    justify-content: space-between;
     margin-bottom: 20px;
 }
 
-.search-input {
-    padding: 8px;
-    width: 200px;
+.uamSearch-input {
+    padding: 10px;
+    width: 60%;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
 
-.search-button, .create-button {
-    padding: 8px 16px;
+.uamSearch-button, .uamCreate-button {
+    padding: 10px 15px;
+    border: 1px solid #ccc;
     border-radius: 5px;
     background-color: #333;
     color: #fff;
     border: none;
     cursor: pointer;
+    margin-left: 10px;
 }
 
-.user-table {
-    margin-top: 20px;
-    border-top: 1px solid #ccc;
+.uamUser-table {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr auto;
+    gap: 10px;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    padding: 10px;
 }
 
-.table-header, .table-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 0;
-}
-
-.table-header {
+.uamTable-header {
+    display: contents;
     font-weight: bold;
-    border-bottom: 1px solid #ccc;
+    background-color: #ddd;
+    padding: 10px;
+    border-radius:5px;
 }
 
-.table-row {
+.uamTable-row {
+    display: contents;
+    padding: 10px;
     border-bottom: 1px solid #eee;
-    align-items: center;
 }
 
-.inspect-button {
-    padding: 5px 10px;
+.uamInspect-button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
     background-color: #333;
     color: #fff;
-    border-radius: 5px;
-    border: none;
     cursor: pointer;
+    margin-left: auto;
 }

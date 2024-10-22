@@ -21,25 +21,25 @@ function UserManagementUI() {
 
     return (
         <div className="umContainer">
-            <div className="header">
-            <div className="userInfo">
+            <div className="umHeader">
+            <div className="umUserInfo">
                     <img 
                         src="https://via.placeholder.com/40" 
                         alt="Profile" 
-                        className="profilePicture" 
+                        className="umProfilePicture" 
                     />
-                    <span className="username">{username}</span>
+                    <span className="umUsername">{username}</span>
                 </div>                
-                <button onClick={handleLogout} className="logoutButton">
+                <button onClick={handleLogout} className="umLogoutButton">
                     Logout
                 </button>
             </div>
-            <div className="buttonContainer">
-                <button onClick={handleAccountManagement} className="actionButton">
+            <div className="umButtonContainer">
+                <button onClick={handleAccountManagement} className="umActionButton">
                     User Account Management
                 </button>
 
-                <button onClick={handleAccountProfile} className="actionButton">
+                <button onClick={handleAccountProfile} className="umActionButton">
                     User Profile Management
                 </button>
             </div>
