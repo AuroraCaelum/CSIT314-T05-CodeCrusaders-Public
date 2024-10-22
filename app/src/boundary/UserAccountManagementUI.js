@@ -127,10 +127,84 @@ function UserAccountManagementUI() {
                     <strong>User Profile:</strong> ${user.profile}<br>
                 </div>
             `,
-            confirmButtonText: 'Close',
+            showCancelButton: true,
+            cancelButtonText: 'close',
+            confirmButtonText: 'Update Details',
+            showDenyButton: true,
+            denyButtonText: 'Suspend',
             focusConfirm: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                handleUpdateAccount(user);
+            } else if (result.isDenied) {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You are about to suspend this user.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, suspend it!',
+                    cancelButtonText: 'No, cancel'
+                }).then((suspendResult) => {
+                    if (suspendResult.isConfirmed) {
+                        console.log('User suspended:', user.pName);
+                        Swal.fire('Suspended!', 'The user has been suspended.', 'success');
+                    }
+                });
+            }
         });
     };
+
+    const handleUpdateAccount = (user) => {
+        Swal.fire({
+            title: 'Update User Account',
+            html: `
+                <input type="text" id="firstName" class="swal2-input" placeholder="First Name" value="${user.name.split(' ')[0]}">
+                <input type="text" id="lastName" class="swal2-input" placeholder="Last Name" value="${user.name.split(' ')[1]}">
+                <input type="text" id="username" class="swal2-input" placeholder="Username" value="${user.username}">
+                <input type="password" id="password" class="swal2-input" placeholder="Password">
+                <input type="text" id="phone" class="swal2-input" placeholder="Phone Number" value="${user.phone || ''}">
+                <input type="email" id="email" class="swal2-input" placeholder="Email" value="${user.email || ''}">
+                <select id="userProfile" class="swal2-input">
+                    <option value="">Select User Profile</option>
+                    <option value="Buyer" ${user.profile === "Buyer" ? "selected" : ""}>Buyer</option>
+                    <option value="Seller" ${user.profile === "Seller" ? "selected" : ""}>Seller</option>
+                    <option value="UsedCarAgent" ${user.profile === "UsedCarAgent" ? "selected" : ""}>Used Car Agent</option>
+                    <option value="UserAdmin" ${user.profile === "UserAdmin" ? "selected" : ""}>User Admin</option>
+                </select>
+            `,
+            confirmButtonText: 'Update',
+            focusConfirm: false,
+            preConfirm: () => {
+                const firstName = document.getElementById('firstName').value;
+                const lastName = document.getElementById('lastName').value;
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                const phone = document.getElementById('phone').value;
+                const email = document.getElementById('email').value;
+                const userProfile = document.getElementById('userProfile').value;
+    
+                if (!firstName || !lastName || !username || !phone || !email || !userProfile) {
+                    Swal.showValidationMessage(`Please fill in all fields`);
+                    return false;
+                }
+                return { firstName, lastName, username, password, phone, email, userProfile };
+            }
+        }).then((updateResult) => {
+            if (updateResult.isConfirmed) {
+                const { firstName, lastName, username, password, phone, email, userProfile } = updateResult.value;
+                console.log('Updated Account Details:', {
+                    firstName,
+                    lastName,
+                    username,
+                    password,
+                    phone,
+                    email,
+                    userProfile
+                });
+                Swal.fire('Updated!', 'The user details have been updated.', 'success');
+            }
+        });
+    };    
 
     const handleLogout = async () => {
         const userAuthController = new UserLogoutController();

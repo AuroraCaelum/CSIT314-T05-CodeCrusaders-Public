@@ -99,8 +99,65 @@ function UserProfileManagementUI() {
                     <strong>Type:</strong> ${user.type}<br>
                 </div>
             `,
-            confirmButtonText: 'Close',
+            showCancelButton: true,
+            cancelButtonText: 'close',
+            confirmButtonText: 'Update Details',
+            showDenyButton: true,
+            denyButtonText: 'Suspend',
             focusConfirm: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                handleUpdateProfile(user);
+            } else if (result.isDenied) {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You are about to suspend this user.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, suspend it!',
+                    cancelButtonText: 'No, cancel'
+                }).then((suspendResult) => {
+                    if (suspendResult.isConfirmed) {
+                        console.log('User suspended:', user.pName);
+                        Swal.fire('Suspended!', 'The user has been suspended.', 'success');
+                    }
+                });
+            }
+        });
+    };
+
+    const handleUpdateProfile = (user) => {
+        Swal.fire({
+            title: 'Update User Profile',
+            html: `
+                <input type="text" id="profileName" class="swal2-input" placeholder="profile name">
+                <input type="text" id="description" class="swal2-input" placeholder="description">
+                <input type="text" id="type" class="swal2-input" placeholder="type">
+            `,
+            confirmButtonText: 'Update',
+            focusConfirm: false,
+            preConfirm: () => {
+                const pName = document.getElementById('profileName').value;
+                const description = document.getElementById('description').value;
+                const type = document.getElementById('type').value;
+        
+    
+                if (!pName || !description || !type ) {
+                    Swal.showValidationMessage(`Please fill in all fields`);
+                    return false;
+                }
+                return { pName, description, type };
+            }
+        }).then((updateResult) => {
+            if (updateResult.isConfirmed) {
+                const { pName, description, type } = updateResult.value;
+                console.log('Updated Profile Details:', {
+                    pName,
+                    description,
+                    type
+                });
+                Swal.fire('Updated!', 'The user details have been updated.', 'success');
+            }
         });
     };
 
