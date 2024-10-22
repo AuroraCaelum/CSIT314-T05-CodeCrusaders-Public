@@ -4,6 +4,8 @@ import "./UserAccountManagementUI.css";
 import UserAuthController from "../controller/UserAuthController";
 import UserProfileController from "../controller/UserProfileController";
 
+import Swal from 'sweetalert2';
+
 function UserProfileManagementUI() {
     const [username] = useState(Cookies.get("username"));
     const [searchUsername, setSearchUsername] = useState("");
@@ -39,10 +41,23 @@ function UserProfileManagementUI() {
         const userAuthController = new UserAuthController();
         const logout = await userAuthController.logout();
         if (logout) {
-            alert("Logout success");
-            window.open("/", "_self")
+            Swal.fire({
+                position: "center",
+                title: 'Logout Successful',
+                icon: 'success',
+                confirmButtonText: 'Back to login',
+                timer: 1500
+            }).then(() => {
+                window.open("/", "_self")
+            });
         } else {
-            alert("Logout failed");
+            Swal.fire({
+                position: "center",
+                title: 'Logout Failed',
+                icon: 'error',
+                confirmButtonText: 'OK',
+                timer: 1500
+            });
         }
     };
 

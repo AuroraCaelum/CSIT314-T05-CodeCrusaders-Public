@@ -3,6 +3,8 @@ import Cookies from "js-cookie";
 import './UserManagementUI.css';
 import UserAuthController from "../controller/UserAuthController";
 
+import Swal from 'sweetalert2';
+
 function UserManagementUI() {
     const [username] = useState(Cookies.get("username"))
 
@@ -24,10 +26,23 @@ function UserManagementUI() {
         const userAuthController = new UserAuthController();
         const logout = await userAuthController.logout();
         if (logout) {
-            alert("Logout success");
-            window.open("/", "_self")
+            Swal.fire({
+                position: "center",
+                title: 'Logout Successful',
+                icon: 'success',
+                confirmButtonText: 'Back to login',
+                timer: 1500
+            }).then(() => {
+                window.open("/", "_self")
+            });
         } else {
-            alert("Logout failed");
+            Swal.fire({
+                position: "center",
+                title: 'Logout Failed',
+                icon: 'error',
+                confirmButtonText: 'OK',
+                timer: 1500
+            });
         }
     }
 
