@@ -89,7 +89,7 @@ function LoginUI() {
                         <option value={profile.type}>{profile.pName}</option>
                     ))}
                 </select>
-                <label htmlFor="userId">User ID:</label>
+                <label htmlFor="userId">Username:</label>
                 <input
                     type="text"
                     id="username"

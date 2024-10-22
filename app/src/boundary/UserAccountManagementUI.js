@@ -66,16 +66,23 @@ function UserAccountManagementUI() {
         console.log("Searched Username:", searchUsername);
     };
 
+    const handleBack = () => {
+        window.history.back();
+    };
+
     return (
         <div className="uamContainer">
             <div className="uamHeader">
+                <button onClick={handleBack} className="uamBack-button">
+                    Back
+                </button>
                 <div className="uamProfile-picture">
                     <img
                         src={"https://placehold.co/40x40?text=" + Cookies.get("username")}
                         alt="Profile"
                     />
-                    <span className="uamUsername">{username}</span>
                 </div>
+                <span className="uamUsername">{username}</span>
                 <button onClick={handleLogout} className="uamLogout-button">
                     Logout
                 </button>
