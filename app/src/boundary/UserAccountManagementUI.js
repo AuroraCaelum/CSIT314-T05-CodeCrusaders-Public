@@ -91,6 +91,9 @@ function UserAccountManagementUI() {
                 if (!firstName || !lastName || !username || !password || !phone || !email || !userProfile) {
                     Swal.showValidationMessage(`Please fill in all the fields`);
                 }
+                else{
+                    Swal.fire("Account Created!");
+                }
 
                 return { firstName, lastName, username, password, phone, email, userProfile };
             },
@@ -108,6 +111,24 @@ function UserAccountManagementUI() {
                 });
                 // Add logic here to handle account creation, like sending data to an API
             }
+        });
+    };
+
+    const handleInspectAccount = (user) => {
+        Swal.fire({
+            title: 'View User Account',
+            html: `
+                <div style="text-align: left;">
+                    <strong>First Name:</strong> ${user.name.split(' ')[0]}<br>
+                    <strong>Last Name:</strong> ${user.name.split(' ')[1]}<br>
+                    <strong>Username:</strong> ${user.username}<br>
+                    <strong>Phone:</strong> ${user.phone || 'N/A'}<br>
+                    <strong>Email:</strong> ${user.email || 'N/A'}<br>
+                    <strong>User Profile:</strong> ${user.profile}<br>
+                </div>
+            `,
+            confirmButtonText: 'Close',
+            focusConfirm: false
         });
     };
 
@@ -191,7 +212,9 @@ function UserAccountManagementUI() {
                         <span>{user.name}</span>
                         <span>{user.username}</span>
                         <span>{user.profile}</span>
-                        <button className="uamInspect-button">Inspect</button>
+                        <button onClick={() => handleInspectAccount(user)} className="uamInspect-button">
+                            Inspect
+                        </button>
                     </div>
                 ))}
             </div>

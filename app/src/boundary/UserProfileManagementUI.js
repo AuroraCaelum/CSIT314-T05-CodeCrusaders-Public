@@ -62,27 +62,45 @@ function UserProfileManagementUI() {
 
             },
             preConfirm: () => {
-                const profileName = profileNameInput.value;
+                const pName = profileNameInput.value;
                 const description = descriptionInput.value;
                 const type = typeInput.value;
 
-                if (!profileName || !description || !type) {
+                if (!pName || !description || !type) {
                     Swal.showValidationMessage(`Please fill in all the fields`);
                 }
+                else{
+                    Swal.fire("Profile Created!");
+                }
 
-                return { profileName, description, type };
+                return { pName, description, type };
             },
 
         }).then((result) => {
             if (result.isConfirmed) {
-                const { profileName, description, type } = result.value;
+                const { pName, description, type } = result.value;
                 console.log('New Account Details:', {
-                    profileName,
+                    pName,
                     description,
                     type
                 });
                 // Add logic here to handle account creation, like sending data to an API
             }
+        });
+    };
+
+    const handleInspectProfile = (user) => {
+        Swal.fire({
+            title: 'View User Profile',
+            html: `
+                <div style="text-align: left;">
+                    <strong>Profile Name:</strong> ${user.pName}<br>
+                    <strong>Description:</strong> ${user.description}<br>
+                    <strong>Type:</strong> ${user.type}<br>
+                </div>
+            `,
+            confirmButtonText: 'Close',
+            focusConfirm: false
         });
     };
 
@@ -166,7 +184,7 @@ function UserProfileManagementUI() {
                         <span>{user.pName}</span>
                         <span>{user.description}</span>
                         <span>{user.type}</span>
-                        <button className="upmInspect-button">Inspect</button>
+                        <button onClick={() => handleInspectProfile(user)}className="upmInspect-button">Inspect</button>
                     </div>
                 ))}
             </div>
