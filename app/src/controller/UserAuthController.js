@@ -2,10 +2,9 @@ import UserAccount from '../entity/UserAccount';
 import UserProfile from '../entity/UserProfile';
 import Cookies from 'js-cookie';
 
-class UserAuthController {
+class UserLoginController {
     constructor() {
         this.authenticateLogin = this.authenticateLogin.bind(this);
-        this.logout = this.logout.bind(this);
     }
 
     static async getUserProfiles() {
@@ -39,7 +38,9 @@ class UserAuthController {
             return false;
         }
     }
+}
 
+class UserLogoutController {
     // Logout
     async logout() {
         try {
@@ -52,7 +53,6 @@ class UserAuthController {
             return false;
         }
     }
-
 }
 
-export default UserAuthController;
+export { UserLoginController, UserLogoutController };
