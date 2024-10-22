@@ -1,4 +1,5 @@
 .uamContainer {
+    position: relative;
     font-family: Arial, sans-serif;
     width: 80%;
     margin: 50px auto;
@@ -10,9 +11,20 @@
 
 .uamHeader {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
     margin-bottom: 20px;
+}
+
+.uamBack-button {
+    padding: 8px 16px; 
+    border: none; 
+    border-radius: 5px; 
+    background-color: #333; 
+    color: #fff; 
+    cursor: pointer; 
+    margin-right: auto; 
 }
 
 .uamProfile-picture {
@@ -20,12 +32,16 @@
     height: 40px;
     border-radius: 50%;
     background-color: #ccc;
+    flex-shrink: 0;
 }
 
 .uamUsername {
     font-size: 16px;
     font-weight: bold;
-    margin-left: 55px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
 }
 
 .uamLogout-button {
@@ -35,7 +51,6 @@
     background-color: #333;
     color: #fff;
     cursor: pointer;
-    border: none;
 }
 
 .uamSearch-bar {
@@ -51,7 +66,7 @@
     border-radius: 5px;
 }
 
-.uamSearch-button, .uamCreate-button {
+.uamSearch-button, .upmCreate-button {
     padding: 10px 15px;
     border: 1px solid #ccc;
     border-radius: 5px;

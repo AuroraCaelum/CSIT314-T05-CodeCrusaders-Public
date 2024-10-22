@@ -66,16 +66,23 @@ function UserProfileManagementUI() {
         console.log("Searched Username:", searchUsername);
     };
 
+    const handleBack = () => {
+        window.history.back(); 
+    };
+
     return (
         <div className="upmContainer">
             <div className="upmHeader">
+                <button onClick={handleBack} className="upmBack-button">
+                    Back
+                </button>
                 <div className="upmProfile-picture">
                     <img
                         src={"https://placehold.co/40x40?text=" + Cookies.get("username")}
                         alt="Profile"
                     />
-                    <span className="upmUsername">{username}</span>
                 </div>
+                <span className="upmUsername">{username}</span>
                 <button onClick={handleLogout} className="upmLogout-button">
                     Logout
                 </button>
