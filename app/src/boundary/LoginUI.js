@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import './LoginUI.css';
-import UserAuthController from "../controller/UserAuthController";
+import { UserLoginController } from "../controller/UserAuthController";
 
 import Swal from 'sweetalert2';
 
@@ -12,7 +12,7 @@ function LoginUI() {
 
     useEffect(() => {
         const fetchUserProfiles = async () => {
-            const snapshot = await UserAuthController.getUserProfiles();
+            const snapshot = await UserLoginController.getUserProfiles();
             if (snapshot !== null) {
                 const userData = snapshot.docs.map(doc => ({
                     pName: doc.data().name,
@@ -46,8 +46,8 @@ function LoginUI() {
                 timer: 1500
             });
         } else {
-            const userAuthController = new UserAuthController();
-            const loginSuccess = await userAuthController.authenticateLogin(username, password, userProfile);
+            const userLoginController = new UserLoginController();
+            const loginSuccess = await userLoginController.authenticateLogin(username, password, userProfile);
             if (loginSuccess) {
                 Swal.fire({
                     position: "center",

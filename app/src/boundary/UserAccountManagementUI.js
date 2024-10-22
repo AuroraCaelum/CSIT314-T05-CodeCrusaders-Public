@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import "./UserAccountManagementUI.css";
-import UserAuthController from "../controller/UserAuthController";
+import { UserLogoutController } from "../controller/UserAuthController";
 import UserAccountController from "../controller/UserAccountController";
 
 import Swal from 'sweetalert2';
@@ -38,7 +38,7 @@ function UserAccountManagementUI() {
     };
 
     const handleLogout = async () => {
-        const userAuthController = new UserAuthController();
+        const userAuthController = new UserLogoutController();
         const logout = await userAuthController.logout();
         if (logout) {
             Swal.fire({
@@ -87,7 +87,7 @@ function UserAccountManagementUI() {
                     Logout
                 </button>
             </div>
-            
+
             <div className="uamSearch-bar">
                 <form onSubmit={handleSearch}>
                     <input
@@ -95,7 +95,7 @@ function UserAccountManagementUI() {
                         placeholder="Search by username"
                         value={searchUsername}
                         onChange={(e) => setSearchUsername(e.target.value)}
-                        //className="search-input"
+                    //className="search-input"
                     />
                     <button type="submit" className="uamSearch-button">
                         Search
