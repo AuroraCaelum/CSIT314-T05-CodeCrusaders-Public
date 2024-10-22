@@ -10,32 +10,31 @@
     text-align: center;
 }
 
-.header {
+.umHeader {
     display: flex;
     justify-content: flex-end;
     align-items: center;
     margin-bottom: 20px;
 }
-
-.userInfo {
+.umUserInfo {
     display: flex;
     align-items: center;
     margin-right: 20px;
 }
 
-.profilePicture {
+.umProfilePicture {
     width: 40px;
     height: 40px;
     border-radius: 50%;
     margin-right: 10px;
 }
 
-.username {
+.umUsername {
     font-size: 16px;
     font-weight: bold;
 }
 
-.logoutButton {
+.umLogoutButton {
     padding: 8px 16px;
     border-radius: 5px;
     background-color: #FFFFFF;
@@ -43,13 +42,13 @@
     cursor: pointer;
 }
 
-.buttonContainer {
+.umButtonContainer {
     display: flex;
     justify-content: space-between;
     margin-top: 60px;
 }
 
-.actionButton {
+.umActionButton {
     width: 45%;
     padding: 15px;
     border-radius: 5px;

@@ -25,48 +25,50 @@ function UserAccountManagementUI() {
     };
 
     return (
-        <div className="container">
-            <div className="header">
-                <img
-                    className="profile-picture"
-                    src="path_to_profile_picture"
-                    alt="Profile"
-                />
-                <span className="username">{username}</span>
-                <button onClick={handleLogout} className="logout-button">
+        <div className="uamContainer">
+            <div className="uamHeader">
+                <div className="uamProfile-picture">
+                    <img
+                        src="path_to_profile_picture"
+                        alt="Profile"
+                    />
+                    <span className="uamUsername">{username}</span>
+                </div>
+                <button onClick={handleLogout} className="uamLogout-button">
                     Logout
                 </button>
             </div>
-            <div className="search-bar">
+            
+            <div className="uamSearch-bar">
                 <form onSubmit={handleSearch}>
                     <input
                         type="text"
                         placeholder="Search by username"
                         value={searchUsername}
                         onChange={(e) => setSearchUsername(e.target.value)}
-                        className="search-input"
+                        //className="search-input"
                     />
-                    <button type="submit" className="search-button">
+                    <button type="submit" className="uamSearch-button">
                         Search
                     </button>
                 </form>
-                <button onClick={handleCreateAccount} className="create-button">
+                <button onClick={handleCreateAccount} className="uamCreate-button">
                     Create user account
                 </button>
             </div>
-            <div className="user-table">
-                <div className="table-header">
+            <div className="uamUser-table">
+                <div className="uamTable-header">
                     <span>Name:</span>
                     <span>Username:</span>
                     <span>Profile:</span>
                     <span></span>
                 </div>
                 {users.map((user) => (
-                    <div key={user.username} className="table-row">
+                    <div key={user.username} className="uamTable-row">
                         <span>{user.name}</span>
                         <span>{user.username}</span>
                         <span>{user.profile}</span>
-                        <button className="inspect-button">Inspect</button>
+                        <button className="uamInspect-button">Inspect</button>
                     </div>
                 ))}
             </div>
