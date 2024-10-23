@@ -17,7 +17,7 @@ class UserAccountController {
         // const { username } = req.params;
         try {
             // const user = new UserAccount(null, null, null, null, null, null, username); // Initialize User with username
-            const userAccount = await UserAccount.viewUserAccount(); // Fetch user data by username
+            const userAccount = await UserAccount.viewUserAccount(username); // Fetch user data by username
             return userAccount;
         } catch (error) {
             return null;
