@@ -95,7 +95,7 @@ function UCAUsedCarListing() {
 
     const handleInspectAccount = (user) => { //not done
         Swal.fire({
-            title: 'View User Account',
+            title: 'View Used Car',
             html: `
                 <div style="text-align: left;">
                     <strong>Product Name:</strong> ${user.pName}<br>
