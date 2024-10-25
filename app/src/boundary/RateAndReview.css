@@ -1,0 +1,87 @@
+.rarContainer {
+    position: relative;
+    font-family: Arial, sans-serif;
+    width: 80%;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+}
+
+.rarHeader {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.rarBack-button {
+    padding: 8px 16px; 
+    border: none; 
+    border-radius: 5px; 
+    background-color: #333; 
+    color: #fff; 
+    cursor: pointer; 
+    margin-right: auto; 
+}
+
+.rarProfile-picture {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #ccc;
+    flex-shrink: 0;
+}
+
+.rarUsername {
+    font-size: 16px;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+}
+
+.rarLogout-button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #333;
+    color: #fff;
+    cursor: pointer;
+}
+
+.rarUser-table {
+    display: flex;
+    grid-template-columns: 1fr 2fr 1fr auto;
+    gap: 10px;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.rarTable-header {
+    display: contents;
+    font-weight: bold;
+    background-color: #ddd;
+    padding: 10px;
+    border-radius:5px;
+}
+
+.rarTable-row {
+    display: contents;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.rarInspect-button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    background-color: #333;
+    color: #fff;
+    cursor: pointer;
+    margin-left: auto;
+}
