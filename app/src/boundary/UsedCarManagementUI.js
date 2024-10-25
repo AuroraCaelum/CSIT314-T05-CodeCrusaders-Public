@@ -12,9 +12,9 @@ function UsedCarManagementUI() {
     //     window.open("/", "_self")
     // }
 
-    const handleUsedCarManagement = () => {
+    const handleUsedCarListing = () => {
         console.log("Used Car Management");
-        window.open("/useraccountmanagement", "_self");
+        window.open("/ucausedcarlisting", "_self");
     };
 
     const handleFeedback = () => {
@@ -62,12 +62,12 @@ function UsedCarManagementUI() {
                 </button>
             </div>
             <div className="ucamButtonContainer">
-                <button onClick={handleUsedCarManagement} className="ucamActionButton">
-                    Used Car Management
+                <button onClick={handleUsedCarListing} className="ucamActionButton">
+                    Used Car Listing
                 </button>
 
                 <button onClick={handleFeedback} className="ucamActionButton">
-                    Feedback
+                    View my Rate and Review
                 </button>
             </div>
         </div>
