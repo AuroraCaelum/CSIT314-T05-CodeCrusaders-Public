@@ -1,10 +1,10 @@
 import FirebaseService from "../FirebaseService";
 
 class UserProfile {
-    constructor(description, name, type) {
+    constructor(profileName, description, profileType) {
+        this.name = profileName;
         this.description = description;
-        this.name = name;
-        this.type = type;
+        this.type = profileType;
         this.firebaseService = new FirebaseService();
     }
 
@@ -72,7 +72,7 @@ class UserProfile {
     // Suspend profile by setting 'suspended' to true
     async suspendUserProfile() {
         try {
-            await this.firebaseService.updateDocument('UserProfile', this.type, { suspended: true });
+            await this.firebaseService.updateDocument('UserProfile', this.name, { suspended: true });
             console.log("UserProfile suspended successfully");
             return true;
         } catch (error) {
