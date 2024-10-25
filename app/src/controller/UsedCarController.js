@@ -1,7 +1,8 @@
 // File path: src/controller/UsedCarController.js
 import UsedCar from '../entity/UsedCar';
+import UserAccount from '../entity/UserAccount';
 
-class UsedCarController {
+class CreateUsedCarController {
 
     // Create a new used car entry
     async createUsedCar(
@@ -11,6 +12,13 @@ class UsedCarController {
         manufacture_year, engine_cap, curb_weight
     ) {
         try {
+            // Validate if the seller exists
+            const isValidSeller = await UserAccount.validateSeller(seller_username);
+            if (!isValidSeller) {
+                return { success: false, message: 'Invalid seller username' };
+            }
+
+            // Proceed to create the used car entry if seller is valid
             const car = new UsedCar(
                 usedCarId, seller_username, car_name, car_type, 
                 car_manufacturer, car_image, description, 
@@ -28,6 +36,21 @@ class UsedCarController {
             return { success: false, message: error.message };
         }
     }
+}
+
+class ViewUsedCarController {
+
+    // Retrieve all used car entries
+    static async getUsedCarList() {
+        try {
+            const usedCars = await UsedCar.getUsedCarList();
+            return { success: true, data: usedCars };
+        } catch (error) {
+            console.error('Error fetching used cars:', error);
+            return { success: false, message: error.message };
+        }
+    }
+
 
     // View a used car by its ID
     async viewUsedCar(usedCarId) {
@@ -43,12 +66,21 @@ class UsedCarController {
             return { success: false, message: error.message };
         }
     }
+}
+
+class UpdateUsedCarController {
 
     // Update an existing used car entry
     async updateUsedCar(
-        usedCarId, newData
+        usedCarId, seller_username, newData
     ) {
         try {
+            // Validate if the seller exists
+            const isValidSeller = await UserAccount.validateSeller(seller_username);
+            if (!isValidSeller) {
+                return { success: false, message: 'Invalid seller username' };
+            }
+
             const success = await UsedCar.updateUsedCar(usedCarId, newData);
             if (success) {
                 return { success: true, message: 'Used car updated successfully' };
@@ -60,6 +92,9 @@ class UsedCarController {
             return { success: false, message: error.message };
         }
     }
+}
+
+class DeleteUsedCarController {
 
     // Suspend a used car entry
     async deleteUsedCar(usedCarId) {
@@ -76,6 +111,9 @@ class UsedCarController {
             return { success: false, message: error.message };
         }
     }
+}
+
+class SearchUsedCarController {
 
     // Search for a used car by name
     async searchUsedCar(usedCarId) {
@@ -91,17 +129,6 @@ class UsedCarController {
             return { success: false, message: error.message };
         }
     }
-
-    // Retrieve all used car entries
-    static async getUsedCarList() {
-        try {
-            const usedCars = await UsedCar.getUsedCarList();
-            return { success: true, data: usedCars };
-        } catch (error) {
-            console.error('Error fetching used cars:', error);
-            return { success: false, message: error.message };
-        }
-    }
 }
 
-export default UsedCarController;
+export { CreateUsedCarController, ViewUsedCarController, UpdateUsedCarController, DeleteUsedCarController, SearchUsedCarController };

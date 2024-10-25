@@ -1,77 +1,23 @@
 import UserProfile from '../entity/UserProfile';
 
-class UserProfileController {
+class CreateUserProfileController {
 
     // Create user profile, takes in profileName, description, profileType
-    async createUserProfile(req, res) {
-        const { description, name, typeOfUser } = req.body;
+    async createUserProfile(profileName, description, profileType) {
         try {
-            const profile = new UserProfile(description, name, typeOfUser);
+            const profile = new UserProfile(description, profileName, profileType);
             const success = await profile.createUserProfile(); // Changed method call to reflect new implementation
             if (success) {
-                res.status(201).json({ message: 'UserProfile created successfully', success: true });
+                return true;
             } else {
-                res.status(500).json({ message: 'Failed to create UserProfile', success: false });
+                return false;
             }
         } catch (error) {
-            res.status(500).json({ error: error.message, success: false });
+            return false;
         }
     }
-
-    // View current user's profile
-    async viewUserProfile(req, res) {
-        const { profileName } = req.params; // This should correspond to typeOfUser now
-        try {
-            const profile = new UserProfile(); // Assuming constructor is still needed
-            const profileData = await profile.viewUserProfile(profileName); // Change to viewUserProfile
-            res.status(200).json(profileData);
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    }
-
-    // Update user's profile
-    async updateUserProfile(req, res) {
-        const { description, name, typeOfUser } = req.body;
-        try {
-            const profile = new UserProfile(description, name, typeOfUser); // Pass data to constructor
-            const success = await profile.updateUserProfile(); // Adjusted to use type as ID
-            if (success) {
-                res.status(200).json({ message: 'UserProfile updated successfully', success: true });
-            } else {
-                res.status(500).json({ message: 'Failed to update UserProfile', success: false });
-            }
-        } catch (error) {
-            res.status(500).json({ error: error.message, success: false });
-        }
-    }
-
-    // Suspend user's profile
-    async suspendUserProfile(req, res) {
-
-        try {
-            const profile = new UserProfile(); // Assuming constructor still needed
-            const success = await profile.suspendUserProfile(); // No need for profileId
-            if (success) {
-                res.status(200).json({ message: 'UserProfile suspended successfully', success: true });
-            } else {
-                res.status(500).json({ message: 'Failed to suspend UserProfile', success: false });
-            }
-        } catch (error) {
-            res.status(500).json({ error: error.message, success: false });
-        }
-    }
-
-    // Search for user's profile
-    async searchUserProfile(req, res) {
-        const { profileName } = req.params;
-        try {
-            const profile = await UserProfile.searchUserProfile(profileName); // Adjusted to correct method
-            res.status(200).json(profile);
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    }
+}
+class ViewUserProfileController {
 
     static async getUserProfiles() {
         try {
@@ -82,7 +28,69 @@ class UserProfileController {
             throw error;
         }
     }
+
+    // View current user's profile
+    async viewUserProfile(profileName) {
+        try {
+            const profile = new UserProfile(); // Assuming constructor is still needed
+            const profileData = await profile.viewUserProfile(profileName); // Change to viewUserProfile
+            return profileData;
+        } catch (error) {
+            console.log("Error:", error);
+            throw error;
+        }
+    }
 }
 
-export default UserProfileController;
+class UpdateUserProfileController {
+
+    // Update user's profile
+    async updateUserProfile(profileName, description, profileType) {
+        try {
+            const profile = new UserProfile(profileName, description, profileType); // Pass data to constructor
+            const success = await profile.updateUserProfile(); // Adjusted to use type as ID
+            if (success) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (error) {
+            return true;
+        }
+    }
+}
+
+class SuspendUserProfileController {
+
+    // Suspend user's profile
+    async suspendUserProfile(profileName) {
+
+        try {
+            const profile = new UserProfile(profileName, null, null); // Assuming constructor still needed
+            const success = await profile.suspendUserProfile(profileName); // No need for profileId
+            if (success) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (error) {
+            return false;
+        }
+    }
+}
+
+class SearchUserProfileController {
+
+    // Search for user's profile
+    async searchUserProfile(profileName) {
+        try {
+            const profile = await UserProfile.searchUserProfile(profileName); // Adjusted to correct method
+            return profile;
+        } catch (error) {
+            throw error;
+        }
+    }
+}
+
+export { CreateUserProfileController, ViewUserProfileController, UpdateUserProfileController, SuspendUserProfileController, SearchUserProfileController };
 

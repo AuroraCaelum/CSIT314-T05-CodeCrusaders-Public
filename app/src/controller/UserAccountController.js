@@ -1,15 +1,27 @@
 import UserAccount from '../entity/UserAccount';
 
-class UserAccountController {
+class CreateUserAccountController {
 
     // Register a new user
     async createUserAccount(fName, lName, username, password, phoneNum, email, userProfile) {
         try {
-            // const user = new UserAccount(email, fName, lName, password, phoneNum, userProfile, username);
             await UserAccount.createUserAccount(email, fName, lName, password, phoneNum, userProfile, username);
             return true;
         } catch (error) {
             return false;
+        }
+    }
+}
+
+class ViewUserAccountController {
+
+    static async getUserAccountList() {
+        try {
+            const userList = await UserAccount.getUserAccountList();
+            return userList;
+        } catch (error) {
+            console.log("Error:", error);
+            throw error;
         }
     }
 
@@ -23,6 +35,9 @@ class UserAccountController {
             return null;
         }
     }
+}
+
+class UpdateUserAccountController {
 
     async updateUserAccount(username, fName, lName, password, phoneNum, email, userProfile) {
         // const { email, fName, lName, phoneNum, userProfile, username } = req.body;
@@ -35,6 +50,9 @@ class UserAccountController {
             return false;
         }
     }
+}
+
+class SuspendUserAccountController {
 
     async suspendUserAccount(username) {
         // const { username } = req.params;
@@ -48,6 +66,9 @@ class UserAccountController {
             return false;
         }
     }
+}
+
+class SearchUserAccountController {
 
     async searchUserAccount(username) {
         // const { username } = req.params;
@@ -60,16 +81,7 @@ class UserAccountController {
             return null;
         }
     }
-
-    static async getUserAccountList() {
-        try {
-            const userList = await UserAccount.getUserAccountList();
-            return userList;
-        } catch (error) {
-            console.log("Error:", error);
-            throw error;
-        }
-    }
 }
 
-export default UserAccountController;
+
+export { CreateUserAccountController, ViewUserAccountController, UpdateUserAccountController, SuspendUserAccountController, SearchUserAccountController };
