@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import "./UCAUsedCarListing.css";
+import "./UCAUsedCarListingUI.css";
 import { UserLogoutController } from "../controller/UserAuthController";
 import { ViewUserAccountController } from "../controller/UserAccountController";
 
 import Swal from 'sweetalert2';
 
-function UCAUsedCarListing() {
+function UCAUsedCarListingUI() {
     const [username] = useState(Cookies.get("username"));
     const [searchUsername, setSearchUsername] = useState("");
     const [users, setUsers] = useState([
@@ -29,7 +29,7 @@ function UCAUsedCarListing() {
         fetchUsers();
     }, []);
 
-    if (Cookies.get("userProfile") !== "UserAdmin") {
+    if (Cookies.get("userProfile") !== "UsedCarAgent") {
         window.open("/", "_self")
     }
 
@@ -70,10 +70,10 @@ function UCAUsedCarListing() {
                 const type = typeInput.value;
                 const price = priceInput.value;
 
-                if (!prodName || !description || !type || !price ) {
+                if (!prodName || !description || !type || !price) {
                     Swal.showValidationMessage(`Please fill in all the fields`);
                 }
-                else{
+                else {
                     Swal.fire("Product Listed!"); //is it ok if we change it to this instead of "Product Created!" ?
                 }
 
@@ -147,8 +147,8 @@ function UCAUsedCarListing() {
                 const description = document.getElementById('description').value;
                 const type = document.getElementById('type').value;
                 const price = document.getElementById('price').value;
-    
-                if (!prodName || !description || !type || !price ) {
+
+                if (!prodName || !description || !type || !price) {
                     Swal.showValidationMessage(`Please fill in all fields`);
                     return false;
                 }
@@ -166,7 +166,7 @@ function UCAUsedCarListing() {
                 Swal.fire('Updated!', 'The used car details have been updated.', 'success');
             }
         });
-    };    
+    };
 
     const handleLogout = async () => {
         const userAuthController = new UserLogoutController();
@@ -260,4 +260,4 @@ function UCAUsedCarListing() {
     );
 }
 
-export default UCAUsedCarListing;
+export default UCAUsedCarListingUI;

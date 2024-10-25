@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import "./RateAndReview.css";
+import "./UCARateReviewUI.css";
 import { UserLogoutController } from "../controller/UserAuthController";
 import { ViewUserAccountController } from "../controller/UserAccountController";
 
 import Swal from 'sweetalert2';
 
-function RateAndReview() {
+function UCARateReviewUI() {
     const [username] = useState(Cookies.get("username"));
     // const [searchUsername, setSearchUsername] = useState("");
     const [users, setUsers] = useState([
@@ -29,7 +29,7 @@ function RateAndReview() {
         fetchUsers();
     }, []);
 
-    if (Cookies.get("userProfile") !== "UserAdmin") {
+    if (Cookies.get("userProfile") !== "UsedCarAgent") {
         window.open("/", "_self")
     }
 
@@ -120,4 +120,4 @@ function RateAndReview() {
     );
 }
 
-export default RateAndReview;
+export default UCARateReviewUI;
