@@ -56,7 +56,8 @@ function LoginUI() {
                     confirmButtonText: 'OK',
                     timer: 1500
                 }).then(() => {
-                    window.open('/usermanagement', "_self")
+                    if (userProfile === "UserAdmin") window.open('/usermanagement', "_self")
+                    else if (userProfile === "UsedCarAgent") window.open('/usedcarmanagement', "_self")
                 });
             } else {
                 Swal.fire({

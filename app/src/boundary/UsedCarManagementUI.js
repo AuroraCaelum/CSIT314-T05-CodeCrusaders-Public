@@ -8,9 +8,9 @@ import Swal from 'sweetalert2';
 function UsedCarManagementUI() {
     const [username] = useState(Cookies.get("username"))
 
-    // if (Cookies.get("userProfile") !== "UsedCarAgent") {
-    //     window.open("/", "_self")
-    // }
+    if (Cookies.get("userProfile") !== "UsedCarAgent") {
+        window.open("/", "_self")
+    }
 
     const handleUsedCarListing = () => {
         console.log("Used Car Management");
@@ -19,7 +19,7 @@ function UsedCarManagementUI() {
 
     const handleFeedback = () => {
         console.log("Feedback");
-        window.open("/userprofilemanagement", "_self");
+        window.open("/ucarateandreview", "_self");
     };
 
     const handleLogout = async () => {
