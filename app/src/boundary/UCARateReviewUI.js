@@ -29,9 +29,9 @@ function UCARateReviewUI() {
         fetchUsers();
     }, []);
 
-    if (Cookies.get("userProfile") !== "UsedCarAgent") {
-        window.open("/", "_self")
-    }
+    // if (Cookies.get("userProfile") !== "UsedCarAgent") {
+    //     window.open("/", "_self")
+    // }
 
     const handleInspectReview = (user) => { //not done
         Swal.fire({
@@ -81,36 +81,36 @@ function UCARateReviewUI() {
     };
 
     return (
-        <div className="uclContainer">
-            <div className="uclHeader">
-                <button onClick={handleBack} className="uclBack-button">
+        <div className="rarContainer">
+            <div className="rarHeader">
+                <button onClick={handleBack} className="rarBack-button">
                     Back
                 </button>
-                <div className="uclProfile-picture">
+                <div className="rarProfile-picture">
                     <img
                         src={"https://placehold.co/40x40?text=" + Cookies.get("username")}
                         alt="Profile"
                     />
                 </div>
-                <span className="uclUsername">{username}</span>
-                <button onClick={handleLogout} className="uclLogout-button">
+                <span className="rarUsername">{username}</span>
+                <button onClick={handleLogout} className="rarLogout-button">
                     Logout
                 </button>
             </div>
 
-            <div className="uclUser-table">
-                <div className="uclTable-header">
+            <div className="rarUser-table">
+                <div className="rarTable-header">
                     <span>Ratings:</span>
                     <span>Reviews:</span>
                     <span>Type:</span>
                     <span></span>
                 </div>
                 {users.map((user) => (
-                    <div key={user.username} className="uclTable-row">
+                    <div key={user.username} className="rarTable-row">
                         <span>{user.rating}</span>
                         <span>{user.review}</span>
                         <span>{user.type}</span>
-                        <button onClick={() => handleInspectReview(user)} className="uclInspect-button">
+                        <button onClick={() => handleInspectReview(user)} className="rarInspect-button">
                             View
                         </button>
                     </div>
