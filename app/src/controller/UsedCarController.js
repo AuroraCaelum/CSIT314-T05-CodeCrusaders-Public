@@ -1,5 +1,6 @@
 // File path: src/controller/UsedCarController.js
 import UsedCar from '../entity/UsedCar';
+import UserAccount from '../entity/UserAccount';
 
 class CreateUsedCarController {
 
@@ -11,6 +12,13 @@ class CreateUsedCarController {
         manufacture_year, engine_cap, curb_weight
     ) {
         try {
+            // Validate if the seller exists
+            const isValidSeller = await UserAccount.validateSeller(seller_username);
+            if (!isValidSeller) {
+                return { success: false, message: 'Invalid seller username' };
+            }
+
+            // Proceed to create the used car entry if seller is valid
             const car = new UsedCar(
                 usedCarId, seller_username, car_name, car_type, 
                 car_manufacturer, car_image, description, 
@@ -43,6 +51,7 @@ class ViewUsedCarController {
         }
     }
 
+
     // View a used car by its ID
     async viewUsedCar(usedCarId) {
         try {
@@ -63,9 +72,15 @@ class UpdateUsedCarController {
 
     // Update an existing used car entry
     async updateUsedCar(
-        usedCarId, newData
+        usedCarId, seller_username, newData
     ) {
         try {
+            // Validate if the seller exists
+            const isValidSeller = await UserAccount.validateSeller(seller_username);
+            if (!isValidSeller) {
+                return { success: false, message: 'Invalid seller username' };
+            }
+
             const success = await UsedCar.updateUsedCar(usedCarId, newData);
             if (success) {
                 return { success: true, message: 'Used car updated successfully' };
@@ -116,4 +131,4 @@ class SearchUsedCarController {
     }
 }
 
-export {CreateUsedCarController, ViewUsedCarController, UpdateUsedCarController, DeleteUsedCarController, SearchUsedCarController};
+export { CreateUsedCarController, ViewUsedCarController, UpdateUsedCarController, DeleteUsedCarController, SearchUsedCarController };

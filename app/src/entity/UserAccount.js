@@ -11,6 +11,16 @@ class UserAccount {
         this.username = username;
         this.firebaseService = new FirebaseService();
     }
+    // Validate if a seller exists by username
+    static async validateSeller(username) {
+        try {
+            const userData = await FirebaseService.getDocument('UserAccount', username);
+            return !!userData; // Returns true if userData exists, otherwise false
+        } catch (error) {
+            console.error(`Error validating seller '${username}':`, error);
+            return false;
+        }
+    }
     // Create a new user account and save
     async createUserAccount(fName, lName, username, password, phoneNum, email, userProfile) {
         try {
