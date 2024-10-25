@@ -1,6 +1,6 @@
 import UserProfile from '../entity/UserProfile';
 
-class UserProfileController {
+class CreateUserProfileController {
 
     // Create user profile, takes in profileName, description, profileType
     async createUserProfile(req, res) {
@@ -17,7 +17,19 @@ class UserProfileController {
             res.status(500).json({ error: error.message, success: false });
         }
     }
+}
+class ViewUserProfileController {
 
+    static async getUserProfiles() {
+        try {
+            const userProfiles = await UserProfile.getUserProfiles();
+            return userProfiles;
+        } catch (error) {
+            console.log("Error:", error);
+            throw error;
+        }
+    }
+    
     // View current user's profile
     async viewUserProfile(req, res) {
         const { profileName } = req.params; // This should correspond to typeOfUser now
@@ -29,6 +41,9 @@ class UserProfileController {
             res.status(500).json({ error: error.message });
         }
     }
+}
+
+class UpdateUserProfileController {
 
     // Update user's profile
     async updateUserProfile(req, res) {
@@ -45,6 +60,9 @@ class UserProfileController {
             res.status(500).json({ error: error.message, success: false });
         }
     }
+}
+
+class SuspendUserProfileController {
 
     // Suspend user's profile
     async suspendUserProfile(req, res) {
@@ -61,6 +79,9 @@ class UserProfileController {
             res.status(500).json({ error: error.message, success: false });
         }
     }
+}
+
+class SearchUserProfileController {
 
     // Search for user's profile
     async searchUserProfile(req, res) {
@@ -72,17 +93,7 @@ class UserProfileController {
             res.status(500).json({ error: error.message });
         }
     }
-
-    static async getUserProfiles() {
-        try {
-            const userProfiles = await UserProfile.getUserProfiles();
-            return userProfiles;
-        } catch (error) {
-            console.log("Error:", error);
-            throw error;
-        }
-    }
 }
 
-export default UserProfileController;
+export {CreateUserProfileController, ViewUserProfileController, UpdateUserProfileController, SuspendUserProfileController, SearchUserProfileController};
 
