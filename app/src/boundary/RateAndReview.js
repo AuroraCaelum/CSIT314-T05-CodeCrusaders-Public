@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import "./RateAndReview.css"; 
+import "./RateAndReview.css";
 import { UserLogoutController } from "../controller/UserAuthController";
-import UserAccountController from "../controller/UserAccountController";
+import { ViewUserAccountController } from "../controller/UserAccountController";
 
 import Swal from 'sweetalert2';
 
@@ -15,7 +15,7 @@ function RateAndReview() {
 
     useEffect(() => {
         const fetchUsers = async () => {
-            const snapshot = await UserAccountController.getUserAccountList();
+            const snapshot = await ViewUserAccountController.getUserAccountList();
             if (snapshot !== null) {
                 const userData = snapshot.docs.map(doc => ({
                     name: doc.data().fName + " " + doc.data().lName,
@@ -50,7 +50,7 @@ function RateAndReview() {
             denyButtonText: 'Delete',
             focusConfirm: false
         });
-    };    
+    };
 
     const handleLogout = async () => {
         const userAuthController = new UserLogoutController();
