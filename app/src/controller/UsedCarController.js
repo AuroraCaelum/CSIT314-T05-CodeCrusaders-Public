@@ -1,7 +1,7 @@
 // File path: src/controller/UsedCarController.js
 import UsedCar from '../entity/UsedCar';
 
-class UsedCarController {
+class CreateUsedCarController {
 
     // Create a new used car entry
     async createUsedCar(
@@ -28,6 +28,20 @@ class UsedCarController {
             return { success: false, message: error.message };
         }
     }
+}
+
+class ViewUsedCarController {
+
+    // Retrieve all used car entries
+    static async getUsedCarList() {
+        try {
+            const usedCars = await UsedCar.getUsedCarList();
+            return { success: true, data: usedCars };
+        } catch (error) {
+            console.error('Error fetching used cars:', error);
+            return { success: false, message: error.message };
+        }
+    }
 
     // View a used car by its ID
     async viewUsedCar(usedCarId) {
@@ -43,6 +57,9 @@ class UsedCarController {
             return { success: false, message: error.message };
         }
     }
+}
+
+class UpdateUsedCarController {
 
     // Update an existing used car entry
     async updateUsedCar(
@@ -60,6 +77,9 @@ class UsedCarController {
             return { success: false, message: error.message };
         }
     }
+}
+
+class DeleteUsedCarController {
 
     // Suspend a used car entry
     async deleteUsedCar(usedCarId) {
@@ -76,6 +96,9 @@ class UsedCarController {
             return { success: false, message: error.message };
         }
     }
+}
+
+class SearchUsedCarController {
 
     // Search for a used car by name
     async searchUsedCar(usedCarId) {
@@ -91,17 +114,6 @@ class UsedCarController {
             return { success: false, message: error.message };
         }
     }
-
-    // Retrieve all used car entries
-    static async getUsedCarList() {
-        try {
-            const usedCars = await UsedCar.getUsedCarList();
-            return { success: true, data: usedCars };
-        } catch (error) {
-            console.error('Error fetching used cars:', error);
-            return { success: false, message: error.message };
-        }
-    }
 }
 
-export default UsedCarController;
+export {CreateUsedCarController, ViewUsedCarController, UpdateUsedCarController, DeleteUsedCarController, SearchUsedCarController};
