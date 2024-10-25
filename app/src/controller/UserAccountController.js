@@ -5,7 +5,6 @@ class CreateUserAccountController {
     // Register a new user
     async createUserAccount(fName, lName, username, password, phoneNum, email, userProfile) {
         try {
-            // const user = new UserAccount(email, fName, lName, password, phoneNum, userProfile, username);
             await UserAccount.createUserAccount(email, fName, lName, password, phoneNum, userProfile, username);
             return true;
         } catch (error) {
@@ -70,7 +69,7 @@ class SuspendUserAccountController {
 }
 
 class SearchUserAccountController {
-    
+
     async searchUserAccount(username) {
         // const { username } = req.params;
         try {
@@ -85,4 +84,4 @@ class SearchUserAccountController {
 }
 
 
-export {CreateUserAccountController, ViewUserAccountController, UpdateUserAccountController, SuspendUserAccountController, SearchUserAccountController};
+export { CreateUserAccountController, ViewUserAccountController, UpdateUserAccountController, SuspendUserAccountController, SearchUserAccountController };
