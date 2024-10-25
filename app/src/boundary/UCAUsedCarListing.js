@@ -44,7 +44,7 @@ function UCAUsedCarListing() {
                 <input type="text" id="type" class="swal2-input" placeholder="type">
                 <input type="price" id="price" class="swal2-input" placeholder="price">
             `,
-            confirmButtonText: 'Create Account',
+            confirmButtonText: 'Create Used Car',
             focusConfirm: false,
             didOpen: () => {
                 const popup = Swal.getPopup();
