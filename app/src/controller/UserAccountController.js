@@ -5,9 +5,13 @@ class CreateUserAccountController {
     // Register a new user
     async createUserAccount(fName, lName, username, password, phoneNum, email, userProfile) {
         try {
-            await UserAccount.createUserAccount(email, fName, lName, password, phoneNum, userProfile, username);
+            // call createUserAccount method via instance
+            const userAccount = new UserAccount(fName, lName, username, password, phoneNum, email, userProfile);
+
+            await userAccount.createUserAccount(fName, lName, username, password, phoneNum, email, userProfile);
             return true;
         } catch (error) {
+            console.log("Error:", error);
             return false;
         }
     }

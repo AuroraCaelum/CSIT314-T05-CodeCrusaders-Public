@@ -1,16 +1,17 @@
 import FirebaseService from '../FirebaseService';
 
 class UserAccount {
-    constructor(email, fName, lName, password, phoneNum, userProfile, username) {
-        this.email = email;
+    constructor(fName, lName, username, password, phoneNum, email, userProfile) {
         this.fName = fName;
         this.lName = lName;
+        this.username = username;
         this.password = password;
         this.phoneNum = phoneNum;
+        this.email = email;
         this.userProfile = userProfile;
-        this.username = username;
-        this.firebaseService = new FirebaseService();
+        this.firebaseService = new FirebaseService(); // Initialize FirebaseService
     }
+
     // Validate if a seller exists by username
     static async validateSeller(username) {
         try {
@@ -21,18 +22,20 @@ class UserAccount {
             return false;
         }
     }
+
     // Create a new user account and save
     async createUserAccount(fName, lName, username, password, phoneNum, email, userProfile) {
         try {
             const userData = {
-                email: email,
                 fName: fName,
                 lName: lName,
+                username: username,
                 password: password,
                 phoneNum: phoneNum,
-                userProfile: userProfile,
-                username: username
+                email: email,
+                userProfile: userProfile
             };
+            console.log("Adding document with data:", userData);
             await this.firebaseService.addDocument('UserAccount', username, userData);
             console.log("User account created and saved to Firestore");
         } catch (error) {
