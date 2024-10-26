@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import "./UserAccountManagementUI.css";
 import { UserLogoutController } from "../controller/UserAuthController";
-import {ViewUserAccountController} from "../controller/UserAccountController";
+import { ViewUserAccountController } from "../controller/UserAccountController";
+import { CreateUserAccountController } from "../controller/UserAccountController";
 
 import Swal from 'sweetalert2';
 
@@ -97,7 +98,7 @@ function UserAccountManagementUI() {
 
                 return { firstName, lastName, username, password, phone, email, userProfile };
             },
-        }).then((result) => {
+        }).then(async (result) => {
             if (result.isConfirmed) {
                 const { firstName, lastName, username, password, phone, email, userProfile } = result.value;
                 console.log('New Account Details:', {
@@ -109,7 +110,23 @@ function UserAccountManagementUI() {
                     email,
                     userProfile
                 });
-                // Add logic here to handle account creation, like sending data to an API
+                // logic for handle account creation (call Controller)
+                const createUserAccountController = new CreateUserAccountController();
+                const isSuccess = await createUserAccountController.createUserAccount(
+                    firstName, 
+                    lastName, 
+                    username, 
+                    password, 
+                    phone, 
+                    email, 
+                    userProfile
+                );
+                
+                if (isSuccess) {
+                    console.log("User account successfully created.");
+                } else {
+                    console.error("Failed to create user account.");
+                }
             }
         });
     };
