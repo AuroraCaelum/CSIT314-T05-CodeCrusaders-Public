@@ -4,6 +4,7 @@ import FirebaseService from '../FirebaseService';
 class UsedCar {
     constructor(
         usedCarId,
+        agent_username,
         seller_username,
         car_name,
         car_type,
@@ -19,6 +20,7 @@ class UsedCar {
         curb_weight
     ) {
         this.usedCarId = usedCarId;
+        this.agent_username = agent_username;
         this.seller_username = seller_username;
         this.car_name = car_name;
         this.car_type = car_type;
@@ -40,6 +42,7 @@ class UsedCar {
         try {
             const carData = {
                 seller_username: this.seller_username,
+                agent_username: this.agent_username,
                 car_name: this.car_name,
                 car_type: this.car_type,
                 car_manufacturer: this.car_manufacturer,

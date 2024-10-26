@@ -6,21 +6,21 @@ class CreateUsedCarController {
 
     // Create a new used car entry
     async createUsedCar(
-        usedCarId, seller_username, car_name, car_type, 
+        usedCarId, agent_username, seller_username, car_name, car_type, 
         car_manufacturer, car_image, description, 
         features, accessories, price, milage, 
         manufacture_year, engine_cap, curb_weight
     ) {
         try {
             // Validate if the seller exists
-            const isValidSeller = await UserAccount.validateSeller(seller_username);
+            const isValidSeller = await UserAccount.validateSeller(agent_username);
             if (!isValidSeller) {
-                return { success: false, message: 'Invalid seller username' };
+                return { success: false, message: 'Seller is not authorized to create used car listings.' };
             }
 
             // Proceed to create the used car entry if seller is valid
             const car = new UsedCar(
-                usedCarId, seller_username, car_name, car_type, 
+                usedCarId, agent_username, seller_username, car_name, car_type, 
                 car_manufacturer, car_image, description, 
                 features, accessories, price, milage, 
                 manufacture_year, engine_cap, curb_weight
@@ -72,11 +72,11 @@ class UpdateUsedCarController {
 
     // Update an existing used car entry
     async updateUsedCar(
-        usedCarId, seller_username, newData
+        usedCarId, agent_username, seller_username, newData
     ) {
         try {
             // Validate if the seller exists
-            const isValidSeller = await UserAccount.validateSeller(seller_username);
+            const isValidSeller = await UserAccount.validateSeller(agent_username);
             if (!isValidSeller) {
                 return { success: false, message: 'Invalid seller username' };
             }

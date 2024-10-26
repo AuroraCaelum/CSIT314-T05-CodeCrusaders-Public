@@ -12,11 +12,19 @@ class UserAccount {
         this.firebaseService = new FirebaseService(); // Initialize FirebaseService
     }
 
-    // Validate if a seller exists by username
+    // Validate if the user is a 'UsedCarAgent'
     static async validateSeller(username) {
         try {
+            // Fetch the user data by username from Firestore
             const userData = await FirebaseService.getDocument('UserAccount', username);
-            return !!userData; // Returns true if userData exists, otherwise false
+
+            // Check if user exists and their userProfile is 'UsedCarAgent'
+            if (userData && userData.userProfile === 'UsedCarAgent') {
+                return true;
+            } else {
+                console.warn(`User '${username}' is not a UsedCarAgent or does not exist.`);
+                return false;
+            }
         } catch (error) {
             console.error(`Error validating seller '${username}':`, error);
             return false;
