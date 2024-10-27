@@ -10,7 +10,7 @@ function UCAUsedCarListingUI() {
     const [username] = useState(Cookies.get("username"));
     const [searchUsername, setSearchUsername] = useState("");
     const [users, setUsers] = useState([
-        { name: "Loading...", username: "Loading...", profile: "Loading..." }
+        { name: "Loading...", username: "Loading...", profile: "Loading...", image: "https://placehold.co/100x100?text=Car+Image" }
     ]);
 
     useEffect(() => {
@@ -20,7 +20,8 @@ function UCAUsedCarListingUI() {
                 const userData = snapshot.docs.map(doc => ({
                     name: doc.data().fName + " " + doc.data().lName,
                     username: doc.data().username,
-                    profile: doc.data().userProfile
+                    profile: doc.data().userProfile,
+                    image: doc.data().carImage || "https://placehold.co/100x100?text=Car+Image"
                 }));
                 setUsers(userData);
             }
@@ -246,6 +247,7 @@ function UCAUsedCarListingUI() {
                 </div>
                 {users.map((user) => (
                     <div key={user.username} className="uclTable-row">
+                        <img src={user.image} alt="Car" className="uclCar-image" />
                         <span>{user.prodName}</span>
                         <span>{user.description}</span>
                         <span>{user.type}</span>
