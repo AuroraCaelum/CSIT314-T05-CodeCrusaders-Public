@@ -79,7 +79,7 @@
 
 .uclUser-table {
     display: grid;
-    grid-template-columns: 1fr 2fr 1fr 1fr auto;
+    grid-template-columns:2fr 1fr 2fr 1fr 1fr auto;
     gap: 10px;
     background-color: #f1f1f1;
     border-radius: 5px;
@@ -98,6 +98,16 @@
     display: contents;
     padding: 10px;
     border-bottom: 1px solid #eee;
+}
+
+.uclCar-image {
+    width: 100%;
+    height: auto;
+    max-width: 100px;
+    max-height: 100px;
+    object-fit: cover;
+    border-radius: 5px;
+    grid-column: 1;
 }
 
 .uclInspect-button {
