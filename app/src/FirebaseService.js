@@ -1,4 +1,4 @@
-import { db } from './firebase';  // Only import db for Firestore operations
+import { db, storage } from './firebase';  // Only import db for Firestore operations
 import {
     collection,
     doc,
@@ -9,6 +9,7 @@ import {
     where,
     getDocs
 } from 'firebase/firestore';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 
 class FirebaseService {
 
@@ -82,6 +83,31 @@ class FirebaseService {
             console.log(`Document with ID: ${docId} updated successfully in ${collectionName}`);
         } catch (error) {
             console.error("Error updating document:", error);
+            throw error;
+        }
+    }
+
+    // Upload a file to Firebase Storage
+    async uploadFile(file, folder) {
+        try {
+            const storageRef = ref(storage, `${folder}/${file.name}`);
+            const uploadTask = uploadBytesResumable(storageRef, file);
+            await uploadTask;
+            console.log("File uploaded successfully");
+        } catch (error) {
+            console.error("Error uploading file:", error);
+            throw error;
+        }
+    }
+
+    // Get a download URL for a file in Firebase Storage
+    async getDownloadURL(folder, fileName) {
+        try {
+            const storageRef = ref(storage, `${folder}/${fileName}`);
+            const url = await getDownloadURL(storageRef);
+            return url;
+        } catch (error) {
+            console.error("Error getting download URL:", error);
             throw error;
         }
     }
