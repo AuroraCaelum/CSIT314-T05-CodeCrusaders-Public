@@ -19,10 +19,10 @@ class UserAccount {
             const userData = await FirebaseService.getDocument('UserAccount', username);
 
             // Check if user exists and their userProfile is 'UsedCarAgent'
-            if (userData && userData.userProfile === 'UsedCarAgent') {
+            if (userData && userData.userProfile === 'Seller') {
                 return true;
             } else {
-                console.warn(`User '${username}' is not a UsedCarAgent or does not exist.`);
+                console.warn(`User '${username}' is not a Seller or does not exist.`);
                 return false;
             }
         } catch (error) {
