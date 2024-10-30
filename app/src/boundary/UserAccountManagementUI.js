@@ -21,6 +21,9 @@ function UserAccountManagementUI() {
                 const userData = snapshot.docs.map(doc => ({
                     name: doc.data().fName + " " + doc.data().lName,
                     username: doc.data().username,
+                    password: doc.data().password,
+                    phone: doc.data().phoneNum,
+                    email: doc.data().email,
                     profile: doc.data().userProfile
                 }));
                 setUsers(userData);
@@ -131,68 +134,131 @@ function UserAccountManagementUI() {
         });
     };
 
-    const handleInspectAccount = (user) => {
-        Swal.fire({
-            title: 'View User Account',
-            html: `
-                <div style="text-align: left;">
-                    <strong>First Name:</strong> ${user.name.split(' ')[0]}<br>
-                    <strong>Last Name:</strong> ${user.name.split(' ')[1]}<br>
-                    <strong>Username:</strong> ${user.username}<br>
-                    <strong>Phone:</strong> ${user.phone || 'N/A'}<br>
-                    <strong>Email:</strong> ${user.email || 'N/A'}<br>
-                    <strong>User Profile:</strong> ${user.profile}<br>
-                </div>
-            `,
-            showCancelButton: true,
-            cancelButtonText: 'close',
-            confirmButtonText: 'Update Details',
-            showDenyButton: true,
-            denyButtonText: 'Suspend',
-            focusConfirm: false
-        }).then((result) => {
-            if (result.isConfirmed) {
-                handleUpdateAccount(user);
-            } else if (result.isDenied) {
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You are about to suspend this user.",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, suspend it!',
-                    cancelButtonText: 'No, cancel'
-                }).then(async (suspendResult) => {
-                    if (suspendResult.isConfirmed) {
-                        const suspendUserAccountController = new SuspendUserAccountController();
-                        const isSuspended = await suspendUserAccountController.suspendUserAccount(user.username);
-                        
-                        if (isSuspended) {
-                            Swal.fire('Suspended!', 'The user has been suspended.', 'success');
-                        } else {
-                            Swal.fire('Failed!', 'Failed to suspend the user.', 'error');
+    const handleViewUserAccount = async (username) => {
+        console.log('Fetching user account for:', username);
+        const viewUserAccountController = new ViewUserAccountController();
+        const userAccount = await viewUserAccountController.viewUserAccount(username);
+        console.log("User account data received:", userAccount);
+
+        if (userAccount) {
+            Swal.fire({
+                title: 'View User Account',
+                html: `
+                    <div style="text-align: left;">
+                        <strong>First Name:</strong> ${userAccount.fName}<br>
+                        <strong>Last Name:</strong> ${userAccount.lName}<br>
+                        <strong>Username:</strong> ${userAccount.username}<br>
+                        <strong>Phone:</strong> ${userAccount.phoneNum || 'N/A'}<br>
+                        <strong>Email:</strong> ${userAccount.email || 'N/A'}<br>
+                        <strong>User Profile:</strong> ${userAccount.userProfile}<br>
+                    </div>
+                `,
+                showCancelButton: true,
+                cancelButtonText: 'close',
+                confirmButtonText: 'Update Details',
+                showDenyButton: true,
+                denyButtonText: 'Suspend',
+                focusConfirm: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    handleUpdateAccount(userAccount);
+                } else if (result.isDenied) {
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You are about to suspend this user.",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, suspend it!',
+                        cancelButtonText: 'No, cancel'
+                    }).then(async (suspendResult) => {
+                        if (suspendResult.isConfirmed) {
+                            const suspendUserAccountController = new SuspendUserAccountController();
+                            const isSuspended = await suspendUserAccountController.suspendUserAccount(username);
+                            
+                            if (isSuspended) {
+                                Swal.fire('Suspended!', 'The user has been suspended.', 'success');
+                            } else {
+                                Swal.fire('Failed!', 'Failed to suspend the user.', 'error');
+                            }
                         }
-                    }
-                });
-            }
-        });
+                    });
+                }
+            });
+            console.log(userAccount);
+            console.log("display success in UI for: ", username);
+        } else {
+            console.error("Failed to load user information:", username);
+            Swal.fire({
+                title: 'Error',
+                text: 'Failed to load user information.',
+                icon: 'error',
+                confirmButtonText: 'Close'
+            });
+        }
     };
 
-    const handleUpdateAccount = (user) => {
+    // const handleInspectAccount = (user) => {
+    //     Swal.fire({
+    //         title: 'View User Account',
+    //         html: `
+    //             <div style="text-align: left;">
+    //                 <strong>First Name:</strong> ${user.name.split(' ')[0]}<br>
+    //                 <strong>Last Name:</strong> ${user.name.split(' ')[1]}<br>
+    //                 <strong>Username:</strong> ${user.username}<br>
+    //                 <strong>Phone:</strong> ${user.phone || 'N/A'}<br>
+    //                 <strong>Email:</strong> ${user.email || 'N/A'}<br>
+    //                 <strong>User Profile:</strong> ${user.profile}<br>
+    //             </div>
+    //         `,
+    //         showCancelButton: true,
+    //         cancelButtonText: 'close',
+    //         confirmButtonText: 'Update Details',
+    //         showDenyButton: true,
+    //         denyButtonText: 'Suspend',
+    //         focusConfirm: false
+    //     }).then((result) => {
+    //         if (result.isConfirmed) {
+    //             handleUpdateAccount(user);
+    //         } else if (result.isDenied) {
+    //             Swal.fire({
+    //                 title: 'Are you sure?',
+    //                 text: "You are about to suspend this user.",
+    //                 icon: 'warning',
+    //                 showCancelButton: true,
+    //                 confirmButtonText: 'Yes, suspend it!',
+    //                 cancelButtonText: 'No, cancel'
+    //             }).then(async (suspendResult) => {
+    //                 if (suspendResult.isConfirmed) {
+    //                     const suspendUserAccountController = new SuspendUserAccountController();
+    //                     const isSuspended = await suspendUserAccountController.suspendUserAccount(user.username);
+                        
+    //                     if (isSuspended) {
+    //                         Swal.fire('Suspended!', 'The user has been suspended.', 'success');
+    //                     } else {
+    //                         Swal.fire('Failed!', 'Failed to suspend the user.', 'error');
+    //                     }
+    //                 }
+    //             });
+    //         }
+    //     });
+    // };
+
+    const handleUpdateAccount = (userAccount) => {
         Swal.fire({
             title: 'Update User Account',
             html: `
-                <input type="text" id="firstName" class="swal2-input" placeholder="First Name" value="${user.name.split(' ')[0]}">
-                <input type="text" id="lastName" class="swal2-input" placeholder="Last Name" value="${user.name.split(' ')[1]}">
-                <input type="text" id="username" class="swal2-input" placeholder="Username" value="${user.username}">
-                <input type="password" id="password" class="swal2-input" placeholder="Password">
-                <input type="text" id="phone" class="swal2-input" placeholder="Phone Number" value="${user.phone || ''}">
-                <input type="email" id="email" class="swal2-input" placeholder="Email" value="${user.email || ''}">
+                <input type="text" id="firstName" class="swal2-input" placeholder="First Name" value="${userAccount.fName}">
+                <input type="text" id="lastName" class="swal2-input" placeholder="Last Name" value="${userAccount.lName}">
+                <input type="text" id="username" class="swal2-input" placeholder="Username" value="${userAccount.username}" disabled>
+                <input type="password" id="password" class="swal2-input" placeholder="Password" value="${userAccount.password}">
+                <input type="text" id="phone" class="swal2-input" placeholder="Phone Number" value="${userAccount.phoneNum || ''}">
+                <input type="email" id="email" class="swal2-input" placeholder="Email" value="${userAccount.email || ''}">
                 <select id="userProfile" class="swal2-input">
                     <option value="">Select User Profile</option>
-                    <option value="Buyer" ${user.profile === "Buyer" ? "selected" : ""}>Buyer</option>
-                    <option value="Seller" ${user.profile === "Seller" ? "selected" : ""}>Seller</option>
-                    <option value="UsedCarAgent" ${user.profile === "UsedCarAgent" ? "selected" : ""}>Used Car Agent</option>
-                    <option value="UserAdmin" ${user.profile === "UserAdmin" ? "selected" : ""}>User Admin</option>
+                    <option value="Buyer" ${userAccount.profile === "Buyer" ? "selected" : ""}>Buyer</option>
+                    <option value="Seller" ${userAccount.profile === "Seller" ? "selected" : ""}>Seller</option>
+                    <option value="UsedCarAgent" ${userAccount.profile === "UsedCarAgent" ? "selected" : ""}>Used Car Agent</option>
+                    <option value="UserAdmin" ${userAccount.profile === "UserAdmin" ? "selected" : ""}>User Admin</option>
                 </select>
             `,
             confirmButtonText: 'Update',
@@ -214,9 +280,9 @@ function UserAccountManagementUI() {
             }
         }).then(async (updateResult) => {
             if (updateResult.isConfirmed) {
-                const { username, firstName, lastName, password, phone, email, userProfile } = updateResult.value;
+                const { fName, lName, username, password, phoneNum, email, userProfile } = updateResult.value;
                 const controller = new UpdateUserAccountController();
-                const isSuccess = await controller.updateUserAccount(username, firstName, lastName, password, phone, email, userProfile);
+                const isSuccess = await controller.updateUserAccount(username, fName, lName, password, phoneNum, email, userProfile);
 
                 if (isSuccess) {
                     Swal.fire('Updated!', 'The user details have been updated.', 'success');
@@ -324,7 +390,7 @@ function UserAccountManagementUI() {
                         <span>{user.name}</span>
                         <span>{user.username}</span>
                         <span>{user.profile}</span>
-                        <button onClick={() => handleInspectAccount(user)} className="uamInspect-button">
+                        <button onClick={() => handleViewUserAccount(user.username)} className="uamInspect-button">
                             Inspect
                         </button>
                     </div>

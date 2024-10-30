@@ -87,15 +87,18 @@ class UserAccount {
     }
 
     // View user account information by userId
-    static async viewUserAccount(username) {
+    async viewUserAccount(username) {
         try {
             // Fetch user data from Firestore using username
-            const userData = await FirebaseService.getDocument('UserAccount', username);
+            const userData = await this.firebaseService.getDocument('UserAccount', username);
 
             if (userData) {
                 console.log("User data:", userData);
+                console.log("connected with data base at:", username)
                 return userData;
             } else {
+                console.log("User Data Load fail at: ", userData)
+                console.log("did not connected with data base at:", username)
                 throw new Error("User not found");
             }
         } catch (error) {
@@ -106,7 +109,7 @@ class UserAccount {
 
 
     // Update user account with new data
-    async updateUserAccount(fName, lName, username, password, phoneNum, email, userProfile) {
+    async updateUserAccount(username, fName, lName, password, phoneNum, email, userProfile) {
         try {
             const newData = {
                 fName: fName,
