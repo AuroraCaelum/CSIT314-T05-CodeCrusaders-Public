@@ -8,7 +8,7 @@ import Swal from 'sweetalert2';
 
 function UCAUsedCarListingUI() {
     const [username] = useState(Cookies.get("username"));
-    const [searchUsername, setSearchUsername] = useState("");
+    //const [searchUsername, setSearchUsername] = useState("");
     const [users, setUsers] = useState([
         { name: "Loading...", username: "Loading...", profile: "Loading...", image: "https://placehold.co/100x100?text=Car+Image" }
     ]);
@@ -34,16 +34,103 @@ function UCAUsedCarListingUI() {
         window.open("/", "_self")
     }
 
+    const handleSearchUsedCar = () => { //this is for saerch pop up
+        let carModelInput, vehicleTypeInput, priceRangeInput, manufactureYearInput;
+
+        Swal.fire({
+            title: 'Search Used Car',
+            html: `
+                <select id="carModel" class="swal2-input">
+                <option value="">Select car model</option>
+                <option value="Sedan">Sedan</option>
+                <option value="SUV">SUV</option>
+                <option value="Truck">Truck</option>
+                <option value="Convertible">Convertible</option>
+            </select>
+
+            <select id="vehicleType" class="swal2-input">
+                <option value="">Select vehicle type</option>
+                <option value="Electric">Electric</option>
+                <option value="Hybrid">Hybrid</option>
+                <option value="Diesel">Diesel</option>
+                <option value="Petrol">Petrol</option>
+            </select>
+
+            <select id="priceRange" class="swal2-input">
+                <option value="">Select price range</option>
+                <option value="0-10000">$0 - $10,000</option>
+                <option value="10001-20000">$10,001 - $20,000</option>
+                <option value="20001-30000">$20,001 - $30,000</option>
+                <option value="30001-40000">$30,001 - $40,000</option>
+            </select>
+
+            <select id="manufactureYear" class="swal2-input">
+                <option value="">Select manufacture year</option>
+                <option value="2023">2023</option>
+                <option value="2022">2022</option>
+                <option value="2021">2021</option>
+                <option value="2020">2020</option>
+            </select>
+            `,
+            confirmButtonText: 'Search Used Car',
+            focusConfirm: false,
+            didOpen: () => {
+                const popup = Swal.getPopup();
+                carModelInput = popup.querySelector('#carModel');
+                vehicleTypeInput = popup.querySelector('#vehicleType');
+                priceRangeInput = popup.querySelector('#priceRange');
+                manufactureYearInput = popup.querySelector('#manufactureYear');
+
+                const handleEnterKey = (event) => {
+                    if (event.key === 'Enter') {
+                        Swal.clickConfirm();
+                    }
+                };
+
+                carModelInput.onkeyup = handleEnterKey;
+                vehicleTypeInput.onkeyup = handleEnterKey;
+                priceRangeInput.onkeyup = handleEnterKey;
+                manufactureYearInput.onkeyup = handleEnterKey;
+            },
+            preConfirm: () => {
+                return {
+                    carModel: carModelInput.value,
+                    vehicleType: vehicleTypeInput.value,
+                    priceRange: priceRangeInput.value,
+                    manufactureYear: manufactureYearInput.value
+                };
+            },
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const { carModel, vehicleType, priceRange, manufactureYear } = result.value;
+                console.log('Filter criteria:', {
+                    carModel,
+                    vehicleType,
+                    priceRange,
+                    manufactureYear
+                });
+                // Add logic here to handle account creation, like sending data to an API
+            }
+        });
+    };
+
+
     const handleCreateUsedCar = () => {
-        let prodNameInput, descriptionInput, typeInput, priceInput;
+        let prodNameInput, descriptionInput, typeInput, priceInput, manufactureYearInput, mileageInput, engineCapInput, curbWeightInput, featuresInput, imageFileInput;
 
         Swal.fire({
             title: 'Create Used Car',
             html: `
                 <input type="text" id="prodName" class="swal2-input" placeholder="Product Name">
                 <input type="text" id="description" class="swal2-input" placeholder="Description">
-                <input type="text" id="type" class="swal2-input" placeholder="type">
-                <input type="price" id="price" class="swal2-input" placeholder="price">
+                <input type="text" id="type" class="swal2-input" placeholder="Type">
+                <input type="price" id="price" class="swal2-input" placeholder="Price">
+                <input type="manufactureYear" id="manufactureYear" class="swal2-input" placeholder="Manufactured">
+                <input type="mileage" id="mileage" class="swal2-input" placeholder="Mileage">
+                <input type="engineCap" id="engineCap" class="swal2-input" placeholder="engine Cap">
+                <input type="curbWeight" id="curbWeight" class="swal2-input" placeholder="Curb Weight">
+                <input type="features" id="features" class="swal2-input" placeholder="Features">
+                <input type="file" id="carImage" class="swal2-input" accept="image/*" placeholder="Insert Image">
             `,
             confirmButtonText: 'Create Used Car',
             focusConfirm: false,
@@ -53,6 +140,14 @@ function UCAUsedCarListingUI() {
                 descriptionInput = popup.querySelector('#description');
                 typeInput = popup.querySelector('#type');
                 priceInput = popup.querySelector('#price');
+                manufactureYearInput = popup.querySelector('#manufactureYear');
+                mileageInput = popup.querySelector('#mileage');
+                engineCapInput = popup.querySelector('#engineCap');
+                curbWeightInput = popup.querySelector('#curbWeight');
+                featuresInput = popup.querySelector('#features');
+                imageFileInput = popup.querySelector('#carImage');
+
+                console.log({ prodNameInput, descriptionInput, typeInput, priceInput, manufactureYearInput, mileageInput, engineCapInput, curbWeightInput, featuresInput, imageFileInput });
 
                 const handleEnterKey = (event) => {
                     if (event.key === 'Enter') {
@@ -60,35 +155,67 @@ function UCAUsedCarListingUI() {
                     }
                 };
 
-                prodNameInput.onkeyup = handleEnterKey;
-                descriptionInput.onkeyup = handleEnterKey;
-                typeInput.onkeyup = handleEnterKey;
-                priceInput.onkeyup = handleEnterKey;
+                if (prodNameInput) prodNameInput.onkeyup = handleEnterKey;
+                if (descriptionInput) descriptionInput.onkeyup = handleEnterKey;
+                if (typeInput) typeInput.onkeyup = handleEnterKey;
+                if (priceInput) priceInput.onkeyup = handleEnterKey;
+                if (manufactureYearInput) manufactureYearInput.onkeyup = handleEnterKey;
+                if (mileageInput) mileageInput.onkeyup = handleEnterKey;
+                if (engineCapInput) engineCapInput.onkeyup = handleEnterKey;
+                if (curbWeightInput) curbWeightInput.onkeyup = handleEnterKey;
+                if (featuresInput) featuresInput.onkeyup = handleEnterKey;
+                if (imageFileInput) imageFileInput.onkeyup = handleEnterKey;
+
             },
             preConfirm: () => {
                 const prodName = prodNameInput.value;
                 const description = descriptionInput.value;
                 const type = typeInput.value;
                 const price = priceInput.value;
+                const manufactureYear = manufactureYearInput.value;
+                const mileage = mileageInput.value;
+                const engineCap = engineCapInput.value;
+                const curbWeight = curbWeightInput.value;
+                const features = featuresInput.value;
+                const imageFile = imageFileInput[0];
 
-                if (!prodName || !description || !type || !price) {
+                if (!prodName || !description || !type || !price || !manufactureYear || !mileage || !engineCap || !curbWeight || !features || !imageFile) {
                     Swal.showValidationMessage(`Please fill in all the fields`);
                 }
                 else {
                     Swal.fire("Product Listed!"); //is it ok if we change it to this instead of "Product Created!" ?
                 }
 
-                return { prodName, description, type, price };
+                return { prodName, description, type, price, manufactureYear, mileage, engineCap, curbWeight, features, imageFile };
             },
         }).then((result) => {
             if (result.isConfirmed) {
-                const { prodName, description, type, price } = result.value;
+                const { prodName, description, type, price, manufactureYear, mileage, engineCap, curbWeight, features, imageFile } = result.value;
                 console.log('New Account Details:', {
                     prodName,
                     description,
                     type,
-                    price
+                    price,
+                    manufactureYear,
+                    mileage,
+                    engineCap,
+                    curbWeight,
+                    features,
+                    imageFile
                 });
+
+                const formData = new FormData();
+                formData.append("prodName", prodName);
+                formData.append("description", description);
+                formData.append("type", type);
+                formData.append("price", price);
+                formData.append("manufactureYear", manufactureYear);
+                formData.append("mileage", mileage);
+                formData.append("engineCap", engineCap);
+                formData.append("curbWeight", curbWeight);
+                formData.append("features", features);
+                formData.append("carImage", imageFile);
+
                 // Add logic here to handle account creation, like sending data to an API
             }
         });
@@ -193,10 +320,10 @@ function UCAUsedCarListingUI() {
         }
     };
 
-    const handleSearch = (e) => {
-        e.preventDefault();
-        console.log("Searched Username:", searchUsername);
-    };
+    // const handleSearch = (e) => {
+    //     e.preventDefault();
+    //     console.log("Searched Username:", searchUsername);
+    // };
 
     const handleBack = () => {
         window.history.back();
@@ -221,7 +348,7 @@ function UCAUsedCarListingUI() {
             </div>
 
             <div className="uclSearch-bar">
-                <form onSubmit={handleSearch}>
+                {/* <form onSubmit={handleSearch}>
                     <input
                         type="text"
                         placeholder="Used Car Name"
@@ -232,7 +359,11 @@ function UCAUsedCarListingUI() {
                     <button type="submit" className="uclSearch-button">
                         Search
                     </button>
-                </form>
+                </form> */}
+                <button onClick={handleSearchUsedCar}>
+                    Search
+                </button>
+                
                 <button onClick={handleCreateUsedCar} className="uclCreate-button">
                     Create used Car
                 </button>
