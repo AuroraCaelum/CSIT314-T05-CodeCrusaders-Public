@@ -1,10 +1,10 @@
 import FirebaseService from '../FirebaseService';
 
 class UserAccount {
-    constructor(fName, lName, username, password, phoneNum, email, userProfile) {
+    constructor(username, fName, lName, password, phoneNum, email, userProfile) {
+        this.username = username;
         this.fName = fName;
         this.lName = lName;
-        this.username = username;
         this.password = password;
         this.phoneNum = phoneNum;
         this.email = email;
@@ -32,12 +32,12 @@ class UserAccount {
     }
 
     // Create a new user account and save
-    async createUserAccount(fName, lName, username, password, phoneNum, email, userProfile) {
+    async createUserAccount(username, fName, lName, password, phoneNum, email, userProfile) {
         try {
             const userData = {
+                username: username,
                 fName: fName,
                 lName: lName,
-                username: username,
                 password: password,
                 phoneNum: phoneNum,
                 email: email,
@@ -112,9 +112,9 @@ class UserAccount {
     async updateUserAccount(username, fName, lName, password, phoneNum, email, userProfile) {
         try {
             const newData = {
+                username: username,
                 fName: fName,
                 lName: lName,
-                username: username,
                 password: password,
                 email: email,
                 phoneNum: phoneNum,

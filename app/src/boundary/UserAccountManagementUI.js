@@ -19,7 +19,8 @@ function UserAccountManagementUI() {
             const snapshot = await ViewUserAccountController.getUserAccountList();
             if (snapshot !== null) {
                 const userData = snapshot.docs.map(doc => ({
-                    name: doc.data().fName + " " + doc.data().lName,
+                    fName: doc.data().fName,
+                    lName: doc.data().lName,
                     username: doc.data().username,
                     password: doc.data().password,
                     phone: doc.data().phoneNum,
@@ -38,16 +39,16 @@ function UserAccountManagementUI() {
     }
 
     const handleCreateAccount = () => {
-        let firstNameInput, lastNameInput, usernameInput, passwordInput, phoneInput, emailInput, userProfileInput;
+        let usernameInput, fNameInput, lNameInput, passwordInput, phoneNumInput, emailInput, userProfileInput;
 
         Swal.fire({
             title: 'Create Account',
             html: `
-                <input type="text" id="firstName" class="swal2-input" placeholder="First Name">
-                <input type="text" id="lastName" class="swal2-input" placeholder="Last Name">
+                <input type="text" id="fName" class="swal2-input" placeholder="First Name">
+                <input type="text" id="lName" class="swal2-input" placeholder="Last Name">
                 <input type="text" id="username" class="swal2-input" placeholder="Username">
                 <input type="password" id="password" class="swal2-input" placeholder="Password">
-                <input type="text" id="phone" class="swal2-input" placeholder="Phone Number">
+                <input type="text" id="phoneNum" class="swal2-input" placeholder="Phone Number">
                 <input type="email" id="email" class="swal2-input" placeholder="Email">
                 <select id="userProfile" class="swal2-input">
                     <option value="">Select User Profile</option>
@@ -61,11 +62,11 @@ function UserAccountManagementUI() {
             focusConfirm: false,
             didOpen: () => {
                 const popup = Swal.getPopup();
-                firstNameInput = popup.querySelector('#firstName');
-                lastNameInput = popup.querySelector('#lastName');
+                fNameInput = popup.querySelector('#fName');
+                lNameInput = popup.querySelector('#lName');
                 usernameInput = popup.querySelector('#username');
                 passwordInput = popup.querySelector('#password');
-                phoneInput = popup.querySelector('#phone');
+                phoneNumInput = popup.querySelector('#phoneNum');
                 emailInput = popup.querySelector('#email');
                 userProfileInput = popup.querySelector('#userProfile');
 
@@ -75,52 +76,52 @@ function UserAccountManagementUI() {
                     }
                 };
 
-                firstNameInput.onkeyup = handleEnterKey;
-                lastNameInput.onkeyup = handleEnterKey;
+                fNameInput.onkeyup = handleEnterKey;
+                lNameInput.onkeyup = handleEnterKey;
                 usernameInput.onkeyup = handleEnterKey;
                 passwordInput.onkeyup = handleEnterKey;
-                phoneInput.onkeyup = handleEnterKey;
+                phoneNumInput.onkeyup = handleEnterKey;
                 emailInput.onkeyup = handleEnterKey;
                 userProfileInput.onkeyup = handleEnterKey;
             },
             preConfirm: () => {
-                const firstName = firstNameInput.value;
-                const lastName = lastNameInput.value;
+                const fName = fNameInput.value;
+                const lName = lNameInput.value;
                 const username = usernameInput.value;
                 const password = passwordInput.value;
-                const phone = phoneInput.value;
+                const phoneNum = phoneNumInput.value;
                 const email = emailInput.value;
                 const userProfile = userProfileInput.value;
 
-                if (!firstName || !lastName || !username || !password || !phone || !email || !userProfile) {
+                if (!username || !fName || !lName || !password || !phoneNum || !email || !userProfile) {
                     Swal.showValidationMessage(`Please fill in all the fields`);
                 }
                 else{
                     Swal.fire("Account Created!");
                 }
 
-                return { firstName, lastName, username, password, phone, email, userProfile };
+                return { username, fName, lName, password, phoneNum, email, userProfile };
             },
         }).then(async (result) => {
             if (result.isConfirmed) {
-                const { firstName, lastName, username, password, phone, email, userProfile } = result.value;
+                const { username, fName, lName, password, phoneNum, email, userProfile } = result.value;
                 console.log('New Account Details:', {
-                    firstName,
-                    lastName,
+                    fName,
+                    lName,
                     username,
                     password,
-                    phone,
+                    phoneNum,
                     email,
                     userProfile
                 });
                 // logic for handle account creation (call Controller)
                 const createUserAccountController = new CreateUserAccountController();
                 const isSuccess = await createUserAccountController.createUserAccount(
-                    firstName, 
-                    lastName, 
+                    fName, 
+                    lName, 
                     username, 
                     password, 
-                    phone, 
+                    phoneNum, 
                     email, 
                     userProfile
                 );
@@ -247,11 +248,11 @@ function UserAccountManagementUI() {
         Swal.fire({
             title: 'Update User Account',
             html: `
-                <input type="text" id="firstName" class="swal2-input" placeholder="First Name" value="${userAccount.fName}">
-                <input type="text" id="lastName" class="swal2-input" placeholder="Last Name" value="${userAccount.lName}">
+                <input type="text" id="fName" class="swal2-input" placeholder="First Name" value="${userAccount.fName}">
+                <input type="text" id="lName" class="swal2-input" placeholder="Last Name" value="${userAccount.lName}">
                 <input type="text" id="username" class="swal2-input" placeholder="Username" value="${userAccount.username}" disabled>
                 <input type="password" id="password" class="swal2-input" placeholder="Password" value="${userAccount.password}">
-                <input type="text" id="phone" class="swal2-input" placeholder="Phone Number" value="${userAccount.phoneNum || ''}">
+                <input type="text" id="phoneNum" class="swal2-input" placeholder="Phone Number" value="${userAccount.phoneNum || ''}">
                 <input type="email" id="email" class="swal2-input" placeholder="Email" value="${userAccount.email || ''}">
                 <select id="userProfile" class="swal2-input">
                     <option value="">Select User Profile</option>
@@ -264,23 +265,23 @@ function UserAccountManagementUI() {
             confirmButtonText: 'Update',
             focusConfirm: false,
             preConfirm: () => {
-                const firstName = document.getElementById('firstName').value;
-                const lastName = document.getElementById('lastName').value;
+                const fName = document.getElementById('fName').value;
+                const lName = document.getElementById('lName').value;
                 const username = document.getElementById('username').value;
                 const password = document.getElementById('password').value;
-                const phone = document.getElementById('phone').value;
+                const phoneNum = document.getElementById('phoneNum').value;
                 const email = document.getElementById('email').value;
                 const userProfile = document.getElementById('userProfile').value;
     
-                if (!firstName || !lastName || !username || !phone || !email || !userProfile) {
+                if (!username || !fName || !lName || !phoneNum || !email || !userProfile) {
                     Swal.showValidationMessage(`Please fill in all fields`);
                     return false;
                 }
-                return { firstName, lastName, username, password, phone, email, userProfile };
+                return { username, fName, lName, password, phoneNum, email, userProfile };
             }
         }).then(async (updateResult) => {
             if (updateResult.isConfirmed) {
-                const { fName, lName, username, password, phoneNum, email, userProfile } = updateResult.value;
+                const { username, fName, lName, password, phoneNum, email, userProfile } = updateResult.value;
                 const controller = new UpdateUserAccountController();
                 const isSuccess = await controller.updateUserAccount(username, fName, lName, password, phoneNum, email, userProfile);
 
@@ -387,7 +388,7 @@ function UserAccountManagementUI() {
                 </div>
                 {users.map((user) => (
                     <div key={user.username} className="uamTable-row">
-                        <span>{user.name}</span>
+                        <span>{`${user.fName} ${user.lName}`}</span>
                         <span>{user.username}</span>
                         <span>{user.profile}</span>
                         <button onClick={() => handleViewUserAccount(user.username)} className="uamInspect-button">
