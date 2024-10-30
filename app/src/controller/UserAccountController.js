@@ -33,9 +33,12 @@ class ViewUserAccountController {
         // const { username } = req.params;
         try {
             // const user = new UserAccount(null, null, null, null, null, null, username); // Initialize User with username
-            const userAccount = await UserAccount.viewUserAccount(username); // Fetch user data by username
-            return userAccount;
+            const userAccount = new UserAccount();
+            const userData = await userAccount.viewUserAccount(username); // Fetch user data by username
+            console.log("Fetched user account:", userData);
+            return userData;
         } catch (error) {
+            console.error("Error fetching user account:", error);
             return null;
         }
     }
@@ -43,14 +46,14 @@ class ViewUserAccountController {
 
 class UpdateUserAccountController {
 
-    async updateUserAccount(fName, lName, username, password, phoneNum, email, userProfile) {
+    async updateUserAccount(username, fName, lName, password, phoneNum, email, userProfile) {
         // const { email, fName, lName, phoneNum, userProfile, username } = req.body;
         try {
             // const user = new UserAccount(email, fName, lName, phoneNum, userProfile, username);
             // const newData = { email, fName, lName, phoneNum, userProfile, username };
             const userAccount = new UserAccount(fName, lName, username, password, phoneNum, email, userProfile);
 
-            await userAccount.updateUserAccount(fName, lName, username, password, phoneNum, email, userProfile);
+            await userAccount.updateUserAccount(username, fName, lName, password, phoneNum, email, userProfile);
             return true;
         } catch (error) {
             return false;
