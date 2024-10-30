@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import "./UserAccountManagementUI.css";
 import { UserLogoutController } from "../controller/UserAuthController";
-import { ViewUserAccountController } from "../controller/UserAccountController";
-import { CreateUserAccountController } from "../controller/UserAccountController";
+import { UpdateUserAccountController, ViewUserAccountController } from "../controller/UserAccountController";
+import { CreateUserAccountController, SearchUserAccountController, SuspendUserAccountController } from "../controller/UserAccountController";
 
 import Swal from 'sweetalert2';
 
@@ -161,10 +161,16 @@ function UserAccountManagementUI() {
                     showCancelButton: true,
                     confirmButtonText: 'Yes, suspend it!',
                     cancelButtonText: 'No, cancel'
-                }).then((suspendResult) => {
+                }).then(async (suspendResult) => {
                     if (suspendResult.isConfirmed) {
-                        console.log('User suspended:', user.pName);
-                        Swal.fire('Suspended!', 'The user has been suspended.', 'success');
+                        const suspendUserAccountController = new SuspendUserAccountController();
+                        const isSuspended = await suspendUserAccountController.suspendUserAccount(user.username);
+                        
+                        if (isSuspended) {
+                            Swal.fire('Suspended!', 'The user has been suspended.', 'success');
+                        } else {
+                            Swal.fire('Failed!', 'Failed to suspend the user.', 'error');
+                        }
                     }
                 });
             }
@@ -206,19 +212,17 @@ function UserAccountManagementUI() {
                 }
                 return { firstName, lastName, username, password, phone, email, userProfile };
             }
-        }).then((updateResult) => {
+        }).then(async (updateResult) => {
             if (updateResult.isConfirmed) {
-                const { firstName, lastName, username, password, phone, email, userProfile } = updateResult.value;
-                console.log('Updated Account Details:', {
-                    firstName,
-                    lastName,
-                    username,
-                    password,
-                    phone,
-                    email,
-                    userProfile
-                });
-                Swal.fire('Updated!', 'The user details have been updated.', 'success');
+                const { username, firstName, lastName, password, phone, email, userProfile } = updateResult.value;
+                const controller = new UpdateUserAccountController();
+                const isSuccess = await controller.updateUserAccount(username, firstName, lastName, password, phone, email, userProfile);
+
+                if (isSuccess) {
+                    Swal.fire('Updated!', 'The user details have been updated.', 'success');
+                } else {
+                    Swal.fire('Error!', 'Failed to update user details.', 'error');
+                }
             }
         });
     };    
@@ -247,9 +251,26 @@ function UserAccountManagementUI() {
         }
     };
 
-    const handleSearch = (e) => {
+    const handleSearch = async (e) => {
         e.preventDefault();
         console.log("Searched Username:", searchUsername);
+
+        const searchUserController = new SearchUserAccountController();
+        const user = await searchUserController.searchUserAccount(searchUsername);
+
+        if (user) {
+            Swal.fire({
+                title: 'User Found',
+                text: `Username: ${user.username}, Name: ${user.name}, Profile: ${user.profile}`,
+                icon: 'success',
+            });
+        } else {
+            Swal.fire({
+                title: 'User Not Found',
+                text: `No user found with the username: ${searchUsername}`,
+                icon: 'error',
+            });
+        }
     };
 
     const handleBack = () => {
