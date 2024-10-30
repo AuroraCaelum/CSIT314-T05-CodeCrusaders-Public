@@ -40,7 +40,7 @@ function UCAUsedCarListingUI() {
         Swal.fire({
             title: 'Search Used Car',
             html: `
-                <select id="carModel" class="swal2-input">
+                <select id="carModel" class="swal2-input custom-select">
                 <option value="">Select car model</option>
                 <option value="Sedan">Sedan</option>
                 <option value="SUV">SUV</option>
@@ -48,7 +48,7 @@ function UCAUsedCarListingUI() {
                 <option value="Convertible">Convertible</option>
             </select>
 
-            <select id="vehicleType" class="swal2-input">
+            <select id="vehicleType" class="swal2-input custom-select">
                 <option value="">Select vehicle type</option>
                 <option value="Electric">Electric</option>
                 <option value="Hybrid">Hybrid</option>
@@ -56,7 +56,7 @@ function UCAUsedCarListingUI() {
                 <option value="Petrol">Petrol</option>
             </select>
 
-            <select id="priceRange" class="swal2-input">
+            <select id="priceRange" class="swal2-input custom-select">
                 <option value="">Select price range</option>
                 <option value="0-10000">$0 - $10,000</option>
                 <option value="10001-20000">$10,001 - $20,000</option>
@@ -64,7 +64,7 @@ function UCAUsedCarListingUI() {
                 <option value="30001-40000">$30,001 - $40,000</option>
             </select>
 
-            <select id="manufactureYear" class="swal2-input">
+            <select id="manufactureYear" class="swal2-input custom-select">
                 <option value="">Select manufacture year</option>
                 <option value="2023">2023</option>
                 <option value="2022">2022</option>
@@ -72,6 +72,11 @@ function UCAUsedCarListingUI() {
                 <option value="2020">2020</option>
             </select>
             `,
+
+            // customClass: {
+            //     input: 'swal2-input custom-select'
+            // },
+
             confirmButtonText: 'Search Used Car',
             focusConfirm: false,
             didOpen: () => {
@@ -360,7 +365,7 @@ function UCAUsedCarListingUI() {
                         Search
                     </button>
                 </form> */}
-                <button onClick={handleSearchUsedCar}>
+                <button onClick={handleSearchUsedCar} className="uclSearch-button">
                     Search
                 </button>
                 

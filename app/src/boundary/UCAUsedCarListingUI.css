@@ -79,7 +79,7 @@
 
 .uclUser-table {
     display: grid;
-    grid-template-columns:2fr 1fr 2fr 1fr 1fr auto;
+    grid-template-columns:2fr 2fr 1fr 1fr 1fr auto;
     gap: 10px;
     background-color: #f1f1f1;
     border-radius: 5px;
@@ -118,4 +118,26 @@
     color: #fff;
     cursor: pointer;
     margin-left: auto;
+}
+
+/* Scoped for search popup */
+.swal-search-popup .custom-select,
+.swal-search-popup .swal2-input {
+    width: 100%; 
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+/* Scoped for used car popup */
+.swal-car-popup .custom-select,
+.swal-car-popup .swal2-input {
+    width: 100%; 
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-bottom: 10px;
 }
