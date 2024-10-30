@@ -3,12 +3,12 @@ import UserAccount from '../entity/UserAccount';
 class CreateUserAccountController {
 
     // Register a new user
-    async createUserAccount(fName, lName, username, password, phoneNum, email, userProfile) {
+    async createUserAccount(username, fName, lName, password, phoneNum, email, userProfile) {
         try {
             // call createUserAccount method via instance
-            const userAccount = new UserAccount(fName, lName, username, password, phoneNum, email, userProfile);
+            const userAccount = new UserAccount(username, fName, lName, password, phoneNum, email, userProfile);
 
-            await userAccount.createUserAccount(fName, lName, username, password, phoneNum, email, userProfile);
+            await userAccount.createUserAccount(username, fName, lName, password, phoneNum, email, userProfile);
             return true;
         } catch (error) {
             console.log("Error:", error);
@@ -51,7 +51,7 @@ class UpdateUserAccountController {
         try {
             // const user = new UserAccount(email, fName, lName, phoneNum, userProfile, username);
             // const newData = { email, fName, lName, phoneNum, userProfile, username };
-            const userAccount = new UserAccount(fName, lName, username, password, phoneNum, email, userProfile);
+            const userAccount = new UserAccount(username, fName, lName, password, phoneNum, email, userProfile);
 
             await userAccount.updateUserAccount(username, fName, lName, password, phoneNum, email, userProfile);
             return true;
