@@ -43,12 +43,14 @@ class ViewUserAccountController {
 
 class UpdateUserAccountController {
 
-    async updateUserAccount(username, fName, lName, password, phoneNum, email, userProfile) {
+    async updateUserAccount(fName, lName, username, password, phoneNum, email, userProfile) {
         // const { email, fName, lName, phoneNum, userProfile, username } = req.body;
         try {
             // const user = new UserAccount(email, fName, lName, phoneNum, userProfile, username);
             // const newData = { email, fName, lName, phoneNum, userProfile, username };
-            await UserAccount.updateUserAccount(username, fName, lName, password, phoneNum, email, userProfile);
+            const userAccount = new UserAccount(fName, lName, username, password, phoneNum, email, userProfile);
+
+            await userAccount.updateUserAccount(fName, lName, username, password, phoneNum, email, userProfile);
             return true;
         } catch (error) {
             return false;
@@ -62,11 +64,15 @@ class SuspendUserAccountController {
         // const { username } = req.params;
         try {
             // const user = new UserAccount(null, null, null, null, null, null, username); // Initialize User with username
-            await UserAccount.suspendUserAccount(username); // Call the suspension method
+            const userAccount = new UserAccount(username);
+
+            await userAccount.suspendUserAccount(username); // Call the suspension method
             // res.status(200).json({ message: 'User account suspended successfully' });
+            console.log("Success to Suspend User(Controller)");
             return true;
         } catch (error) {
             // res.status(500).json({ error: 'Failed to suspend user account: ' + error.message });
+            console.log("failed to Suspend User(Controller)");
             return false;
         }
     }

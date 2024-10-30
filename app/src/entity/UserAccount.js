@@ -106,20 +106,20 @@ class UserAccount {
 
 
     // Update user account with new data
-    static async updateUserAccount(username, fName, lName, password, phoneNum, email, userProfile) {
+    async updateUserAccount(fName, lName, username, password, phoneNum, email, userProfile) {
         try {
             const newData = {
-                email: email,
                 fName: fName,
                 lName: lName,
+                username: username,
                 password: password,
+                email: email,
                 phoneNum: phoneNum,
-                userProfile: userProfile,
-                username: username
+                userProfile: userProfile
             };
             // await this.firebaseService.updateUserAccount('UserAccount', this.username, newData);
             // Object.assign(this, newData);
-            await FirebaseService.updateDocument('UserAccount', username, newData);
+            await this.firebaseService.updateDocument('UserAccount', username, newData);
             console.log("User account updated successfully");
             return true;
         } catch (error) {
@@ -140,12 +140,14 @@ class UserAccount {
 
     // Search for a user by username
     static async searchUserAccount(username) {
+        console.log("Searching for username:", username); 
         try {
-            // Search for a user in Firestore by the username field
-            // const userData = await FirebaseService.searchByField('UserAccount', 'username', username);
-            const userData = await FirebaseService.getDocument('UserAccount', username);
-            if (userData && userData.length > 0) {
-                return userData[0]; // Assuming usernames are unique
+            const firebaseService = new FirebaseService();
+            const userData = await firebaseService.getDocument('UserAccount', username);
+            console.log("User Data:", userData);
+
+            if(userData) {
+                return userData; // Assuming usernames are unique
             } else {
                 throw new Error("User not found");
             }
@@ -154,7 +156,8 @@ class UserAccount {
             throw error;
         }
     }
-
+// Search for a user in Firestore by the username field
+            // const userData = await FirebaseService.searchByField('UserAccount', 'username', username);
     static async getUserAccountList() {
         try {
             const firebaseService = new FirebaseService();
