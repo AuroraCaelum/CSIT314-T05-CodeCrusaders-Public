@@ -3,6 +3,7 @@ import FirebaseService from '../FirebaseService';
 
 class UsedCar {
     constructor(
+        agent_username,
         usedCarId,
         seller_username,
         car_name,
@@ -18,6 +19,7 @@ class UsedCar {
         engine_cap,
         curb_weight
     ) {
+        this.agent_username = agent_username;
         this.usedCarId = usedCarId;
         this.seller_username = seller_username;
         this.car_name = car_name;
@@ -38,12 +40,15 @@ class UsedCar {
     // Create a new used car entry
     async createUsedCar() {
         try {
+            const imageUrl = await this.firebaseService.uploadFile(this.car_image, 'car_images');
+
             const carData = {
+                agent_username: this.agent_username,
                 seller_username: this.seller_username,
                 car_name: this.car_name,
                 car_type: this.car_type,
                 car_manufacturer: this.car_manufacturer,
-                car_image: this.car_image,
+                car_image: imageUrl,
                 description: this.description,
                 features: this.features,
                 accessories: this.accessories,
@@ -81,7 +86,31 @@ class UsedCar {
     // Update an existing used car entry by usedCarId
     static async updateUsedCar(usedCarId, newData) {
         try {
-            await this.firebaseService.updateDocument('UsedCar', usedCarId, newData);
+            //  Check if a new image file is provided and upload if necessary
+            let imageUrl = null;
+            if (newData.car_image) {
+                imageUrl = await this.firebaseService.uploadFile(newData.car_image, 'car_images');
+            }
+
+            //  Prepare car data with the new or existing image URL
+            const carData = {
+                seller_username: newData.seller_username,
+                car_name: newData.car_name,
+                car_type: newData.car_type,
+                car_manufacturer: newData.car_manufacturer,
+                car_image: imageUrl || null, // Use the new URL if provided, or retain existing if null
+                description: newData.description,
+                features: newData.features,
+                accessories: newData.accessories,
+                price: newData.price,
+                milage: newData.milage,
+                manufacture_year: newData.manufacture_year,
+                engine_cap: newData.engine_cap,
+                curb_weight: newData.curb_weight
+            };
+
+            // Update the car document in Firestore
+            await this.firebaseService.updateDocument('UsedCar', usedCarId, carData);
             console.log("Used car entry updated successfully");
             return { success: true, message: "Used car entry updated successfully" };
         } catch (error) {
@@ -103,28 +132,46 @@ class UsedCar {
     }
 
     // Search for used cars by car name
-    static async searchUsedCar(usedCarId) {
+    static async searchUsedCar(carmodel, cartype, priceMin, priceMax, manufactureYear) {
         try {
-            const cars = await this.firebaseService.searchByFields('UsedCar', { usedCarId });
+            let query = this.firebaseService.collection('UsedCar');
+
+            // Apply `carmodel` (car_name) filter if provided
+            if (carmodel) {
+                query = query.where("car_name", "==", carmodel);
+            }
+
+            // Apply `cartype` (car_type) filter if provided
+            if (cartype) {
+                query = query.where("car_type", "==", cartype);
+            }
+
+            // Apply `price` range filter if provided
+            if (priceMin !== undefined && priceMax !== undefined) {
+                query = query.where("price", ">=", priceMin)
+                             .where("price", "<=", priceMax);
+            } else if (priceMin !== undefined) {
+                query = query.where("price", ">=", priceMin);
+            } else if (priceMax !== undefined) {
+                query = query.where("price", "<=", priceMax);
+            }
+
+            // Apply `manufactureYear` filter if provided
+            if (manufactureYear) {
+                query = query.where("manufacture_year", "==", manufactureYear);
+            }
+
+            // Execute the query and retrieve matching documents
+            const snapshot = await query.get();
+            const cars = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
             if (cars.length > 0) {
                 return { success: true, data: cars };
             } else {
-                return { success: false, message: "No cars found" };
+                return { success: false, message: "No cars found matching the criteria" };
             }
         } catch (error) {
             console.error("Error searching for cars:", error);
-            return { success: false, message: error.message };
-        }
-    }
-
-    // Get a list of all used cars
-    static async getUsedCarList() {
-        try {
-            const carList = await this.firebaseService.getDocuments('UsedCar');
-            console.log(carList);
-            return { success: true, data: carList };
-        } catch (error) {
-            console.error("Error fetching used car list:", error);
             return { success: false, message: error.message };
         }
     }

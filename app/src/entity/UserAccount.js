@@ -12,13 +12,13 @@ class UserAccount {
         this.firebaseService = new FirebaseService(); // Initialize FirebaseService
     }
 
-    // Validate if the user is a 'UsedCarAgent'
+    // Validate if the user is a 'Seller'
     static async validateSeller(username) {
         try {
             // Fetch the user data by username from Firestore
-            const userData = await FirebaseService.getDocument('UserAccount', username);
+            const userData = await this.firebaseService.getDocument('UserAccount', username);
 
-            // Check if user exists and their userProfile is 'UsedCarAgent'
+            // Check if user exists and their userProfile is 'Seller'
             if (userData && userData.userProfile === 'Seller') {
                 return true;
             } else {
