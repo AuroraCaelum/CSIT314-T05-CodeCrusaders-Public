@@ -92,8 +92,11 @@ class FirebaseService {
         try {
             const storageRef = ref(storage, `${folder}/${file.name}`);
             const uploadTask = uploadBytesResumable(storageRef, file);
+            // Await completion of upload and retrieve download URL
             await uploadTask;
+            const url = await getDownloadURL(storageRef);
             console.log("File uploaded successfully");
+            return url;
         } catch (error) {
             console.error("Error uploading file:", error);
             throw error;
