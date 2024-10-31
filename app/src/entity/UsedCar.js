@@ -175,6 +175,30 @@ class UsedCar {
             return { success: false, message: error.message };
         }
     }
+
+     // Retrieve a list of used cars by their IDs
+     static async getUsedCarListById(usedCarIds) {
+        try {
+            const usedCars = [];
+
+            // Loop through each ID and retrieve the document from Firestore
+            for (const usedCarId of usedCarIds) {
+                const carData = await UsedCar.firebaseService.getDocument('UsedCar', usedCarId);
+                if (carData) {
+                    usedCars.push({ id: usedCarId, ...carData });
+                }
+            }
+
+            if (usedCars.length > 0) {
+                return { success: true, data: usedCars };
+            } else {
+                return { success: false, message: "No used cars found for the provided IDs" };
+            }
+        } catch (error) {
+            console.error("Error retrieving used cars by ID list:", error);
+            return { success: false, message: error.message };
+        }
+    }
 }
 
 export default UsedCar;
