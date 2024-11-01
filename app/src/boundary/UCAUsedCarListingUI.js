@@ -131,22 +131,22 @@ function UCAUsedCarListingUI() {
             title: 'Create Used Car',
             width: 1200,
             html: `
-                <div class="grid-container" style="display: grid; grid-template-columns: 1fr 1fr;">
-                    <div style="display: flex; align-items: baseline;">
-                        <strong>Car Manufacturer:</strong>
+                <div class="wrapper">
+                    <input type="file" id="car_image" class="swal2-input" accept="image/*" placeholder="Car Image">
+                    <div class="item">
+                        <label>Car Manufacturer</label>
                         <input type="text" id="car_manufacturer" class="swal2-input" placeholder="Ex) Hyundai">
                     </div>
-                    <div style="display: flex; align-items: baseline;">
-                        <strong>Car Name:</strong>
+                    <div class="item">
+                        <label>Car Name</label>
                         <input type="text" id="car_name" class="swal2-input" placeholder="Ex) Ioniq 5">
                     </div>
-                    <div style="display: flex; align-items: baseline;">
-                        <strong>Price:</strong>
-                        <input type="text" id="price" class="swal2-input" placeholder="ex) 150000">
+                    <div class="item">
+                        <label>Price ($)</label>
+                        <input type="text" id="price" class="swal2-input" placeholder="Ex) 150000">
                     </div>
-                    <input type="file" id="car_image" class="swal2-input" accept="image/*" placeholder="Insert Image">
-                    <div style="display: flex; align-items: baseline;">
-                        <strong>Car Type:</strong>
+                    <div class="item">
+                        <label>Car Type</label>
                         <select id="car_type" class="swal2-select">
                             <option value="">Select Car Type</option>
                             <option value="Sedan">Sedan</option>
@@ -161,25 +161,25 @@ function UCAUsedCarListingUI() {
                             <option value="Sports Car">Sports Car</option>
                         </select>
                     </div>
-                    <div style="display: flex; align-items: baseline;">
-                        <strong>Manufactured Year:</strong>
+                    <div class="item">
+                        <label>Manufacture Year</label>
                         <input type="text" id="manufacture_year" class="swal2-input" placeholder="Ex) 2021">
                     </div>
-                    <div style="display: flex; align-items: baseline;">
-                        <strong>Mileage:</strong>
-                        <input type="text" id="mileage" class="swal2-input" placeholder="Mileage">
+                    <div class="item">
+                        <label>Mileage (km)</label>
+                        <input type="text" id="mileage" class="swal2-input" placeholder="Ex) 100000">
                     </div>
-                    <div style="display: flex; align-items: baseline;">
-                        <strong>Engine Capacity:</strong>
-                        <input type="text" id="engine_cap" class="swal2-input" placeholder="Engine Capacity">
+                    <div class="item">
+                        <label>Engine Capacity (cc)</label>
+                        <input type="text" id="engine_cap" class="swal2-input" placeholder="Ex) 1500">
                     </div>
-                    <div style="display: flex; align-items: baseline;">
-                        <strong>Features:</strong>
-                        <input type="text" id="features" class="swal2-input" placeholder="Features">
+                    <div class="item">
+                        <label>Features</label>
+                        <input type="text" id="features" class="swal2-input" placeholder="Enter features...">
                     </div>
-                    <div style="display: flex; align-items: baseline;">
-                        <strong>Description:</strong>
-                        <input type="textarea" id="description" class="swal2-input" placeholder="Description">
+                    <div class="item">
+                        <label>Description</label>
+                        <input type="textarea" id="description" class="swal2-input" placeholder="Enter description...">
                     </div>
                 </div>
             `,
@@ -460,7 +460,7 @@ function UCAUsedCarListingUI() {
                 </button>
 
                 <button onClick={handleCreateUsedCar} className="uclCreate-button">
-                    Create used Car
+                    Create Used Car
                 </button>
             </div>
             <div className="uclUser-table">
@@ -477,8 +477,8 @@ function UCAUsedCarListingUI() {
                         <img src={car.image} alt="Car" className="uclCar-image" />
                         <span>{car.car_name}</span>
                         <span>{car.manufacture_year}</span>
-                        <span>{car.mileage}</span>
-                        <span>{car.price}</span>
+                        <span>{car.mileage.toLocaleString()}</span>
+                        <span>${car.price.toLocaleString()}</span>
                         <button onClick={() => handleViewUsedCar(car.usedCarId)} className="uclInspect-button">
                             Inspect
                         </button>

@@ -18,13 +18,13 @@
 }
 
 .uclBack-button {
-    padding: 8px 16px; 
-    border: none; 
-    border-radius: 5px; 
-    background-color: #333; 
-    color: #fff; 
-    cursor: pointer; 
-    margin-right: auto; 
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #333;
+    color: #fff;
+    cursor: pointer;
+    margin-right: auto;
 }
 
 .uclProfile-picture {
@@ -60,13 +60,15 @@
 }
 
 .uclSearch-input {
-    width: 50ch; /* mistake here (i want to change the legth of the search bar) */
+    width: 50ch;
+    /* mistake here (i want to change the legth of the search bar) */
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
 
-.uclSearch-button, .uclCreate-button {
+.uclSearch-button,
+.uclCreate-button {
     padding: 10px 15px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -79,7 +81,7 @@
 
 .uclUser-table {
     display: grid;
-    grid-template-columns:2fr 2fr 1fr 1fr 1fr auto;
+    grid-template-columns: 2fr 2fr 1fr 1fr 1fr auto;
     gap: 10px;
     background-color: #f1f1f1;
     border-radius: 5px;
@@ -91,7 +93,7 @@
     font-weight: bold;
     background-color: #ddd;
     padding: 10px;
-    border-radius:5px;
+    border-radius: 5px;
 }
 
 .uclTable-row {
@@ -123,7 +125,7 @@
 /* Scoped for search popup */
 .swal-search-popup .custom-select,
 .swal-search-popup .swal2-input {
-    width: 100%; 
+    width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -134,10 +136,35 @@
 /* Scoped for used car popup */
 .swal-car-popup .custom-select,
 .swal-car-popup .swal2-input {
-    width: 100%; 
+    width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
     margin-bottom: 10px;
+}
+
+.wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    .item {
+        display: grid;
+        gap: 10px;
+        padding: 10px;
+
+        label {
+            font-weight: bold;
+            text-align: left;
+            margin-left: 2em;
+        }
+
+        input {
+            margin: 0em 2em 3px;
+        }
+
+        /* select {
+            padding: 19px;
+        } */
+    }
 }
