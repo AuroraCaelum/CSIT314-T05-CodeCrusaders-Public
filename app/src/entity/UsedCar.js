@@ -149,7 +149,7 @@ class UsedCar {
             // Apply `price` range filter if provided
             if (priceMin !== undefined && priceMax !== undefined) {
                 query = query.where("price", ">=", priceMin)
-                             .where("price", "<=", priceMax);
+                    .where("price", "<=", priceMax);
             } else if (priceMin !== undefined) {
                 query = query.where("price", ">=", priceMin);
             } else if (priceMax !== undefined) {
@@ -176,8 +176,8 @@ class UsedCar {
         }
     }
 
-     // Retrieve a list of used cars by their IDs
-     static async getUsedCarListById(usedCarIds) {
+    // Retrieve a list of used cars by their IDs
+    static async getUsedCarListById(usedCarIds) {
         try {
             const usedCars = [];
 
@@ -197,6 +197,18 @@ class UsedCar {
         } catch (error) {
             console.error("Error retrieving used cars by ID list:", error);
             return { success: false, message: error.message };
+        }
+    }
+
+    static async getUsedCarList() {
+        try {
+            const firebaseService = new FirebaseService();
+            const usedCar = await firebaseService.getDocuments('UsedCar');
+            console.log(usedCar);
+            return usedCar;
+        } catch (error) {
+            console.error("Error:", error);
+            throw error;
         }
     }
 }
