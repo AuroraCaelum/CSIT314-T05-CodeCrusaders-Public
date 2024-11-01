@@ -3,7 +3,8 @@ import Cookies from "js-cookie";
 import "./UCAUsedCarListingUI.css";
 import { UserLogoutController } from "../controller/UserAuthController";
 import { ViewUserAccountController } from "../controller/UserAccountController";
-import { CreateUsedCarController } from "../controller/UsedCarController"
+import { CreateUsedCarController } from "../controller/UsedCarController";
+import { ViewUsedCarController, DeleteUsedCarController } from "../controller/UsedCarController";
 
 import Swal from 'sweetalert2';
 
@@ -259,42 +260,67 @@ function UCAUsedCarListingUI() {
         });
     };
 
-    const handleInspectAccount = (user) => { //not done
-        Swal.fire({
-            title: 'View Used Car',
-            html: `
-                <div style="text-align: left;">
-                    <strong>Product Name:</strong> ${user.pName}<br>
-                    <strong>Description:</strong> ${user.description}<br>
-                    <strong>Type:</strong> ${user.type}<br>
-                    <strong>Price:</strong> ${user.price}<br>
-                </div>
-            `,
-            showCancelButton: true,
-            cancelButtonText: 'close',
-            confirmButtonText: 'Update Details',
-            showDenyButton: true,
-            denyButtonText: 'Delete',
-            focusConfirm: false
-        }).then((result) => {
-            if (result.isConfirmed) {
-                handleUpdateUsedCar(user);
-            } else if (result.isDenied) {
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You are about to Delete this product.",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, Delete it!',
-                    cancelButtonText: 'No, cancel'
-                }).then((DeleteResult) => {
-                    if (DeleteResult.isConfirmed) {
-                        console.log('User Deleted:', user.pName);
-                        Swal.fire('Deleteed!', 'The product has been Deleted.', 'success');
-                    }
-                });
-            }
-        });
+    const handleViewUsedCar = async (usedCarId) => { //not done
+        console.log('Fetching used Car for:', usedCarId);
+        const viewUsedCarController = new ViewUsedCarController();
+        const usedCar = await viewUsedCarController.viewUsedCar(usedCarId);
+        console.log("Used Car data received:", usedCar);
+
+        if (usedCar) {
+            Swal.fire({
+                title: 'View Used Car',
+                html: `
+                    <div style="text-align: left;">
+                        <strong>Product Name:</strong> ${usedCar.prodName}<br>
+                        <strong>Description:</strong> ${usedCar.description}<br>
+                        <strong>Type:</strong> ${usedCar.type}<br>
+                        <strong>Price:</strong> ${usedCar.price}<br>
+                    </div>
+                `,
+                showCancelButton: true,
+                cancelButtonText: 'close',
+                confirmButtonText: 'Update Details',
+                showDenyButton: true,
+                denyButtonText: 'Delete',
+                focusConfirm: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    handleUpdateUsedCar(usedCarId);
+                } else if (result.isDenied) {
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You are about to Delete this product.",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, Delete it!',
+                        cancelButtonText: 'No, cancel'
+                    }).then(async (DeleteResult) => {
+                        if (DeleteResult.isConfirmed) {
+                            const deleteUsedCarController = new DeleteUsedCarController();
+                            const isDeleted = await deleteUsedCarController.deleteUsedCar(usedCarId);
+                            
+                            if (isDeleted) {
+                                Swal.fire('Deleted!', 'This car has been deleted.', 'success');
+                            } else {
+                                Swal.fire('Failed!', 'Failed to delete this car.', 'error');
+                            }
+                            console.log('Car Deleted:', usedCarId.prodName);
+                            Swal.fire('Deleteed!', 'The product has been Deleted.', 'success');
+                        }
+                    });
+                }
+            });
+            console.log(usedCar);
+            console.log("display success in UI for: ", usedCarId);
+        } else {
+            console.error("Failed to load car information:", usedCarId);
+            Swal.fire({
+                title: 'Error',
+                text: 'Failed to load car information.',
+                icon: 'error',
+                confirmButtonText: 'Close'
+            });
+        }
     };
 
     const handleUpdateUsedCar = (user) => {
@@ -304,7 +330,7 @@ function UCAUsedCarListingUI() {
                 <input type="text" id="prodName" class="swal2-input" placeholder="Product Name" value="${user.prodName}">
                 <input type="text" id="description" class="swal2-input" placeholder="Description" value="${user.description}">
                 <input type="text" id="type" class="swal2-input" placeholder="Type" value="${user.type}">
-                <input type="price" id="price" class="swal2-input" placeholder="Price">
+                <input type="text" id="price" class="swal2-input" placeholder="Price">
             `,
             confirmButtonText: 'Update',
             focusConfirm: false,
@@ -421,7 +447,7 @@ function UCAUsedCarListingUI() {
                         <span>{user.description}</span>
                         <span>{user.type}</span>
                         <span>{user.price}</span>
-                        <button onClick={() => handleInspectAccount(user)} className="uclInspect-button">
+                        <button onClick={() => handleViewUsedCar(user)} className="uclInspect-button">
                             Inspect
                         </button>
                     </div>
