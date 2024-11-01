@@ -9,6 +9,10 @@ import UserProfileManagementUI from './boundary/UserProfileManagementUI';
 import UsedCarManagementUI from './boundary/UsedCarManagementUI';
 import UCAUsedCarListingUI from './boundary/UCAUsedCarListingUI';
 import UCARateReviewUI from './boundary/UCARateReviewUI';
+import BuyerMainUI from './boundary/BuyerMainUI';
+import BuyerUsedCarUI from './boundary/BuyerUsedCarUI';
+import BuyerShortlistUI from './boundary/BuyerShortlistUI';
+
 
 function App() {
     return (
@@ -21,6 +25,9 @@ function App() {
                 <Route path="/usedcarmanagement" element={<UsedCarManagementUI />} />
                 <Route path="/ucausedcarlisting" element={<UCAUsedCarListingUI />} />
                 <Route path="/ucarateandreview" element={<UCARateReviewUI />} />
+                <Route path="/buyermain" element={<BuyerMainUI />} />
+                <Route path="/buyerusedcar" element={<BuyerUsedCarUI />} />
+                <Route path="/buyershortlist" element={<BuyerShortlistUI />} />
             </Routes>
         </Router>
     );
