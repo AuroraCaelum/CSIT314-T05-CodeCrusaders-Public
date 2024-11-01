@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import "./UCAUsedCarListingUI.css";
 import { UserLogoutController } from "../controller/UserAuthController";
-import { ViewUserAccountController } from "../controller/UserAccountController";
+// import { ViewUserAccountController } from "../controller/UserAccountController";
 import { CreateUsedCarController } from "../controller/UsedCarController";
 import { ViewUsedCarController, DeleteUsedCarController } from "../controller/UsedCarController";
 
@@ -11,25 +11,27 @@ import Swal from 'sweetalert2';
 function UCAUsedCarListingUI() {
     const [username] = useState(Cookies.get("username"));
     //const [searchUsername, setSearchUsername] = useState("");
-    const [users, setUsers] = useState([
-        { name: "Loading...", username: "Loading...", profile: "Loading...", image: "https://placehold.co/100x100?text=Car+Image" }
+    const [cars, setCars] = useState([
+        { car_name: "Loading...", manufacture_year: "Loading...", mileage: "Loading...", price: "Loading...", image: "https://placehold.co/100x100?text=Car+Image" }
     ]);
 
     useEffect(() => {
-        const fetchUsers = async () => {
-            const snapshot = await ViewUserAccountController.getUserAccountList();
+        const fetchCars = async () => {
+            const snapshot = await ViewUsedCarController.getUsedCarList();
             if (snapshot !== null) {
-                const userData = snapshot.docs.map(doc => ({
-                    name: doc.data().fName + " " + doc.data().lName,
-                    username: doc.data().username,
-                    profile: doc.data().userProfile,
-                    image: doc.data().carImage || "https://placehold.co/100x100?text=Car+Image"
+                const carData = snapshot.docs.map(doc => ({
+                    usedCarId: doc.id,
+                    car_name: doc.data().car_name,
+                    manufacture_year: doc.data().manufacture_year,
+                    mileage: doc.data().mileage,
+                    price: doc.data().price,
+                    image: (doc.data().car_image === undefined) ? "https://placehold.co/100x100?text=Car+Image" : "https://firebasestorage.googleapis.com/v0/b/moeuigosa-encjrx.appspot.com/o/car_images%2F" + doc.data().car_image + "?alt=media"
                 }));
-                setUsers(userData);
+                setCars(carData);
             }
         };
 
-        fetchUsers();
+        fetchCars();
     }, []);
 
     if (Cookies.get("userProfile") !== "UsedCarAgent") {
@@ -127,30 +129,59 @@ function UCAUsedCarListingUI() {
 
         Swal.fire({
             title: 'Create Used Car',
+            width: 1200,
             html: `
-                <input type="text" id="prodName" class="swal2-input" placeholder="Product Name">
-                <input type="text" id="description" class="swal2-input" placeholder="Description">
-                <input type="text" id="type" class="swal2-input" placeholder="Type">
-                <select id="type" class="swal2-input">
-                    <option value="">Select Car Type</option>
-                    <option value="Sedan">Sedan</option>
-                    <option value="SUV">SUV</option>
-                    <option value="Hatchback">Hatchback</option>
-                    <option value="Wagon">Wagon</option>
-                    <option value="Coupe">Coupe</option>
-                    <option value="Van">Van</option>
-                    <option value="MiniVan">MiniVan</option>
-                    <option value="Pickup Truck">Pickup Truck</option>
-                    <option value="Convertible">Convertible</option>
-                    <option value="Sports Car">Sports Car</option>
-                </select>
-                <input type="price" id="price" class="swal2-input" placeholder="ex) 150000">
-                <input type="manufactureYear" id="manufactureYear" class="swal2-input" placeholder="Manufactured">
-                <input type="mileage" id="mileage" class="swal2-input" placeholder="Mileage">
-                <input type="engineCap" id="engineCap" class="swal2-input" placeholder="engine Cap">
-                <input type="curbWeight" id="curbWeight" class="swal2-input" placeholder="Curb Weight">
-                <input type="features" id="features" class="swal2-input" placeholder="Features">
-                <input type="file" id="carImage" class="swal2-input" accept="image/*" placeholder="Insert Image">
+                <div class="grid-container" style="display: grid; grid-template-columns: 1fr 1fr;">
+                    <div style="display: flex; align-items: baseline;">
+                        <strong>Car Manufacturer:</strong>
+                        <input type="text" id="car_manufacturer" class="swal2-input" placeholder="Ex) Hyundai">
+                    </div>
+                    <div style="display: flex; align-items: baseline;">
+                        <strong>Car Name:</strong>
+                        <input type="text" id="car_name" class="swal2-input" placeholder="Ex) Ioniq 5">
+                    </div>
+                    <div style="display: flex; align-items: baseline;">
+                        <strong>Price:</strong>
+                        <input type="text" id="price" class="swal2-input" placeholder="ex) 150000">
+                    </div>
+                    <input type="file" id="car_image" class="swal2-input" accept="image/*" placeholder="Insert Image">
+                    <div style="display: flex; align-items: baseline;">
+                        <strong>Car Type:</strong>
+                        <select id="car_type" class="swal2-select">
+                            <option value="">Select Car Type</option>
+                            <option value="Sedan">Sedan</option>
+                            <option value="SUV">SUV</option>
+                            <option value="Hatchback">Hatchback</option>
+                            <option value="Wagon">Wagon</option>
+                            <option value="Coupe">Coupe</option>
+                            <option value="Van">Van</option>
+                            <option value="MiniVan">MiniVan</option>
+                            <option value="Pickup Truck">Pickup Truck</option>
+                            <option value="Convertible">Convertible</option>
+                            <option value="Sports Car">Sports Car</option>
+                        </select>
+                    </div>
+                    <div style="display: flex; align-items: baseline;">
+                        <strong>Manufactured Year:</strong>
+                        <input type="text" id="manufacture_year" class="swal2-input" placeholder="Ex) 2021">
+                    </div>
+                    <div style="display: flex; align-items: baseline;">
+                        <strong>Mileage:</strong>
+                        <input type="text" id="mileage" class="swal2-input" placeholder="Mileage">
+                    </div>
+                    <div style="display: flex; align-items: baseline;">
+                        <strong>Engine Capacity:</strong>
+                        <input type="text" id="engine_cap" class="swal2-input" placeholder="Engine Capacity">
+                    </div>
+                    <div style="display: flex; align-items: baseline;">
+                        <strong>Features:</strong>
+                        <input type="text" id="features" class="swal2-input" placeholder="Features">
+                    </div>
+                    <div style="display: flex; align-items: baseline;">
+                        <strong>Description:</strong>
+                        <input type="textarea" id="description" class="swal2-input" placeholder="Description">
+                    </div>
+                </div>
             `,
             confirmButtonText: 'Create Used Car',
             focusConfirm: false,
@@ -298,7 +329,7 @@ function UCAUsedCarListingUI() {
                         if (DeleteResult.isConfirmed) {
                             const deleteUsedCarController = new DeleteUsedCarController();
                             const isDeleted = await deleteUsedCarController.deleteUsedCar(usedCarId);
-                            
+
                             if (isDeleted) {
                                 Swal.fire('Deleted!', 'This car has been deleted.', 'success');
                             } else {
@@ -427,27 +458,28 @@ function UCAUsedCarListingUI() {
                 <button onClick={handleSearchUsedCar} className="uclSearch-button">
                     Search
                 </button>
-                
+
                 <button onClick={handleCreateUsedCar} className="uclCreate-button">
                     Create used Car
                 </button>
             </div>
             <div className="uclUser-table">
                 <div className="uclTable-header">
-                    <span>Product Name:</span>
-                    <span>Description:</span>
-                    <span>Type:</span>
+                    <span></span>
+                    <span>Car Name:</span>
+                    <span>Manufactured:</span>
+                    <span>Mileage:</span>
                     <span>Price:</span>
                     <span></span>
                 </div>
-                {users.map((user) => (
-                    <div key={user.username} className="uclTable-row">
-                        <img src={user.image} alt="Car" className="uclCar-image" />
-                        <span>{user.prodName}</span>
-                        <span>{user.description}</span>
-                        <span>{user.type}</span>
-                        <span>{user.price}</span>
-                        <button onClick={() => handleViewUsedCar(user)} className="uclInspect-button">
+                {cars.map((car) => (
+                    <div key={car.usedCarId} className="uclTable-row">
+                        <img src={car.image} alt="Car" className="uclCar-image" />
+                        <span>{car.car_name}</span>
+                        <span>{car.manufacture_year}</span>
+                        <span>{car.mileage}</span>
+                        <span>{car.price}</span>
+                        <button onClick={() => handleViewUsedCar(car.usedCarId)} className="uclInspect-button">
                             Inspect
                         </button>
                     </div>

@@ -6,9 +6,9 @@ class CreateUsedCarController {
 
     // Create a new used car entry
     async createUsedCar(
-        agent_username, seller_username, car_name, car_type, 
-        car_manufacturer, car_image, description, 
-        features, accessories, price, milage, 
+        agent_username, seller_username, car_name, car_type,
+        car_manufacturer, car_image, description,
+        features, accessories, price, milage,
         manufacture_year, engine_cap, curb_weight
     ) {
         try {
@@ -20,9 +20,9 @@ class CreateUsedCarController {
 
             // Proceed to create the used car entry if seller is valid
             const car = new UsedCar(
-                agent_username, seller_username, car_name, car_type, 
-                car_manufacturer, car_image, description, 
-                features, accessories, price, milage, 
+                agent_username, seller_username, car_name, car_type,
+                car_manufacturer, car_image, description,
+                features, accessories, price, milage,
                 manufacture_year, engine_cap, curb_weight
             );
             const success = await car.createUsedCar();
@@ -39,6 +39,16 @@ class CreateUsedCarController {
 }
 
 class ViewUsedCarController {
+
+    static async getUsedCarList() {
+        try {
+            const usedCarList = await UsedCar.getUsedCarList();
+            return usedCarList;
+        } catch (error) {
+            console.log("Error:", error);
+            throw error;
+        }
+    }
 
     // View a used car by its ID
     async viewUsedCar(usedCarId) {
@@ -60,9 +70,9 @@ class UpdateUsedCarController {
 
     // Update an existing used car entry
     async updateUsedCar(
-        usedCarId, seller_username, car_name, car_type, 
-        car_manufacturer, car_image, description, 
-        features, accessories, price, milage, 
+        usedCarId, seller_username, car_name, car_type,
+        car_manufacturer, car_image, description,
+        features, accessories, price, milage,
         manufacture_year, engine_cap, curb_weight
     ) {
         try {
@@ -77,7 +87,7 @@ class UpdateUsedCarController {
                 car_name,
                 car_type,
                 car_manufacturer,
-                car_image,  
+                car_image,
                 description,
                 features,
                 accessories,
@@ -87,7 +97,7 @@ class UpdateUsedCarController {
                 engine_cap,
                 curb_weight
             };
-            
+
             const success = await UsedCar.updateUsedCar(usedCarId, newData);
             if (success) {
                 return { success: true, message: 'Used car updated successfully' };
