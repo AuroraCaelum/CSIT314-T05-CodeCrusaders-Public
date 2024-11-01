@@ -51,12 +51,12 @@ class UsedCar {
                 car_image: imageUrl,
                 description: this.description,
                 features: this.features,
-                accessories: this.accessories,
+                // accessories: this.accessories,
                 price: this.price,
                 milage: this.milage,
                 manufacture_year: this.manufacture_year,
                 engine_cap: this.engine_cap,
-                curb_weight: this.curb_weight,
+                // curb_weight: this.curb_weight,
             };
             await this.firebaseService.addDocument('UsedCar', this.usedCarId, carData);
             console.log("Used car entry created successfully");
