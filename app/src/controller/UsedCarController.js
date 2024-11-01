@@ -60,7 +60,7 @@ class UpdateUsedCarController {
 
     // Update an existing used car entry
     async updateUsedCar(
-        usedCarID, seller_username, car_name, car_type, 
+        usedCarId, seller_username, car_name, car_type, 
         car_manufacturer, car_image, description, 
         features, accessories, price, milage, 
         manufacture_year, engine_cap, curb_weight
@@ -72,7 +72,7 @@ class UpdateUsedCarController {
                 return { success: false, message: 'Invalid seller username' };
             }
             const newData = {
-                usedCarID,
+                usedCarId,
                 seller_username,
                 car_name,
                 car_type,
@@ -106,7 +106,7 @@ class DeleteUsedCarController {
     // Suspend a used car entry
     async deleteUsedCar(usedCarId) {
         try {
-            const success = await car.deleteUsedCar(usedCarId);
+            const success = await UsedCar.deleteUsedCar(usedCarId);
             if (success) {
                 return { success: true, message: 'Used car deleted successfully' };
             } else {

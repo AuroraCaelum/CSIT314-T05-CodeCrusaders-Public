@@ -3,6 +3,7 @@ import Cookies from "js-cookie";
 import "./UCAUsedCarListingUI.css";
 import { UserLogoutController } from "../controller/UserAuthController";
 import { ViewUserAccountController } from "../controller/UserAccountController";
+import { CreateUsedCarController } from "../controller/UsedCarController"
 
 import Swal from 'sweetalert2';
 
@@ -129,7 +130,20 @@ function UCAUsedCarListingUI() {
                 <input type="text" id="prodName" class="swal2-input" placeholder="Product Name">
                 <input type="text" id="description" class="swal2-input" placeholder="Description">
                 <input type="text" id="type" class="swal2-input" placeholder="Type">
-                <input type="price" id="price" class="swal2-input" placeholder="Price">
+                <select id="type" class="swal2-input">
+                    <option value="">Select Car Type</option>
+                    <option value="Sedan">Sedan</option>
+                    <option value="SUV">SUV</option>
+                    <option value="Hatchback">Hatchback</option>
+                    <option value="Wagon">Wagon</option>
+                    <option value="Coupe">Coupe</option>
+                    <option value="Van">Van</option>
+                    <option value="MiniVan">MiniVan</option>
+                    <option value="Pickup Truck">Pickup Truck</option>
+                    <option value="Convertible">Convertible</option>
+                    <option value="Sports Car">Sports Car</option>
+                </select>
+                <input type="price" id="price" class="swal2-input" placeholder="ex) 150000">
                 <input type="manufactureYear" id="manufactureYear" class="swal2-input" placeholder="Manufactured">
                 <input type="mileage" id="mileage" class="swal2-input" placeholder="Mileage">
                 <input type="engineCap" id="engineCap" class="swal2-input" placeholder="engine Cap">
@@ -193,7 +207,7 @@ function UCAUsedCarListingUI() {
 
                 return { prodName, description, type, price, manufactureYear, mileage, engineCap, curbWeight, features, imageFile };
             },
-        }).then((result) => {
+        }).then(async (result) => {
             if (result.isConfirmed) {
                 const { prodName, description, type, price, manufactureYear, mileage, engineCap, curbWeight, features, imageFile } = result.value;
                 console.log('New Account Details:', {
@@ -222,6 +236,25 @@ function UCAUsedCarListingUI() {
                 formData.append("carImage", imageFile);
 
                 // Add logic here to handle account creation, like sending data to an API
+                const createUsedCarController = new CreateUsedCarController();
+                const isSuccess = await createUsedCarController.createUsedCar(
+                    prodName,
+                    description,
+                    type,
+                    price,
+                    manufactureYear,
+                    mileage,
+                    engineCap,
+                    curbWeight,
+                    features,
+                    imageFile
+                );
+
+                if (isSuccess) {
+                    console.log("Used Car successfully created.");
+                } else {
+                    console.error("Failed to create used car.");
+                }
             }
         });
     };
