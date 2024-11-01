@@ -8,8 +8,8 @@ class CreateUsedCarController {
     async createUsedCar(
         agent_username, seller_username, car_name, car_type,
         car_manufacturer, car_image, description,
-        features, accessories, price, milage,
-        manufacture_year, engine_cap, curb_weight
+        features, price, milage,
+        manufacture_year, engine_cap
     ) {
         try {
             // Validate if the seller exists
@@ -22,8 +22,8 @@ class CreateUsedCarController {
             const car = new UsedCar(
                 agent_username, seller_username, car_name, car_type,
                 car_manufacturer, car_image, description,
-                features, accessories, price, milage,
-                manufacture_year, engine_cap, curb_weight
+                features, price, milage,
+                manufacture_year, engine_cap
             );
             const success = await car.createUsedCar();
             if (success) {
