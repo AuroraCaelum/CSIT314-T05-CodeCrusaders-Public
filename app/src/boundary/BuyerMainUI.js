@@ -8,9 +8,9 @@ import Swal from 'sweetalert2';
 function BuyerManagementUI() {
     const [username] = useState(Cookies.get("username"))
 
-    // if (Cookies.get("userProfile") !== "Buyer") {
-    //     window.open("/", "_self")
-    // }
+    if (Cookies.get("userProfile") !== "Buyer") {
+        window.open("/", "_self")
+    }
 
     const handleBuyerUsedCar = () => {
         console.log("Buyer Used Car");

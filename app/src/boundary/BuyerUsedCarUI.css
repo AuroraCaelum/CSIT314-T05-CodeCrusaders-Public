@@ -1,0 +1,177 @@
+.bucContainer {
+    position: relative;
+    font-family: Arial, sans-serif;
+    width: 80%;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+}
+
+.bucHeader {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.bucBack-button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #333;
+    color: #fff;
+    cursor: pointer;
+    margin-right: auto;
+}
+
+.bucProfile-picture {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #ccc;
+    flex-shrink: 0;
+}
+
+.bucUsername {
+    font-size: 16px;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+}
+
+.bucLogout-button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #333;
+    color: #fff;
+    cursor: pointer;
+}
+
+.bucSearch-bar {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.bucSearch-input {
+    width: 50ch;
+    /* mistake here (i want to change the legth of the search bar) */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.bucSearch-button,
+.bucMyShortlist-button {
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.bucUser-table {
+    display: grid;
+    grid-template-columns: 2fr 2fr 1fr 1fr 1fr auto;
+    gap: 10px;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.bucTable-header {
+    display: contents;
+    font-weight: bold;
+    background-color: #ddd;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.bucTable-row {
+    display: contents;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.bucCar-image {
+    width: 100%;
+    height: auto;
+    max-width: 100px;
+    max-height: 100px;
+    object-fit: cover;
+    border-radius: 5px;
+    grid-column: 1;
+}
+
+.bucInspect-button,
+.bucSTS-button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    background-color: #333;
+    color: #fff;
+    cursor: pointer;
+    margin-left: auto;
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+/* Scoped for search popup */
+.swal-search-popup .custom-select,
+.swal-search-popup .swal2-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+/* Scoped for used car popup */
+.swal-car-popup .custom-select,
+.swal-car-popup .swal2-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    .item {
+        display: grid;
+        gap: 10px;
+        padding: 5px;
+
+        label {
+            font-weight: bold;
+            text-align: left;
+            margin-left: 2em;
+        }
+
+        input {
+            margin: 0em 2em 3px;
+        }
+
+        select {
+            margin: 0em 2em 3px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            color: #ccc;
+        }
+    }
+}
