@@ -1,12 +1,24 @@
 .bucContainer {
-    position: relative;
+    /* position: relative;
     font-family: Arial, sans-serif;
     width: 80%;
     margin: 50px auto;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 10px;
+    background-color: #f9f9f9; */
+
+    position: relative;
+    font-family: Arial, sans-serif;
+    width: 95vw; /* Slightly less than 100vw */
+    height: 90vh; /* Slightly less than 100vh to account for top margin */
+    margin: 30px auto; /* Adds a 30px margin on top and centers horizontally */
+    padding: 20px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 10px;
     background-color: #f9f9f9;
+    overflow-y: auto;
 }
 
 .bucHeader {
@@ -65,6 +77,23 @@
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
+}
+
+.custom-select {
+    background-color: #f0e6d6; /* Grey-cream color */
+    padding: 10px; /* Internal padding on all sides */
+    font-size: 16px; /* Slightly larger text */
+    border-radius: 5px; /* Rounded corners */
+    box-sizing: border-box; /* Ensures padding doesn’t affect width */
+    color: #333; /* Dark text for contrast */
+    appearance: none; /* Removes default arrow for consistent styling */
+    margin: 4px;
+}
+
+.custom-select:focus {
+    border-color: #888; /* Slightly darker border on focus */
+    outline: none; /* Removes default outline */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Subtle shadow on focus */
 }
 
 .bucSearch-button,
