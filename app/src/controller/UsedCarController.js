@@ -90,12 +90,12 @@ class UpdateUsedCarController {
                 car_image,
                 description,
                 features,
-                accessories,
+                //accessories,
                 price,
                 milage,
                 manufacture_year,
-                engine_cap,
-                curb_weight
+                engine_cap
+                //curb_weight
             };
 
             const success = await UsedCar.updateUsedCar(usedCarId, newData);

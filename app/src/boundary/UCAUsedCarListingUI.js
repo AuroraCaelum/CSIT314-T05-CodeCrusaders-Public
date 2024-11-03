@@ -125,7 +125,7 @@ function UCAUsedCarListingUI() {
 
 
     const handleCreateUsedCar = () => {
-        let car_image_input, seller_username_input, car_manufacturer_input, car_name_input, car_type_input, price_input, manufacture_year_input, mileage_input, engine_cap_input, features_input, description_input;
+        let seller_username_input, car_name_input, car_type_input, car_manufacturer_input, car_image_input, description_input, features_input, price_input, mileage_input, manufacture_year_input, engine_cap_input;
 
         Swal.fire({
             title: 'Create Used Car',
@@ -177,7 +177,7 @@ function UCAUsedCarListingUI() {
                         <input type="text" id="mileage" class="swal2-input" placeholder="Ex) 100000">
                     </div>
                     <div class="item">
-                        <label>Engine Capacity (cc)</label>
+                        <label>Engine Capacity (CC)</label>
                         <input type="text" id="engine_cap" class="swal2-input" placeholder="Ex) 1500">
                     </div>
                     <div class="item">
@@ -194,19 +194,19 @@ function UCAUsedCarListingUI() {
             focusConfirm: false,
             didOpen: () => {
                 const popup = Swal.getPopup();
-                car_image_input = popup.querySelector('#car_image');
                 seller_username_input = popup.querySelector('#seller_username');
-                car_manufacturer_input = popup.querySelector('#car_manufacturer');
                 car_name_input = popup.querySelector('#car_name');
                 car_type_input = popup.querySelector('#car_type');
-                price_input = popup.querySelector('#price');
-                manufacture_year_input = popup.querySelector('#manufacture_year');
-                mileage_input = popup.querySelector('#mileage');
-                engine_cap_input = popup.querySelector('#engine_cap');
-                features_input = popup.querySelector('#features');
+                car_manufacturer_input = popup.querySelector('#car_manufacturer');
+                car_image_input = popup.querySelector('#car_image');
                 description_input = popup.querySelector('#description');
+                features_input = popup.querySelector('#features');
+                price_input = popup.querySelector('#price');
+                mileage_input = popup.querySelector('#mileage');
+                manufacture_year_input = popup.querySelector('#manufacture_year');
+                engine_cap_input = popup.querySelector('#engine_cap');
 
-                console.log({ car_image_input, seller_username_input, car_manufacturer_input, car_name_input, car_type_input, price_input, manufacture_year_input, mileage_input, engine_cap_input, features_input, description_input });
+                console.log({ seller_username_input, car_name_input, car_type_input, car_manufacturer_input, car_image_input, description_input, features_input, price_input, mileage_input, manufacture_year_input, engine_cap_input });
 
                 const handleEnterKey = (event) => {
                     if (event.key === 'Enter') {
@@ -214,32 +214,33 @@ function UCAUsedCarListingUI() {
                     }
                 };
 
-                if (car_image_input) car_image_input.onkeyup = handleEnterKey;
                 if (seller_username_input) seller_username_input.onkeyup = handleEnterKey;
-                if (car_manufacturer_input) car_manufacturer_input.onkeyup = handleEnterKey;
                 if (car_name_input) car_name_input.onkeyup = handleEnterKey;
                 if (car_type_input) car_type_input.onkeyup = handleEnterKey;
+                if (car_manufacturer_input) car_manufacturer_input.onkeyup = handleEnterKey;
+                if (car_image_input) car_image_input.onkeyup = handleEnterKey;
+                if (description_input) description_input.onkeyup = handleEnterKey;
+                if (features_input) features_input.onkeyup = handleEnterKey;
+                if (mileage_input) mileage_input.onkeyup = handleEnterKey;
                 if (price_input) price_input.onkeyup = handleEnterKey;
                 if (manufacture_year_input) manufacture_year_input.onkeyup = handleEnterKey;
-                if (mileage_input) mileage_input.onkeyup = handleEnterKey;
                 if (engine_cap_input) engine_cap_input.onkeyup = handleEnterKey;
-                if (features_input) features_input.onkeyup = handleEnterKey;
-                if (description_input) description_input.onkeyup = handleEnterKey;
+                
             },
             preConfirm: () => {
-                const car_image = car_image_input[0];
                 const seller_username = seller_username_input.value;
-                const car_manufacturer = car_manufacturer_input.value;
                 const car_name = car_name_input.value;
                 const car_type = car_type_input.value;
+                const car_manufacturer = car_manufacturer_input.value;
+                const car_image = car_image_input[0];
+                const description = description_input.value;
+                const features = features_input.value;
+                const mileage = mileage_input.value;
                 const price = price_input.value;
                 const manufacture_year = manufacture_year_input.value;
-                const mileage = mileage_input.value;
                 const engine_cap = engine_cap_input.value;
-                const features = features_input.value;
-                const description = description_input.value;
 
-                if (!car_image || !seller_username || !car_manufacturer || !car_name || !car_type || !price || !manufacture_year || !mileage || !engine_cap || !features || !description) {
+                if (!seller_username || !car_name || !car_type || !car_manufacturer || !car_image || !description || !features || !mileage || !price || !manufacture_year || !engine_cap) {
                     Swal.showValidationMessage(`Please fill in all fields`);
                     return false;
                 }
@@ -247,37 +248,37 @@ function UCAUsedCarListingUI() {
                     Swal.fire("Product Listed!"); //is it ok if we change it to this instead of "Product Created!" ?
                 }
 
-                return { car_image, seller_username, car_manufacturer, car_name, car_type, price, manufacture_year, mileage, engine_cap, features, description };
+                return { seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap };
             },
         }).then(async (result) => {
             if (result.isConfirmed) {
-                const { car_image, seller_username, car_manufacturer, car_name, car_type, price, manufacture_year, mileage, engine_cap, features, description } = result.value;
+                const { seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap } = result.value;
                 console.log('New Car Details:', {
-                    car_image,
-                    seller_username,
-                    car_manufacturer,
-                    car_name,
-                    car_type,
-                    price,
-                    manufacture_year,
-                    mileage,
-                    engine_cap,
-                    features,
-                    description
+                    seller_username, 
+                    car_name, 
+                    car_type, 
+                    car_manufacturer, 
+                    car_image, 
+                    description, 
+                    features, 
+                    price, 
+                    mileage, 
+                    manufacture_year, 
+                    engine_cap
                 });
 
                 const formData = new FormData();
-                formData.append('car_image', car_image);
                 formData.append('seller_username', seller_username);
-                formData.append('car_manufacturer', car_manufacturer);
                 formData.append('car_name', car_name);
                 formData.append('car_type', car_type);
-                formData.append('price', price);
-                formData.append('manufacture_year', manufacture_year);
-                formData.append('mileage', mileage);
-                formData.append('engine_cap', engine_cap);
-                formData.append('features', features);
+                formData.append('car_manufacturer', car_manufacturer);
+                formData.append('car_image', car_image);
                 formData.append('description', description);
+                formData.append('features', features);
+                formData.append('price', price);
+                formData.append('mileage', mileage);
+                formData.append('manufacture_year', manufacture_year);
+                formData.append('engine_cap', engine_cap);
 
                 // Add logic here to handle account creation, like sending data to an API
                 const createUsedCarController = new CreateUsedCarController();
