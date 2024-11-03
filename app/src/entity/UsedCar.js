@@ -12,12 +12,12 @@ class UsedCar {
         car_image,
         description,
         features,
-        accessories,
+        //accessories,
         price,
         milage,
         manufacture_year,
         engine_cap,
-        curb_weight
+        //curb_weight
     ) {
         this.agent_username = agent_username;
         this.usedCarId = usedCarId;
@@ -28,12 +28,12 @@ class UsedCar {
         this.car_image = car_image;
         this.description = description;
         this.features = features;
-        this.accessories = accessories;
+        //this.accessories = accessories;
         this.price = price;
         this.milage = milage;
         this.manufacture_year = manufacture_year;
         this.engine_cap = engine_cap;
-        this.curb_weight = curb_weight;
+        //this.curb_weight = curb_weight;
         this.firebaseService = new FirebaseService();
     }
 
@@ -56,7 +56,7 @@ class UsedCar {
                 milage: this.milage,
                 manufacture_year: this.manufacture_year,
                 engine_cap: this.engine_cap,
-                // curb_weight: this.curb_weight,
+                // curb_weight: this.curb_weight
             };
             await this.firebaseService.addDocument('UsedCar', this.usedCarId, carData);
             console.log("Used car entry created successfully");
@@ -101,12 +101,12 @@ class UsedCar {
                 car_image: imageUrl || null, // Use the new URL if provided, or retain existing if null
                 description: newData.description,
                 features: newData.features,
-                accessories: newData.accessories,
+                //accessories: newData.accessories,
                 price: newData.price,
                 milage: newData.milage,
                 manufacture_year: newData.manufacture_year,
                 engine_cap: newData.engine_cap,
-                curb_weight: newData.curb_weight
+                //curb_weight: newData.curb_weight
             };
 
             // Update the car document in Firestore
