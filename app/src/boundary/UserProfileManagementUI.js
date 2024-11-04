@@ -33,7 +33,7 @@ function UserProfileManagementUI() {
         window.open("/", "_self")
     }
 
-    const handleCreateProfile = () => {
+    const createUserProfile = () => {
         let profileNameInput, descriptionInput, typeInput;
         Swal.fire({
             title: 'Create Profile',
@@ -89,7 +89,7 @@ function UserProfileManagementUI() {
         });
     };
 
-    const handleInspectProfile = (user) => {
+    const viewUserProfile = (user) => {
         Swal.fire({
             title: 'View User Profile',
             html: `
@@ -107,7 +107,7 @@ function UserProfileManagementUI() {
             focusConfirm: false
         }).then((result) => {
             if (result.isConfirmed) {
-                handleUpdateProfile(user);
+                updateUserProfile(user);
             } else if (result.isDenied) {
                 Swal.fire({
                     title: 'Are you sure?',
@@ -126,7 +126,7 @@ function UserProfileManagementUI() {
         });
     };
 
-    const handleUpdateProfile = (user) => {
+    const updateUserProfile = (user) => {
         Swal.fire({
             title: 'Update User Profile',
             html: `
@@ -185,7 +185,7 @@ function UserProfileManagementUI() {
         }
     };
 
-    const handleSearch = (e) => {
+    const searchUserProfile = (e) => {
         e.preventDefault();
         console.log("Searched Username:", searchUsername);
     };
@@ -213,7 +213,7 @@ function UserProfileManagementUI() {
             </div>
 
             <div className="upmSearch-bar">
-                <form onSubmit={handleSearch}>
+                <form onSubmit={searchUserProfile}>
                     <input
                         type="text"
                         placeholder="Search by username"
@@ -225,7 +225,7 @@ function UserProfileManagementUI() {
                         Search
                     </button>
                 </form>
-                <button onClick={handleCreateProfile} className="upmCreate-button">
+                <button onClick={createUserProfile} className="upmCreate-button">
                     Create user profile
                 </button>
             </div>
@@ -241,7 +241,7 @@ function UserProfileManagementUI() {
                         <span>{user.pName}</span>
                         <span>{user.description}</span>
                         <span>{user.type}</span>
-                        <button onClick={() => handleInspectProfile(user)}className="upmInspect-button">Inspect</button>
+                        <button onClick={() => viewUserProfile(user)}className="upmInspect-button">Inspect</button>
                     </div>
                 ))}
             </div>

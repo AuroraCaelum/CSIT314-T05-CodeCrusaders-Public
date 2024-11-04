@@ -12,7 +12,7 @@ function BuyerUsedCarUI() {
     const [username] = useState(Cookies.get("username"));
     //const [searchUsername, setSearchUsername] = useState("");
     const [cars, setCars] = useState([
-        { car_name: "Loading...", manufacture_year: "Loading...", mileage: "Loading...", price: "Loading...", image: "https://placehold.co/100x100?text=Car+Image" }
+        { car_name: "Loading...", manufacture_year: "Loading...", mileage: "Loading...", price: "Loading...", image: "https://placehold.co/100x100?text=Car+Image", inspectCount: 0, shortlistCount: 0 }
     ]);
 
     useEffect(() => {
@@ -25,7 +25,9 @@ function BuyerUsedCarUI() {
                     manufacture_year: doc.data().manufacture_year,
                     mileage: doc.data().mileage,
                     price: doc.data().price,
-                    image: (doc.data().car_image === undefined) ? "https://placehold.co/100x100?text=Car+Image" : "https://firebasestorage.googleapis.com/v0/b/moeuigosa-encjrx.appspot.com/o/car_images%2F" + doc.data().car_image + "?alt=media"
+                    image: (doc.data().car_image === undefined) ? "https://placehold.co/100x100?text=Car+Image" : "https://firebasestorage.googleapis.com/v0/b/moeuigosa-encjrx.appspot.com/o/car_images%2F" + doc.data().car_image + "?alt=media",
+                    inspectCount: 0,
+                    shortlistCount: 0
                 }));
                 setCars(carData);
             }
@@ -43,7 +45,7 @@ function BuyerUsedCarUI() {
         window.open("/buyershortlist", "_self");
     };
 
-    const handleSearchUsedCar = () => { //this is for saerch pop up
+    const searchUsedCar = () => { //this is for saerch pop up
         let carModelInput, vehicleTypeInput, priceRangeInput, manufactureYearInput;
 
         // Swal.fire({
@@ -297,11 +299,20 @@ function BuyerUsedCarUI() {
     //     });
     // };
 
-    const handleViewUsedCar = async (usedCarId) => { //not done
+    const viewUsedCar = async (usedCarId) => { //not done
         console.log('Fetching used Car for:', usedCarId);
         const viewUsedCarController = new ViewUsedCarController();
+        const updatedCars = cars.map(car => {
+            if (car.usedCarId === usedCarId) {
+                car.inspectCount += 1;
+            }
+            return car;
+        });
+        setCars(updatedCars);
         const usedCar = await viewUsedCarController.viewUsedCar(usedCarId);
         console.log("Used Car data received:", usedCar);
+
+        
 
         if (usedCar) {
             Swal.fire({
@@ -322,9 +333,9 @@ function BuyerUsedCarUI() {
                 focusConfirm: false
             }).then((result) => {
                 if (result.isConfirmed) {
-                    handleRateAndReview(usedCarId);
+                    leaveRateReview(usedCarId);
                 } else if (result.isDenied) {
-                    handleLoanCalculator(usedCar.price);
+                    openLoanCalculator(usedCar.price);
                 }
             });
             console.log(usedCar);
@@ -340,7 +351,7 @@ function BuyerUsedCarUI() {
         }
     };
 
-    const handleRateAndReview = (usedCarId, agentName) => {
+    const leaveRateReview = (usedCarId, agentName) => {
         let ratingInput = 0, reviewInput;
     
         Swal.fire({
@@ -392,7 +403,7 @@ function BuyerUsedCarUI() {
         });
     };
     
-    const handleLoanCalculator = (price) => {
+    const openLoanCalculator = (price) => {
         let interestRateInput, loanTermInput;
     
         Swal.fire({
@@ -442,7 +453,14 @@ function BuyerUsedCarUI() {
         });
     };
 
-    const handleAddToShortlist = (usedCarId) => {
+    const saveToShortlist = (usedCarId) => {
+        const updatedCars = cars.map(car => {
+            if (car.usedCarId === usedCarId) {
+                car.shortlistCount += 1;  // Increment shortlist count when 'Save to Shortlist' is clicked
+            }
+            return car;
+        });
+        setCars(updatedCars);
         Swal.fire({
             title: 'Car Added!',
             text: "The car has been added to your shortlist.",
@@ -551,7 +569,7 @@ function BuyerUsedCarUI() {
                         <option value="2020">2020</option>
                     </select>
                     
-                    <button onClick={handleSearchUsedCar} className="bucSearch-button">
+                    <button onClick={searchUsedCar} className="bucSearch-button">
                         Search
                     </button>
                 </span>
@@ -563,8 +581,9 @@ function BuyerUsedCarUI() {
             </div>
             <div className="bucUser-table">
                 <div className="bucTable-header">
-                    <span></span>
+                    <span>Car Picture</span>
                     <span>Car Name:</span>
+                    <span>Description:</span>
                     <span>Manufactured:</span>
                     <span>Mileage:</span>
                     <span>Price:</span>
@@ -574,14 +593,15 @@ function BuyerUsedCarUI() {
                     <div key={car.usedCarId} className="bucTable-row">
                         <img src={car.image} alt="Car" className="bucCar-image" />
                         <span>{car.car_name}</span>
+                        <span>{car.description}</span>
                         <span>{car.manufacture_year}</span>
                         <span>{car.mileage.toLocaleString()}</span>
                         <span>${car.price.toLocaleString()}</span>
                         <span>
-                            <button onClick={() => handleViewUsedCar(car.usedCarId)} className="bucInspect-button">
+                            <button onClick={() => viewUsedCar(car.usedCarId)} className="bucInspect-button">
                                 Inspect
                             </button>
-                            <button onClick={() => handleAddToShortlist(car.usedCarId)} className="bucSTS-button">
+                            <button onClick={() => saveToShortlist(car.usedCarId)} className="bucSTS-button">
                                 Save to Shortlist
                             </button>
                         </span>
