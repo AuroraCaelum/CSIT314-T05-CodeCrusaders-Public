@@ -33,7 +33,7 @@ function UCARateReviewUI() {
     //     window.open("/", "_self")
     // }
 
-    const handleInspectReview = (user) => { //not done
+    const viewRateReview = (user) => { //not done
         Swal.fire({
             title: 'View Used Car',
             html: `
@@ -110,7 +110,7 @@ function UCARateReviewUI() {
                         <span>{user.rating}</span>
                         <span>{user.review}</span>
                         <span>{user.type}</span>
-                        <button onClick={() => handleInspectReview(user)} className="rarInspect-button">
+                        <button onClick={() => viewRateReview(user)} className="rarInspect-button">
                             View
                         </button>
                     </div>

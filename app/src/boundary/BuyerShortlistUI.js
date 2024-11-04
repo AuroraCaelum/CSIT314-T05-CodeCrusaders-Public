@@ -37,7 +37,7 @@ function BuyerShortlistUI() {
     //     window.open("/", "_self")
     // }
 
-    const handleSearchUsedCar = () => { //this is for saerch pop up
+    const searchShortlist = () => { //this is for saerch pop up
         let carModelInput, vehicleTypeInput, priceRangeInput, manufactureYearInput;
 
         // Swal.fire({
@@ -291,7 +291,7 @@ function BuyerShortlistUI() {
     //     });
     // };
 
-    const handleViewUsedCar = async (usedCarId) => { //not done
+    const viewUsedCar = async (usedCarId) => { //not done
         console.log('Fetching used Car for:', usedCarId);
         const viewUsedCarController = new ViewUsedCarController();
         const usedCar = await viewUsedCarController.viewUsedCar(usedCarId);
@@ -552,7 +552,7 @@ function BuyerShortlistUI() {
                         <option value="2020">2020</option>
                     </select>
                     
-                    <button onClick={handleSearchUsedCar} className="bucSearch-button">
+                    <button onClick={searchShortlist} className="bucSearch-button">
                         Search
                     </button>
                 </span>
@@ -574,7 +574,7 @@ function BuyerShortlistUI() {
                         <span>{car.mileage.toLocaleString()}</span>
                         <span>${car.price.toLocaleString()}</span>
                         <span>
-                            <button onClick={() => handleViewUsedCar(car.usedCarId)} className="bsInspect-button">
+                            <button onClick={() => viewUsedCar(car.usedCarId)} className="bsInspect-button">
                                 Inspect
                             </button>
                             <button onClick={() => handleRemoveFromShortlist(car.usedCarId)} className="bsRFS-button">

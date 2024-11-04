@@ -12,7 +12,7 @@ function UCAUsedCarListingUI() {
     const [username] = useState(Cookies.get("username"));
     //const [searchUsername, setSearchUsername] = useState("");
     const [cars, setCars] = useState([
-        { car_name: "Loading...", manufacture_year: "Loading...", mileage: "Loading...", price: "Loading...", image: "https://placehold.co/100x100?text=Car+Image" }
+        { car_name: "Loading...", manufacture_year: "Loading...", mileage: "Loading...", price: "Loading...", image: "https://placehold.co/100x100?text=Car+Image", inspectCount: 0, shortlistCount: 0 }
     ]);
 
     useEffect(() => {
@@ -25,7 +25,9 @@ function UCAUsedCarListingUI() {
                     manufacture_year: doc.data().manufacture_year,
                     mileage: doc.data().mileage,
                     price: doc.data().price,
-                    image: (doc.data().car_image === undefined) ? "https://placehold.co/100x100?text=Car+Image" : "https://firebasestorage.googleapis.com/v0/b/moeuigosa-encjrx.appspot.com/o/car_images%2F" + doc.data().car_image + "?alt=media"
+                    image: (doc.data().car_image === undefined) ? "https://placehold.co/100x100?text=Car+Image" : "https://firebasestorage.googleapis.com/v0/b/moeuigosa-encjrx.appspot.com/o/car_images%2F" + doc.data().car_image + "?alt=media",
+                    inspectCount: 0,
+                    shortlistCount: 0
                 }));
                 setCars(carData);
             }
@@ -124,7 +126,7 @@ function UCAUsedCarListingUI() {
     };
 
 
-    const handleCreateUsedCar = () => {
+    const createUsedCar = () => {
         let seller_username_input, car_name_input, car_type_input, car_manufacturer_input, car_image_input, description_input, features_input, price_input, mileage_input, manufacture_year_input, engine_cap_input;
 
         Swal.fire({
@@ -293,9 +295,15 @@ function UCAUsedCarListingUI() {
         });
     };
 
-    const handleViewUsedCar = async (usedCarId) => { //not done
+    const viewUsedCar = async (usedCarId) => { //not done
         console.log('Fetching used Car for:', usedCarId);
         const viewUsedCarController = new ViewUsedCarController();
+        const updatedCars = cars.map(car => {
+            if (car.usedCarId === usedCarId) {
+                car.inspectCount += 1;
+            }
+            return car;
+        });
         const usedCar = await viewUsedCarController.viewUsedCar(usedCarId);
         console.log("Used Car data received:", usedCar);
 
@@ -318,7 +326,7 @@ function UCAUsedCarListingUI() {
                 focusConfirm: false
             }).then((result) => {
                 if (result.isConfirmed) {
-                    handleUpdateUsedCar(usedCarId);
+                    updateUsedCar(usedCarId);
                 } else if (result.isDenied) {
                     Swal.fire({
                         title: 'Are you sure?',
@@ -356,7 +364,7 @@ function UCAUsedCarListingUI() {
         }
     };
 
-    const handleUpdateUsedCar = (user) => {
+    const updateUsedCar = (user) => {
         Swal.fire({
             title: 'Update Used Car Detail',
             html: `
@@ -461,14 +469,15 @@ function UCAUsedCarListingUI() {
                     Search
                 </button>
 
-                <button onClick={handleCreateUsedCar} className="uclCreate-button">
+                <button onClick={createUsedCar} className="uclCreate-button">
                     Create Used Car
                 </button>
             </div>
             <div className="uclUser-table">
                 <div className="uclTable-header">
-                    <span></span>
+                    <span>Car Picture</span>
                     <span>Car Name:</span>
+                    <span>Description:</span>
                     <span>Manufactured:</span>
                     <span>Mileage:</span>
                     <span>Price:</span>
@@ -478,12 +487,21 @@ function UCAUsedCarListingUI() {
                     <div key={car.usedCarId} className="uclTable-row">
                         <img src={car.image} alt="Car" className="uclCar-image" />
                         <span>{car.car_name}</span>
+                        <span>{car.description}</span>
                         <span>{car.manufacture_year}</span>
                         <span>{car.mileage.toLocaleString()}</span>
                         <span>${car.price.toLocaleString()}</span>
-                        <button onClick={() => handleViewUsedCar(car.usedCarId)} className="uclInspect-button">
-                            Inspect
-                        </button>
+                        <span>
+                            <button onClick={() => viewUsedCar(car.usedCarId)} className="uclInspect-button">
+                                Inspect
+                            </button>
+                        </span>
+                        <span>
+                            <div className="counter-display">
+                                <span>🔍 {car.inspectCount}</span>  {/* Display inspect count with an icon */}
+                                <span>⭐ {car.shortlistCount}</span>  {/* Display shortlist count with an icon */}
+                            </div>
+                        </span>
                     </div>
                 ))}
             </div>

@@ -84,7 +84,7 @@
 
 .uclUser-table {
     display: grid;
-    grid-template-columns: 2fr 2fr 1fr 1fr 1fr auto;
+    grid-template-columns: 1fr 2fr 2fr 1fr 1fr 1fr auto;
     gap: 10px;
     background-color: #f1f1f1;
     border-radius: 5px;
