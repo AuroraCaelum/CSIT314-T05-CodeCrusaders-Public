@@ -1,12 +1,15 @@
 .uclContainer {
     position: relative;
     font-family: Arial, sans-serif;
-    width: 80%;
-    margin: 50px auto;
+    width: 95vw; /* Slightly less than 100vw */
+    height: 90vh; /* Slightly less than 100vh to account for top margin */
+    margin: 30px auto; /* Adds a 30px margin on top and centers horizontally */
     padding: 20px;
+    box-sizing: border-box;
     border: 1px solid #ccc;
     border-radius: 10px;
     background-color: #f9f9f9;
+    overflow-y: auto;
 }
 
 .uclHeader {
