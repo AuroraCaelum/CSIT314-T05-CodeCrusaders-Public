@@ -9,7 +9,7 @@ import {
     where,
     getDocs
 } from 'firebase/firestore';
-import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
 class FirebaseService {
 
@@ -90,12 +90,12 @@ class FirebaseService {
     // Upload a file to Firebase Storage
     async uploadFile(file, folder) {
         try {
+            console.log("File object: ", file);
             const storageRef = ref(storage, `${folder}/${file.name}`);
-            const uploadTask = uploadBytesResumable(storageRef, file);
+            const snapshot = await uploadBytes(storageRef, file);
+            const url = getDownloadURL(snapshot.ref);
             // Await completion of upload and retrieve download URL
-            await uploadTask;
-            const url = await getDownloadURL(storageRef);
-            console.log("File uploaded successfully");
+            console.log("File uploaded successfully. URL: ", url);
             return url;
         } catch (error) {
             console.error("Error uploading file:", error);

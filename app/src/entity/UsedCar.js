@@ -12,12 +12,10 @@ class UsedCar {
         car_image,
         description,
         features,
-        //accessories,
         price,
-        milage,
+        mileage,
         manufacture_year,
         engine_cap,
-        //curb_weight
     ) {
         this.agent_username = agent_username;
         this.usedCarId = usedCarId;
@@ -28,38 +26,39 @@ class UsedCar {
         this.car_image = car_image;
         this.description = description;
         this.features = features;
-        //this.accessories = accessories;
         this.price = price;
-        this.milage = milage;
+        this.milage = mileage;
         this.manufacture_year = manufacture_year;
         this.engine_cap = engine_cap;
-        //this.curb_weight = curb_weight;
         this.firebaseService = new FirebaseService();
     }
 
     // Create a new used car entry
-    async createUsedCar() {
+    async createUsedCar(agent_username, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap) {
         try {
-            const imageUrl = await this.firebaseService.uploadFile(this.car_image, 'car_images');
+            //const imageUrl = await this.firebaseService.uploadFile(this.car_image, 'car_images');
+            const firebaseService = new FirebaseService();
+            const imageUrl = await firebaseService.uploadFile(car_image, 'car_images');
+            if (!imageUrl) console.log("Error uploading image");
 
             const carData = {
-                agent_username: this.agent_username,
-                seller_username: this.seller_username,
-                car_name: this.car_name,
-                car_type: this.car_type,
-                car_manufacturer: this.car_manufacturer,
+                agent_username: agent_username,
+                seller_username: seller_username,
+                car_name: car_name,
+                car_type: car_type,
+                car_manufacturer: car_manufacturer,
                 car_image: imageUrl,
-                description: this.description,
-                features: this.features,
-                // accessories: this.accessories,
-                price: this.price,
-                milage: this.milage,
-                manufacture_year: this.manufacture_year,
-                engine_cap: this.engine_cap,
-                // curb_weight: this.curb_weight
+                description: description,
+                features: features,
+                price: price,
+                mileage: mileage,
+                manufacture_year: manufacture_year,
+                engine_cap: engine_cap,
             };
+
+            console.log("New Car Details(E):", agent_username, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap)
             await this.firebaseService.addDocument('UsedCar', this.usedCarId, carData);
-            console.log("Used car entry created successfully");
+            console.log("Used car entry created successfully", carData);
             return { success: true, message: "Used car entry created successfully" };
         } catch (error) {
             console.error("Error creating used car entry:", error);
@@ -68,51 +67,49 @@ class UsedCar {
     }
 
     // View a used car entry by usedCarId
-    static async viewUsedCar(usedCarId) {
+    async viewUsedCar(usedCarId) {
         try {
-            const carData = await this.firebaseService.getDocument('UsedCar', usedCarId);
-            if (carData) {
-                console.log("Car data:", carData);
-                return { success: true, data: carData };
-            } else {
-                return { success: false, message: "Car not found" };
-            }
+            const firebaseService = new FirebaseService();
+            const carData = await firebaseService.getDocument('UsedCar', usedCarId);
+            console.log("Car data:", carData);
+            return { "usedCarId" : usedCarId, "body" : carData };
         } catch (error) {
             console.error("Error fetching car data:", error);
-            return { success: false, message: error.message };
+            throw error;
         }
     }
 
     // Update an existing used car entry by usedCarId
-    static async updateUsedCar(usedCarId, newData) {
+    async updateUsedCar(usedCarId, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap) {
         try {
             //  Check if a new image file is provided and upload if necessary
             let imageUrl = null;
-            if (newData.car_image) {
-                imageUrl = await this.firebaseService.uploadFile(newData.car_image, 'car_images');
+            if (usedCarId.car_image) {
+                imageUrl = await this.firebaseService.uploadFile(usedCarId.car_image, 'car_image');
             }
 
             //  Prepare car data with the new or existing image URL
             const carData = {
-                seller_username: newData.seller_username,
-                car_name: newData.car_name,
-                car_type: newData.car_type,
-                car_manufacturer: newData.car_manufacturer,
-                car_image: imageUrl || null, // Use the new URL if provided, or retain existing if null
-                description: newData.description,
-                features: newData.features,
-                //accessories: newData.accessories,
-                price: newData.price,
-                milage: newData.milage,
-                manufacture_year: newData.manufacture_year,
-                engine_cap: newData.engine_cap,
-                //curb_weight: newData.curb_weight
+                seller_username: seller_username,
+                car_name: car_name,
+                car_type: car_type,
+                car_manufacturer: car_manufacturer,
+                car_image: imageUrl,
+                description: description,
+                features: features,
+                price: price,
+                mileage: mileage,
+                manufacture_year: manufacture_year,
+                engine_cap: engine_cap
             };
+
+            console.log(usedCarId);
+            console.log(carData);
 
             // Update the car document in Firestore
             await this.firebaseService.updateDocument('UsedCar', usedCarId, carData);
             console.log("Used car entry updated successfully");
-            return { success: true, message: "Used car entry updated successfully" };
+            return true;
         } catch (error) {
             console.error("Error updating car entry:", error);
             return { success: false, message: error.message };

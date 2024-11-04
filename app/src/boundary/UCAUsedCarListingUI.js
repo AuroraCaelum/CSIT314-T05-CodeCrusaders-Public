@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import "./UCAUsedCarListingUI.css";
 import { UserLogoutController } from "../controller/UserAuthController";
 // import { ViewUserAccountController } from "../controller/UserAccountController";
-import { CreateUsedCarController } from "../controller/UsedCarController";
+import { CreateUsedCarController, UpdateUsedCarController } from "../controller/UsedCarController";
 import { ViewUsedCarController, DeleteUsedCarController } from "../controller/UsedCarController";
 
 import Swal from 'sweetalert2';
@@ -25,7 +25,7 @@ function UCAUsedCarListingUI() {
                     manufacture_year: doc.data().manufacture_year,
                     mileage: doc.data().mileage,
                     price: doc.data().price,
-                    image: (doc.data().car_image === undefined) ? "https://placehold.co/100x100?text=Car+Image" : "https://firebasestorage.googleapis.com/v0/b/moeuigosa-encjrx.appspot.com/o/car_images%2F" + doc.data().car_image + "?alt=media"
+                    car_image: doc.data().car_image
                 }));
                 setCars(carData);
             }
@@ -126,7 +126,7 @@ function UCAUsedCarListingUI() {
 
     const handleCreateUsedCar = () => {
         let seller_username_input, car_name_input, car_type_input, car_manufacturer_input, car_image_input, description_input, features_input, price_input, mileage_input, manufacture_year_input, engine_cap_input;
-
+                    
         Swal.fire({
             title: 'Create Used Car',
             width: 1200,
@@ -208,6 +208,10 @@ function UCAUsedCarListingUI() {
 
                 console.log({ seller_username_input, car_name_input, car_type_input, car_manufacturer_input, car_image_input, description_input, features_input, price_input, mileage_input, manufacture_year_input, engine_cap_input });
 
+                if (!seller_username_input || !car_name_input || !car_type_input || !car_manufacturer_input) {
+                    console.error("One or more inputs are not found.");
+                }
+
                 const handleEnterKey = (event) => {
                     if (event.key === 'Enter') {
                         Swal.clickConfirm();
@@ -232,7 +236,7 @@ function UCAUsedCarListingUI() {
                 const car_name = car_name_input.value;
                 const car_type = car_type_input.value;
                 const car_manufacturer = car_manufacturer_input.value;
-                const car_image = car_image_input[0];
+                const car_image = car_image_input.files[0];
                 const description = description_input.value;
                 const features = features_input.value;
                 const mileage = mileage_input.value;
@@ -240,12 +244,14 @@ function UCAUsedCarListingUI() {
                 const manufacture_year = manufacture_year_input.value;
                 const engine_cap = engine_cap_input.value;
 
-                if (!seller_username || !car_name || !car_type || !car_manufacturer || !car_image || !description || !features || !mileage || !price || !manufacture_year || !engine_cap) {
+
+                if (!seller_username || !car_name || !car_type || !car_manufacturer || !car_image || !description || !features || !price || !mileage || !manufacture_year || !engine_cap) {
+
                     Swal.showValidationMessage(`Please fill in all fields`);
                     return false;
                 }
                 else {
-                    Swal.fire("Product Listed!"); //is it ok if we change it to this instead of "Product Created!" ?
+                    Swal.fire("Product Created!");
                 }
 
                 return { seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap };
@@ -267,19 +273,6 @@ function UCAUsedCarListingUI() {
                     engine_cap
                 });
 
-                const formData = new FormData();
-                formData.append('seller_username', seller_username);
-                formData.append('car_name', car_name);
-                formData.append('car_type', car_type);
-                formData.append('car_manufacturer', car_manufacturer);
-                formData.append('car_image', car_image);
-                formData.append('description', description);
-                formData.append('features', features);
-                formData.append('price', price);
-                formData.append('mileage', mileage);
-                formData.append('manufacture_year', manufacture_year);
-                formData.append('engine_cap', engine_cap);
-
                 // Add logic here to handle account creation, like sending data to an API
                 const createUsedCarController = new CreateUsedCarController();
                 const isSuccess = await createUsedCarController.createUsedCar(Cookies.get("username"), seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap);
@@ -298,16 +291,17 @@ function UCAUsedCarListingUI() {
         const viewUsedCarController = new ViewUsedCarController();
         const usedCar = await viewUsedCarController.viewUsedCar(usedCarId);
         console.log("Used Car data received:", usedCar);
+        console.log(usedCarId);
 
         if (usedCar) {
             Swal.fire({
                 title: 'View Used Car',
                 html: `
                     <div style="text-align: left;">
-                        <strong>Product Name:</strong> ${usedCar.prodName}<br>
-                        <strong>Description:</strong> ${usedCar.description}<br>
-                        <strong>Type:</strong> ${usedCar.type}<br>
-                        <strong>Price:</strong> ${usedCar.price}<br>
+                        <strong>Product Name:</strong> ${usedCar.body.car_name}<br>
+                        <strong>Description:</strong> ${usedCar.body.description}<br>
+                        <strong>Type:</strong> ${usedCar.body.car_type}<br>
+                        <strong>Price:</strong> ${usedCar.body.price}<br>
                     </div>
                 `,
                 showCancelButton: true,
@@ -318,7 +312,7 @@ function UCAUsedCarListingUI() {
                 focusConfirm: false
             }).then((result) => {
                 if (result.isConfirmed) {
-                    handleUpdateUsedCar(usedCarId);
+                    handleUpdateUsedCar(usedCar);
                 } else if (result.isDenied) {
                     Swal.fire({
                         title: 'Are you sure?',
@@ -337,7 +331,7 @@ function UCAUsedCarListingUI() {
                             } else {
                                 Swal.fire('Failed!', 'Failed to delete this car.', 'error');
                             }
-                            console.log('Car Deleted:', usedCarId.prodName);
+                            console.log('Car Deleted:', usedCarId.car_Name);
                             Swal.fire('Deleteed!', 'The product has been Deleted.', 'success');
                         }
                     });
@@ -356,39 +350,110 @@ function UCAUsedCarListingUI() {
         }
     };
 
-    const handleUpdateUsedCar = (user) => {
+    const handleUpdateUsedCar = (usedCar) => {
         Swal.fire({
             title: 'Update Used Car Detail',
+            width: 1200,
             html: `
-                <input type="text" id="prodName" class="swal2-input" placeholder="Product Name" value="${user.prodName}">
-                <input type="text" id="description" class="swal2-input" placeholder="Description" value="${user.description}">
-                <input type="text" id="type" class="swal2-input" placeholder="Type" value="${user.type}">
-                <input type="text" id="price" class="swal2-input" placeholder="Price">
+            <div class="wrapper">
+                    <div class="item">
+                        <label>Car Image</label>
+                        <input type="file" id="car_image" class="swal2-input" accept="image/*" value=${usedCar.body.car_image}>
+                    </div>
+                    <div class="item">
+                        <label>Seller Username</label>
+                        <input type="text" id="seller_username" class="swal2-input" value=${usedCar.body.seller_username}>
+                    </div>
+                    <div class="item">
+                        <label>Car Manufacturer</label>
+                        <input type="text" id="car_manufacturer" class="swal2-input" value=${usedCar.body.car_manufacturer}>
+                    </div>
+                    <div class="item">
+                        <label>Car Name</label>
+                        <input type="text" id="car_name" class="swal2-input" value=${usedCar.body.car_name}>
+                    </div>
+                    <div class="item">
+                        <label>Car Type</label>
+                        <select id="car_type" class="swal2-select">
+                            <option value="">Select Car Type</option>
+                            <option value="Sedan" ${(usedCar.body.car_type) === "Sedan" ? 'selected' : ''}>Sedan</option>
+                            <option value="SUV" ${(usedCar.body.car_type) === "SUV" ? 'selected' : ''}>SUV</option>
+                            <option value="Hatchback" ${(usedCar.body.car_type) === "Hatchback" ? 'selected' : ''}>Hatchback</option>
+                            <option value="Wagon" ${(usedCar.body.car_type) === "Wagon" ? 'selected' : ''}>Wagon</option>
+                            <option value="Coupe" ${(usedCar.body.car_type) === "Coupe" ? 'selected' : ''}>Coupe</option>
+                            <option value="Van" ${(usedCar.body.car_type) === "Van" ? 'selected' : ''}>Van</option>
+                            <option value="MiniVan" ${(usedCar.body.car_type) === "MiniVan" ? 'selected' : ''}>MiniVan</option>
+                            <option value="Pickup Truck" ${(usedCar.body.car_type) === "Pickup Truck" ? 'selected' : ''}>Pickup Truck</option>
+                            <option value="Convertible" ${(usedCar.body.car_type) === "Convertible" ? 'selected' : ''}>Convertible</option>
+                            <option value="Sports Car" ${(usedCar.body.car_type) === "Sports Car" ? 'selected' : ''}>Sports Car</option>
+                        </select>
+                    </div>
+                    <div class="item">
+                        <label>Price ($)</label>
+                        <input type="text" id="price" class="swal2-input" value=${usedCar.body.price}>
+                    </div>
+                    <div class="item">
+                        <label>Manufacture Year</label>
+                        <input type="text" id="manufacture_year" class="swal2-input" value=${usedCar.body.manufacture_year}>
+                    </div>
+                    <div class="item">
+                        <label>Mileage (km)</label>
+                        <input type="text" id="mileage" class="swal2-input" value=${usedCar.body.mileage}>
+                    </div>
+                    <div class="item">
+                        <label>Engine Capacity (CC)</label>
+                        <input type="text" id="engine_cap" class="swal2-input" value=${usedCar.body.engine_cap}>
+                    </div>
+                    <div class="item">
+                        <label>Features</label>
+                        <input type="text" id="features" class="swal2-input" value=${usedCar.body.features}>
+                    </div>
+                    <div class="item" style="grid-column: span 2">
+                        <label>Description</label>
+                        <input type="textarea" id="description" class="swal2-input" value=${usedCar.body.description}>
+                    </div>
+                </div>
             `,
             confirmButtonText: 'Update',
             focusConfirm: false,
             preConfirm: () => {
-                const prodName = document.getElementById('prodName').value;
-                const description = document.getElementById('description').value;
-                const type = document.getElementById('type').value;
+                const car_image = document.getElementById('car_image').value;
+                const seller_username = document.getElementById('seller_username').value;
+                const car_manufacturer = document.getElementById('car_manufacturer').value;
+                const car_name = document.getElementById('car_name').value;
+                const car_type = document.getElementById('car_type').value;
                 const price = document.getElementById('price').value;
+                const manufacture_year = document.getElementById('manufacture_year').value;
+                const mileage = document.getElementById('mileage').value;
+                const engine_cap = document.getElementById('engine_cap').value;
+                const features = document.getElementById('features').value;
+                const description = document.getElementById('description').value;
 
-                if (!prodName || !description || !type || !price) {
+                if (!seller_username || !car_manufacturer || !car_name || !car_type || !price || !manufacture_year || !mileage || !engine_cap || !features || !description) {
                     Swal.showValidationMessage(`Please fill in all fields`);
                     return false;
                 }
-                return { prodName, description, type, price };
+                return { car_image, seller_username, car_manufacturer, car_name, car_type, price, manufacture_year, mileage, engine_cap, features, description };
             }
-        }).then((updateResult) => {
+        }).then(async (updateResult) => {
             if (updateResult.isConfirmed) {
-                const { prodName, description, type, price } = updateResult.value;
-                console.log('Updated Used Car Details:', {
-                    prodName,
-                    description,
-                    type,
-                    price
-                });
-                Swal.fire('Updated!', 'The used car details have been updated.', 'success');
+                const { car_image, seller_username, car_manufacturer, car_name, car_type, price, manufacture_year, mileage, engine_cap, features, description } = updateResult.value;
+                const updateUsedCarController = new UpdateUsedCarController();
+                const isSuccess = await updateUsedCarController.updateUsedCar(usedCar.usedCarId, car_image, seller_username, car_manufacturer, car_name, car_type, price, manufacture_year, mileage, engine_cap, features, description);
+
+                if (isSuccess) {
+                    console.log('Updated Used Car Details:', {
+                        car_name,
+                        description,
+                        car_type,
+                        price
+                    });
+                    Swal.fire('Updated!', 'The used car details have been updated.', 'success');
+                } else {
+                    Swal.fire('Error!', 'Failed to update car details.', 'error');
+                }
+
+                
             }
         });
     };
@@ -476,7 +541,7 @@ function UCAUsedCarListingUI() {
                 </div>
                 {cars.map((car) => (
                     <div key={car.usedCarId} className="uclTable-row">
-                        <img src={car.image} alt="Car" className="uclCar-image" />
+                        <img src={car.car_image} alt="Car" className="uclCar-image" />
                         <span>{car.car_name}</span>
                         <span>{car.manufacture_year}</span>
                         <span>{car.mileage.toLocaleString()}</span>
