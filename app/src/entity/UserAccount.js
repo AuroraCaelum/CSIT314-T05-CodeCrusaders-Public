@@ -16,7 +16,8 @@ class UserAccount {
     static async validateSeller(username) {
         try {
             // Fetch the user data by username from Firestore
-            const userData = await this.firebaseService.getDocument('UserAccount', username);
+            const firebaseService = new FirebaseService();
+            const userData = await firebaseService.getDocument('UserAccount', username);
 
             // Check if user exists and their userProfile is 'Seller'
             if (userData && userData.userProfile === 'Seller') {

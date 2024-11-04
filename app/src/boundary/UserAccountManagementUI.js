@@ -198,52 +198,6 @@ function UserAccountManagementUI() {
         }
     };
 
-    // const handleInspectAccount = (user) => {
-    //     Swal.fire({
-    //         title: 'View User Account',
-    //         html: `
-    //             <div style="text-align: left;">
-    //                 <strong>First Name:</strong> ${user.name.split(' ')[0]}<br>
-    //                 <strong>Last Name:</strong> ${user.name.split(' ')[1]}<br>
-    //                 <strong>Username:</strong> ${user.username}<br>
-    //                 <strong>Phone:</strong> ${user.phone || 'N/A'}<br>
-    //                 <strong>Email:</strong> ${user.email || 'N/A'}<br>
-    //                 <strong>User Profile:</strong> ${user.profile}<br>
-    //             </div>
-    //         `,
-    //         showCancelButton: true,
-    //         cancelButtonText: 'close',
-    //         confirmButtonText: 'Update Details',
-    //         showDenyButton: true,
-    //         denyButtonText: 'Suspend',
-    //         focusConfirm: false
-    //     }).then((result) => {
-    //         if (result.isConfirmed) {
-    //             handleUpdateAccount(user);
-    //         } else if (result.isDenied) {
-    //             Swal.fire({
-    //                 title: 'Are you sure?',
-    //                 text: "You are about to suspend this user.",
-    //                 icon: 'warning',
-    //                 showCancelButton: true,
-    //                 confirmButtonText: 'Yes, suspend it!',
-    //                 cancelButtonText: 'No, cancel'
-    //             }).then(async (suspendResult) => {
-    //                 if (suspendResult.isConfirmed) {
-    //                     const suspendUserAccountController = new SuspendUserAccountController();
-    //                     const isSuspended = await suspendUserAccountController.suspendUserAccount(user.username);
-                        
-    //                     if (isSuspended) {
-    //                         Swal.fire('Suspended!', 'The user has been suspended.', 'success');
-    //                     } else {
-    //                         Swal.fire('Failed!', 'Failed to suspend the user.', 'error');
-    //                     }
-    //                 }
-    //             });
-    //         }
-    //     });
-    // };
-
     const handleUpdateAccount = (userAccount) => {
         Swal.fire({
             title: 'Update User Account',
