@@ -1,10 +1,12 @@
 // File path: src/entity/UsedCar.js
 import FirebaseService from '../FirebaseService';
+import { db } from './../firebase';  // Only import db for Firestore operations
+import { collection, query, where, getDocs } from 'firebase/firestore';
 
 class UsedCar {
     constructor(
-        agent_username,
         usedCarId,
+        agent_username,
         seller_username,
         car_name,
         car_type,
@@ -34,14 +36,16 @@ class UsedCar {
     }
 
     // Create a new used car entry
-    async createUsedCar(agent_username, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap) {
+    async createUsedCar(usedCarId, agent_username, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap) {
         try {
             //const imageUrl = await this.firebaseService.uploadFile(this.car_image, 'car_images');
             const firebaseService = new FirebaseService();
             const imageUrl = await firebaseService.uploadFile(car_image, 'car_images');
             if (!imageUrl) console.log("Error uploading image");
 
+
             const carData = {
+                // usedCarId: usedCarId,
                 agent_username: agent_username,
                 seller_username: seller_username,
                 car_name: car_name,
@@ -56,8 +60,9 @@ class UsedCar {
                 engine_cap: engine_cap,
             };
 
-            console.log("New Car Details(E):", agent_username, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap)
-            await this.firebaseService.addDocument('UsedCar', this.usedCarId, carData);
+            console.log("New Car Details(E):", usedCarId, agent_username, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap)
+            await this.firebaseService.addDocument('UsedCar', usedCarId, carData);
+            console.log("Used car entry created successfully with ID:", usedCarId);
             console.log("Used car entry created successfully", carData);
             return { success: true, message: "Used car entry created successfully" };
         } catch (error) {
@@ -83,18 +88,17 @@ class UsedCar {
     async updateUsedCar(usedCarId, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap) {
         try {
             //  Check if a new image file is provided and upload if necessary
-            let imageUrl = null;
-            if (usedCarId.car_image) {
-                imageUrl = await this.firebaseService.uploadFile(usedCarId.car_image, 'car_image');
-            }
+            // let imageUrl = null;
+            // if (usedCarId.car_image) {
+            //     imageUrl = await this.firebaseService.uploadFile(usedCarId.car_image, 'car_image');
+            //}
+            const firebaseService = new FirebaseService();
 
-            //  Prepare car data with the new or existing image URL
-            const carData = {
+            var carData = {
                 seller_username: seller_username,
                 car_name: car_name,
                 car_type: car_type,
                 car_manufacturer: car_manufacturer,
-                car_image: imageUrl,
                 description: description,
                 features: features,
                 price: price,
@@ -103,11 +107,27 @@ class UsedCar {
                 engine_cap: engine_cap
             };
 
+            if (car_image != null) {
+                const imageUrl = await firebaseService.uploadFile(car_image, 'car_images');
+                if (!imageUrl) {
+                    console.log("Error uploading image");
+                } else {
+                    carData["car_image"] = imageUrl;
+                }
+            }
+
             console.log(usedCarId);
             console.log(carData);
+            console.log(car_image);
+            if (car_image != null) {
+                console.log(car_image.name);
+                console.log(car_image.type);
+            } else {
+                console.log("Car image is not updated.");
+            }
 
             // Update the car document in Firestore
-            await this.firebaseService.updateDocument('UsedCar', usedCarId, carData);
+            await this.firebaseService.updateDocument('UsedCar', this.usedCarId, carData);
             console.log("Used car entry updated successfully");
             return true;
         } catch (error) {
@@ -119,9 +139,10 @@ class UsedCar {
     // Delete a used car entry 
     async deleteUsedCar(usedCarId) {
         try {
-            await this.firebaseService.updateDocument('UsedCar', usedCarId, { suspended: true });
+            await this.firebaseService.deleteDocument('UsedCar', usedCarId);
             console.log("Used car entry deleted successfully");
-            return { success: true, message: "Used car entry deleted successfully" };
+            return true;
+            //return { success: true, message: "Used car entry deleted successfully" };
         } catch (error) {
             console.error("Error suspending car entry:", error);
             return { success: false, message: error.message };
@@ -129,37 +150,40 @@ class UsedCar {
     }
 
     // Search for used cars by car name
-    static async searchUsedCar(carmodel, cartype, priceMin, priceMax, manufactureYear) {
+    async searchUsedCar(carmodel, cartype, priceRange, manufactureYear) {
         try {
-            let query = this.firebaseService.collection('UsedCar');
+            // const firebaseService = new FirebaseService();
+            let carQuery = collection(db, 'UsedCar');
+            let priceMin = priceRange[0];
+            let priceMax = priceRange[1];
+
+            const conditions = [];
 
             // Apply `carmodel` (car_name) filter if provided
             if (carmodel) {
-                query = query.where("car_name", "==", carmodel);
+                conditions.push(where("car_name", "==", carmodel));
             }
 
             // Apply `cartype` (car_type) filter if provided
             if (cartype) {
-                query = query.where("car_type", "==", cartype);
+                conditions.push(where("car_type", "==", cartype));
             }
 
             // Apply `price` range filter if provided
             if (priceMin !== undefined && priceMax !== undefined) {
-                query = query.where("price", ">=", priceMin)
-                    .where("price", "<=", priceMax);
-            } else if (priceMin !== undefined) {
-                query = query.where("price", ">=", priceMin);
-            } else if (priceMax !== undefined) {
-                query = query.where("price", "<=", priceMax);
+                conditions.push(where("price", ">=", Number(priceMin)));
+                conditions.push(where("price", "<=", Number(priceMax)));
             }
 
             // Apply `manufactureYear` filter if provided
             if (manufactureYear) {
-                query = query.where("manufacture_year", "==", manufactureYear);
+                conditions.push(where("manufacture_year", "==", manufactureYear));
             }
 
+            const finalQuery = query(carQuery, ...conditions);
+
             // Execute the query and retrieve matching documents
-            const snapshot = await query.get();
+            const snapshot = await getDocs(finalQuery)
             const cars = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
             if (cars.length > 0) {
