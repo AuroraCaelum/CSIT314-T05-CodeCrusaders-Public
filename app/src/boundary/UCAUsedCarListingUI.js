@@ -12,7 +12,7 @@ function UCAUsedCarListingUI() {
     const [username] = useState(Cookies.get("username"));
     //const [searchUsername, setSearchUsername] = useState("");
     const [cars, setCars] = useState([
-        { car_name: "Loading...", manufacture_year: "Loading...", mileage: "Loading...", price: "Loading...", image: "https://placehold.co/100x100?text=Car+Image" }
+        { car_name: "Loading...", manufacture_year: "Loading...", mileage: "Loading...", price: "Loading...", car_image: "https://placehold.co/100x100?text=Car+Image" }
     ]);
 
     const fetchCars = async () => {
@@ -380,132 +380,47 @@ function UCAUsedCarListingUI() {
         });
     };
 
-    const handleSearchUsedCar = () => { //this is for saerch pop up
-        let carModelInput, vehicleTypeInput, priceRangeInput, manufactureYearInput;
+    const handleSearchUsedCar = async () => {
+        const carNameInput = document.getElementById('car_name');
+        const vehicleTypeInput = document.getElementById('vehicleType');
+        const priceRangeInput = document.getElementById('priceRange');
+        const manufactureYearInput = document.getElementById('manufactureYear');
 
-        Swal.fire({
-            title: 'Search Used Car',
-            html: `
-                <select id="carModel" class="swal2-input custom-select">
-                <option value="">Select car model</option>
-                <option value="Sedan">Sedan</option>
-                <option value="SUV">SUV</option>
-                <option value="Truck">Truck</option>
-                <option value="Convertible">Convertible</option>
-            </select>
+        let priceRange = [];
+        priceRange[0] = priceRangeInput.value.toString().split("-")[0];
+        priceRange[1] = priceRangeInput.value.toString().split("-")[1];
 
-            <select id="vehicleType" class="swal2-input custom-select">
-                <option value="">Select Vehicle Type</option>
-                <option value="Sedan">Sedan</option>
-                <option value="SUV">SUV</option>
-                <option value="Hatchback">Hatchback</option>
-                <option value="Wagon">Wagon</option>
-                <option value="Coupe">Coupe</option>
-                <option value="Van">Van</option>
-                <option value="MiniVan">MiniVan</option>
-                <option value="Pickup Truck">Pickup Truck</option>
-                <option value="Convertible">Convertible</option>
-                <option value="Sports Car">Sports Car</option>
-            </select>
+        const filterCriteria = {
+            car_name: carNameInput ? carNameInput.value : '',
+            vehicleType: vehicleTypeInput.value,
+            priceRange: priceRange,
+            manufactureYear: manufactureYearInput.value
+        };
+        
+        const searchUsedCarController = new SearchUsedCarController();
+        const searchResult = await searchUsedCarController.searchUsedCar(
+            filterCriteria.car_name,
+            filterCriteria.vehicleType,
+            filterCriteria.priceRange,
+            filterCriteria.manufactureYear
+        );
 
-            <select id="priceRange" class="swal2-input custom-select">
-                <option value="">Select price range</option>
-                <option value="0-10000">$0 - $10,000</option>
-                <option value="10001-20000">$10,001 - $20,000</option>
-                <option value="20001-30000">$20,001 - $30,000</option>
-                <option value="30001-40000">$30,001 - $40,000</option>
-                <option value="40001-50000">$40,001 - $50,000</option>
-                <option value="50001-60000">$50,001 - $60,000</option>
-                <option value="60001-70000">$60,001 - $70,000</option>
-                <option value="70001-80000">$70,001 - $80,000</option>
-                <option value="80001-90000">$80,001 - $90,000</option>
-                <option value="90001-100000">$90,001 - $100,000</option>
-            </select>
 
-            <select id="manufactureYear" class="swal2-input custom-select">
-                <option value="">Select manufacture year</option>
-                <option value="2023">2023</option>
-                <option value="2022">2022</option>
-                <option value="2021">2021</option>
-                <option value="2020">2020</option>
-                <option value="2019">2019</option>
-                <option value="2018">2018</option>
-                <option value="2017">2017</option>
-                <option value="2016">2016</option>
-                <option value="2015">2015</option>
-                <option value="2014">2014</option>
-                <option value="2013">2013</option>
-                <option value="2012">2012</option>
-                <option value="2011">2011</option>
-                <option value="2010">2010</option>
-            </select>
-            `,
+        if (searchResult) {
+            console.log("Search results:", searchResult.data);
+            const carData = searchResult.data.map(doc => ({
+                usedCarId: doc.id,
+                car_name: doc.car_name,
+                manufacture_year: doc.manufacture_year,
+                mileage: doc.mileage,
+                price: doc.price,
+                car_image: doc.car_image
+            }));
+            setCars(carData);
+        } else {
+            console.error("Search failed:", searchResult.message);
+        }
 
-            // customClass: {
-            //     input: 'swal2-input custom-select'
-            // },
-
-            confirmButtonText: 'Search Used Car',
-            focusConfirm: false,
-            didOpen: () => {
-                const popup = Swal.getPopup();
-                carModelInput = popup.querySelector('#carModel');
-                vehicleTypeInput = popup.querySelector('#vehicleType');
-                priceRangeInput = popup.querySelector('#priceRange');
-                manufactureYearInput = popup.querySelector('#manufactureYear');
-
-                const handleEnterKey = (event) => {
-                    if (event.key === 'Enter') {
-                        Swal.clickConfirm();
-                    }
-                };
-                
-                carModelInput.onkeyup = handleEnterKey;
-                vehicleTypeInput.onkeyup = handleEnterKey;
-                priceRangeInput.onkeyup = handleEnterKey;
-                manufactureYearInput.onkeyup = handleEnterKey;
-            },
-            preConfirm: () => {
-                let priceRange = [];
-                priceRange[0] = priceRangeInput.value.toString().split("-")[0];
-                priceRange[1] = priceRangeInput.value.toString().split("-")[1];
-                return {
-                    carModel: carModelInput.value,
-                    vehicleType: vehicleTypeInput.value,
-                    priceRange: priceRange,
-                    manufactureYear: manufactureYearInput.value
-                };
-            },
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                const { carModel, vehicleType, priceRange, manufactureYear } = result.value;
-                console.log('Filter criteria:', {
-                    carModel,
-                    vehicleType,
-                    priceRange,
-                    manufactureYear
-                });
-                // Add logic here to handle account creation, like sending data to an API
-                const searchUsedCarController = new SearchUsedCarController();
-                const searchResult = await searchUsedCarController.searchUsedCar(carModel, vehicleType, priceRange, manufactureYear);
-
-                if (searchResult) {
-                    console.log("Search results:", searchResult.data);
-                    const carData = searchResult.data.map(doc => ({
-                        usedCarId: doc.id,
-                        car_name: doc.car_name,
-                        manufacture_year: doc.manufacture_year,
-                        mileage: doc.mileage,
-                        price: doc.price,
-                        car_image: doc.car_image
-                    }));
-                    setCars(carData);
-                } else {
-                    console.error("Search failed:", searchResult.message);
-                }
-
-            }
-        });
     };
 
     const handleLogout = async () => {
@@ -572,13 +487,64 @@ function UCAUsedCarListingUI() {
                         Search
                     </button>
                 </form> */}
-                <button onClick={handleSearchUsedCar} className="uclSearch-button">
-                    Search
-                </button>
+                <span>
+                <input id="car_name" class="swal2-input custom-select" placeholder= "Car Name(Hyundai)"></input>
 
+                    <select id="vehicleType" class="swal2-input custom-select">
+                        <option value="">Select Vehicle Type</option>
+                        <option value="Sedan">Sedan</option>
+                        <option value="SUV">SUV</option>
+                        <option value="Hatchback">Hatchback</option>
+                        <option value="Wagon">Wagon</option>
+                        <option value="Coupe">Coupe</option>
+                        <option value="Van">Van</option>
+                        <option value="MiniVan">MiniVan</option>
+                        <option value="Pickup Truck">Pickup Truck</option>
+                        <option value="Convertible">Convertible</option>
+                        <option value="Sports Car">Sports Car</option>
+                    </select>
+
+                    <select id="priceRange" class="swal2-input custom-select">
+                        <option value="">Select price range</option>
+                        <option value="0-10000">$0 - $10,000</option>
+                        <option value="10001-20000">$10,001 - $20,000</option>
+                        <option value="20001-30000">$20,001 - $30,000</option>
+                        <option value="30001-40000">$30,001 - $40,000</option>
+                        <option value="40001-50000">$40,001 - $50,000</option>
+                        <option value="50001-60000">$50,001 - $60,000</option>
+                        <option value="60001-70000">$60,001 - $70,000</option>
+                        <option value="70001-80000">$70,001 - $80,000</option>
+                        <option value="80001-90000">$80,001 - $90,000</option>
+                        <option value="90001-100000">$90,001 - $100,000</option>
+                    </select>
+
+                    <select id="manufactureYear" class="swal2-input custom-select">
+                        <option value="">Select manufacture year</option>
+                        <option value="2023">2023</option>
+                        <option value="2022">2022</option>
+                        <option value="2021">2021</option>
+                        <option value="2020">2020</option>
+                        <option value="2019">2019</option>
+                        <option value="2018">2018</option>
+                        <option value="2017">2017</option>
+                        <option value="2016">2016</option>
+                        <option value="2015">2015</option>
+                        <option value="2014">2014</option>
+                        <option value="2013">2013</option>
+                        <option value="2012">2012</option>
+                        <option value="2011">2011</option>
+                        <option value="2010">2010</option>
+                    </select>
+                    
+                    <button onClick={handleSearchUsedCar} className="bucSearch-button">
+                        Search
+                    </button>
+                </span>
+                <span>
                 <button onClick={handleCreateUsedCar} className="uclCreate-button">
                     Create Used Car
                 </button>
+                </span>
             </div>
             <div className="uclUser-table">
                 <div className="uclTable-header">

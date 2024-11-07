@@ -150,7 +150,7 @@ class UsedCar {
     }
 
     // Search for used cars by car name
-    async searchUsedCar(carmodel, cartype, priceRange, manufactureYear) {
+    async searchUsedCar(carName, cartype, priceRange, manufactureYear) {
         try {
             // const firebaseService = new FirebaseService();
             let carQuery = collection(db, 'UsedCar');
@@ -159,9 +159,9 @@ class UsedCar {
 
             const conditions = [];
 
-            // Apply `carmodel` (car_name) filter if provided
-            if (carmodel) {
-                conditions.push(where("car_name", "==", carmodel));
+            // Apply `carName` (car_name) filter if provided
+            if (carName) {
+                conditions.push(where("car_name", "==", carName));
             }
 
             // Apply `cartype` (car_type) filter if provided

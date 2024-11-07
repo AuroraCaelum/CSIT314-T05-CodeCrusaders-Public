@@ -105,11 +105,11 @@ class DeleteUsedCarController {
 class SearchUsedCarController {
 
     // Search for a used car by multiple filters
-    async searchUsedCar(carmodel, cartype, priceRange, manufactureYear) {
+    async searchUsedCar(carName, cartype, priceRange, manufactureYear) {
         try {
             // Pass each filter parameter directly to the entity's search method
             const usedCar = new UsedCar();
-            const result = await usedCar.searchUsedCar(carmodel, cartype, priceRange, manufactureYear);
+            const result = await usedCar.searchUsedCar(carName, cartype, priceRange, manufactureYear);
 
             // Return the result (success or failure with message)
             return result;
