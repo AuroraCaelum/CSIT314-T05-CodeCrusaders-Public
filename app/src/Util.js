@@ -1,5 +1,6 @@
 import UsedCar from './entity/UsedCar'
 import UserAccount from './entity/UserAccount'
+import UserProfile from './entity/UserProfile'
 import RateReview from './entity/RateReview'
 
 class Util {
@@ -8,6 +9,16 @@ class Util {
         try {
             const userList = await UserAccount.getUserAccountList();
             return userList;
+        } catch (error) {
+            console.log("Error:", error);
+            throw error;
+        }
+    }
+
+    static async getUserProfiles() {
+        try {
+            const userProfiles = await UserProfile.getUserProfiles();
+            return userProfiles;
         } catch (error) {
             console.log("Error:", error);
             throw error;
