@@ -42,7 +42,7 @@ function UCAUsedCarListingUI() {
 
     const createUsedCar = () => {
         let seller_username_input, car_name_input, car_type_input, car_manufacturer_input, car_image_input, description_input, features_input, price_input, mileage_input, manufacture_year_input, engine_cap_input;
-                    
+
         Swal.fire({
             title: 'Create Used Car',
             width: 1200,
@@ -146,7 +146,7 @@ function UCAUsedCarListingUI() {
                 if (price_input) price_input.onkeyup = handleEnterKey;
                 if (manufacture_year_input) manufacture_year_input.onkeyup = handleEnterKey;
                 if (engine_cap_input) engine_cap_input.onkeyup = handleEnterKey;
-                
+
             },
             preConfirm: () => {
                 const usedCarId = Date.now().toString();
@@ -178,17 +178,17 @@ function UCAUsedCarListingUI() {
             if (result.isConfirmed) {
                 const { usedCarId, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap } = result.value;
                 console.log('New Car Details:', {
-                    usedCarId, 
-                    seller_username, 
-                    car_name, 
-                    car_type, 
-                    car_manufacturer, 
-                    car_image, 
-                    description, 
-                    features, 
-                    price, 
-                    mileage, 
-                    manufacture_year, 
+                    usedCarId,
+                    seller_username,
+                    car_name,
+                    car_type,
+                    car_manufacturer,
+                    car_image,
+                    description,
+                    features,
+                    price,
+                    mileage,
+                    manufacture_year,
                     engine_cap
                 });
 
@@ -407,7 +407,7 @@ function UCAUsedCarListingUI() {
             priceRange: priceRange,
             manufactureYear: manufactureYearInput.value
         };
-        
+
         const searchUsedCarController = new SearchUsedCarController();
         const searchResult = await searchUsedCarController.searchUsedCar(
             filterCriteria.car_name,
@@ -419,15 +419,25 @@ function UCAUsedCarListingUI() {
 
         if (searchResult) {
             console.log("Search results:", searchResult.data);
-            const carData = searchResult.data.map(doc => ({
-                usedCarId: doc.id,
-                car_name: doc.car_name,
-                manufacture_year: doc.manufacture_year,
-                mileage: doc.mileage,
-                price: doc.price,
-                car_image: doc.car_image
-            }));
-            setCars(carData);
+            if (searchResult.data === undefined || searchResult.data.length === 0) {
+                Swal.fire({
+                    title: 'No Results',
+                    text: 'No used cars found matching the search criteria.',
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            } else {
+                const carData = searchResult.data.map(doc => ({
+                    usedCarId: doc.id,
+                    car_name: doc.car_name,
+                    manufacture_year: doc.manufacture_year,
+                    mileage: doc.mileage,
+                    price: doc.price,
+                    car_image: doc.car_image
+                }));
+                setCars(carData);
+            }
         } else {
             console.error("Search failed:", searchResult.message);
         }
@@ -499,7 +509,7 @@ function UCAUsedCarListingUI() {
                     </button>
                 </form> */}
                 <span>
-                <input id="car_name" class="swal2-input custom-select" placeholder= "Car Name(Hyundai)"></input>
+                    <input id="car_name" class="swal2-input custom-select" placeholder="Car Name(Hyundai)"></input>
 
                     <select id="vehicleType" class="swal2-input custom-select">
                         <option value="">Select Vehicle Type</option>
@@ -546,15 +556,15 @@ function UCAUsedCarListingUI() {
                         <option value="2011">2011</option>
                         <option value="2010">2010</option>
                     </select>
-                    
+
                     <button onClick={handleSearchUsedCar} className="bucSearch-button">
                         Search
                     </button>
                 </span>
                 <span>
-                <button onClick={createUsedCar} className="uclCreate-button">
-                    Create Used Car
-                </button>
+                    <button onClick={createUsedCar} className="uclCreate-button">
+                        Create Used Car
+                    </button>
                 </span>
             </div>
             <div className="uclUser-table">
@@ -580,11 +590,11 @@ function UCAUsedCarListingUI() {
                             Inspects
                         </button>
                         <span>
-                        <div className="counter-display">
-                            <span>🔍 {car.inspectCount}</span>  {/* Display inspect count with an icon */}
-                            <span>⭐ {car.shortlistCount}</span>  {/* Display shortlist count with an icon */}
-                        </div>
-                    </span>
+                            <div className="counter-display">
+                                <span>🔍 {car.inspectCount}</span>  {/* Display inspect count with an icon */}
+                                <span>⭐ {car.shortlistCount}</span>  {/* Display shortlist count with an icon */}
+                            </div>
+                        </span>
 
                     </div>
                 ))}
