@@ -225,10 +225,17 @@ function UCAUsedCarListingUI() {
                 title: 'View Used Car',
                 html: `
                     <div style="text-align: left;">
+                        <img src=${usedCar.body.car_image} alt="Car" class="uclCar-image" /><br>
                         <strong>Product Name:</strong> ${usedCar.body.car_name}<br>
                         <strong>Description:</strong> ${usedCar.body.description}<br>
                         <strong>Type:</strong> ${usedCar.body.car_type}<br>
                         <strong>Price:</strong> ${usedCar.body.price}<br>
+                        <strong>Manufacturer:</strong> ${usedCar.body.manufactureYear}<br>
+                        <strong>Engine cap:</strong> ${usedCar.body.engine_cap}<br>
+                        <strong>Mileage:</strong> ${usedCar.body.mileage}<br>
+                        <strong>Features:</strong> ${usedCar.body.features}<br>
+                        <strong>Description:</strong> ${usedCar.body.description}<br>
+                        <strong>Seller Username:</strong> ${usedCar.body.seller_username}<br>
                     </div>
                 `,
                 showCancelButton: true,
