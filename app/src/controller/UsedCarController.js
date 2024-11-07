@@ -114,11 +114,11 @@ class SearchUsedCarController {
 class GetUsedCarViewCountController {
     async getUsedCarViewCount(usedCarId) {
         try {
-            const response = await UsedCar.getUsedCarViewCount(usedCarId);
-            return response; // This contains either success response or error message
+            const viewCount = await UsedCar.getUsedCarViewCount(usedCarId);
+            return viewCount; // Returns only the view count as an integer
         } catch (error) {
             console.error("Controller Error fetching view count:", error);
-            return { success: false, message: "Failed to retrieve view count" };
+            return null; // Or handle as needed, e.g., return -1 to indicate error
         }
     }
 }
@@ -127,11 +127,11 @@ class GetUsedCarViewCountController {
 class GetUsedCarShortlistCountController {
     async getUsedCarShortlistCount(usedCarId) {
         try {
-            const response = await UsedCar.getUsedCarShortlistCount(usedCarId);
-            return response; // This contains either success response or error message
+            const shortlistCount = await UsedCar.getUsedCarShortlistCount(usedCarId);
+            return shortlistCount; // Returns only the shortlist count as an integer
         } catch (error) {
             console.error("Controller Error fetching shortlist count:", error);
-            return { success: false, message: "Failed to retrieve shortlist count" };
+            return null; // Or handle as needed, e.g., return -1 to indicate error
         }
     }
 }
