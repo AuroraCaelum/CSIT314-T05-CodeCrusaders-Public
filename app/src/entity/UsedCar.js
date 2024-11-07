@@ -267,5 +267,38 @@ class UsedCar {
             return { success: false, message: error.message };
         }
     }
+
+    // increase counter for view_count or shortlist_count when clicked
+    async increaseCount(usedCarId, countType) {
+        try {
+            // Check if countType is valid
+            if (countType !== "view_count" && countType !== "shortlist_count") {
+                throw new Error("Invalid count type. Use 'view_count' or 'shortlist_count'");
+            }
+
+            // Reference to the specific used car document in Firestore
+            const carRef = doc(db, 'UsedCar', usedCarId);
+
+            // Update Firestore document with incremented value
+            await updateDoc(carRef, {
+                [countType]: increment(1)
+            });
+
+            console.log(`Successfully incremented ${countType} for car ID: ${usedCarId}`);
+            return { success: true, message: `${countType} incremented successfully` };
+        } catch (error) {
+            console.error(`Error incrementing ${countType} for used car entry:`, error);
+            return { success: false, message: error.message };
+        }
+    }
+
+
+
+
+
+
+
+
+
 }
 export default UsedCar;
