@@ -33,22 +33,32 @@ class RateReview {
             return { success: false, message: error.message };
         }
     }
+    
 
-    // Get all rate and review for Car agent
-    static async viewRateReview(agentUsername) {
+    // Get detailed rate and review for Car agent
+    static async viewRateReview(rateReviewId) {
         try {
-            const reviews = await RateReview.firebaseService.searchByFields('RateReview', { reviewTo: agentUsername });
-            if (reviews.length > 0) {
-                console.log("Reviews found:", reviews);
-                return { success: true, data: reviews };
-            } else {
-                return { success: false, message: "No reviews found for this agent" };
-            }
+            const review = await RateReview.firebaseService.getDocument('RateReview', rateReviewId);
+            return review;
         } catch (error) {
             console.error("Error fetching reviews for agent:", error);
             return { success: false, message: error.message };
         }
     }
+
+    // Get all rate and review for Car agent
+    static async getRateReviewList(agent_username) {
+        try {
+            const firebaseService = new FirebaseService();
+            const rateReview = await firebaseService.searchByFields('RateReview', { reviewTo: agent_username });
+            console.log(rateReview);
+            return rateReview;
+        } catch (error) {
+            console.error("Error:", error);
+            throw error;
+        }
+    }
+
 }
 
 export default RateReview;

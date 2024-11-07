@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import "./UserAccountManagementUI.css";
+import { Util } from "../Util";
 import { UserLogoutController } from "../controller/UserAuthController";
-import { UpdateUserAccountController, ViewUserAccountController } from "../controller/UserAccountController";
-import { CreateUserAccountController, SearchUserAccountController, SuspendUserAccountController } from "../controller/UserAccountController";
+import { CreateUserAccountController, ViewUserAccountController, UpdateUserAccountController, SuspendUserAccountController, SearchUserAccountController } from "../controller/UserAccountController";
 
 import Swal from 'sweetalert2';
 
@@ -16,7 +16,7 @@ function UserAccountManagementUI() {
 
     useEffect(() => {
         const fetchUsers = async () => {
-            const snapshot = await ViewUserAccountController.getUserAccountList();
+            const snapshot = await Util.getUserAccountList();
             if (snapshot !== null) {
                 const userData = snapshot.docs.map(doc => ({
                     fName: doc.data().fName,

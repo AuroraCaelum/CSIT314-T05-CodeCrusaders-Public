@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
+import { Util } from "../Util";
 import "./UCAUsedCarListingUI.css";
 import { UserLogoutController } from "../controller/UserAuthController";
-// import { ViewUserAccountController } from "../controller/UserAccountController";
-import { CreateUsedCarController, UpdateUsedCarController } from "../controller/UsedCarController";
-import { ViewUsedCarController, DeleteUsedCarController, SearchUsedCarController } from "../controller/UsedCarController";
+import { CreateUsedCarController, ViewUsedCarController, UpdateUsedCarController, DeleteUsedCarController, SearchUsedCarController } from "../controller/UsedCarController";
 
 import Swal from 'sweetalert2';
 
 function UCAUsedCarListingUI() {
     const [username] = useState(Cookies.get("username"));
-    //const [searchUsername, setSearchUsername] = useState("");
     const [cars, setCars] = useState([
         { car_name: "Loading...", description: "Loading...", manufacture_year: "Loading...", mileage: "Loading...", price: "Loading...", car_image: "https://placehold.co/100x100?text=Car+Image", inspectCount: 0, shortlistCount: 0 }
     ]);
 
 
     const fetchCars = async () => {
-        const snapshot = await ViewUsedCarController.getUsedCarList();
+        const snapshot = await Util.getUsedCarList();
         if (snapshot !== null) {
             const carData = snapshot.docs.map(doc => ({
                 usedCarId: doc.id,
@@ -502,18 +500,6 @@ function UCAUsedCarListingUI() {
             </div>
 
             <div className="uclSearch-bar">
-                {/* <form onSubmit={handleSearch}>
-                    <input
-                        type="text"
-                        placeholder="Used Car Name"
-                        value={searchUsername}
-                        onChange={(e) => setSearchUsername(e.target.value)}
-                    //className="search-input"
-                    />
-                    <button type="submit" className="uclSearch-button">
-                        Search
-                    </button>
-                </form> */}
                 <span>
                     <input id="car_name" class="swal2-input custom-select" placeholder="Car Name(Hyundai)"></input>
 

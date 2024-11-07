@@ -1,56 +1,68 @@
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import "./UCARateReviewUI.css";
+import { Util } from "../Util";
 import { UserLogoutController } from "../controller/UserAuthController";
-import { ViewUserAccountController } from "../controller/UserAccountController";
+import { ViewRateReviewController } from "../controller/RateReviewController";
 
 import Swal from 'sweetalert2';
 
 function UCARateReviewUI() {
     const [username] = useState(Cookies.get("username"));
-    // const [searchUsername, setSearchUsername] = useState("");
-    const [users, setUsers] = useState([
-        { name: "Loading...", username: "Loading...", profile: "Loading..." }
+    const [rateReviewList, setRateReviewList] = useState([
+        { rate: "Loading...", review: "Loading...", reviewer_username: "Loading..."}
     ]);
-
+    
+    const fetchRateReview = async () => {
+        const snapshot = await Util.getRateReviewList(username);
+        console.log(snapshot)
+        if (snapshot !== null) {
+            const rateReviewData = snapshot.map(doc => ({
+                rateReviewId: doc.documentId,
+                rate: doc.rate,
+                review: doc.review,
+                reviewer_username: doc.reviewerUsername,
+            }));
+            setRateReviewList(rateReviewData);
+        }
+    };
+    
     useEffect(() => {
-        const fetchUsers = async () => {
-            const snapshot = await ViewUserAccountController.getUserAccountList();
-            if (snapshot !== null) {
-                const userData = snapshot.docs.map(doc => ({
-                    name: doc.data().fName + " " + doc.data().lName,
-                    username: doc.data().username,
-                    profile: doc.data().userProfile
-                }));
-                setUsers(userData);
-            }
-        };
-
-        fetchUsers();
+        fetchRateReview();
     }, []);
 
-    // if (Cookies.get("userProfile") !== "UsedCarAgent") {
-    //     window.open("/", "_self")
-    // }
+    const viewRateReview = async (rateReviewId) => {
+        const viewRateReviewController = new ViewRateReviewController();
 
-    const viewRateReview = (user) => {
-        const username = Cookies.get('username');
-        Swal.fire({
-            title: 'View Used Car',
-            html: `
-                <div style="text-align: left;">
-                    <strong>Product Name:</strong> ${user.pName}<br>
-                    <strong>review:</strong> ${user.review}<br>
-                    <strong>Type:</strong> ${user.type}<br>
-                </div>
-            `,
-            showCancelButton: true,
-            cancelButtonText: 'close',
-            confirmButtonText: 'Update Details',
-            showDenyButton: true,
-            denyButtonText: 'Delete',
-            focusConfirm: false
-        });
+        try {
+            const rateReview = await viewRateReviewController.viewRateReview(rateReviewId);
+            console.log(rateReview)
+            if (rateReview) {
+                Swal.fire({
+                    title: 'View Rate and Review',
+                    html: `
+                        <div style="text-align: left;">
+                            <strong>Rating</strong> ${rateReview.rate}<br>
+                            <strong>Review</strong> ${rateReview.review}<br>
+                            <strong>Review By</strong> ${rateReview.reviewerUsername} (${rateReview.reviewerType})<br>
+                        </div>
+                    `,
+                    cancelButtonText: 'close',
+                    focusConfirm: false
+                });
+            } else {
+                Swal.fire({
+                    title: 'No Reviews Found',
+                    text: 'There is no review for this Agent',
+                    icon: 'info',
+                    confirmButtonText: 'Close'
+                })
+            }
+
+        } catch (error) {
+            console.error("Error displaying reviews", error);
+        }
+        
     };
 
     const handleLogout = async () => {
@@ -103,20 +115,21 @@ function UCARateReviewUI() {
                 <div className="rarTable-header">
                     <span>Ratings</span>
                     <span>Reviews</span>
-                    <span>Type</span>
+                    <span>Reviewer</span>
                     <span></span>
                 </div>
-                {users.map((user) => (
-                    <div key={user.username} className="rarTable-row">
-                        <span>{user.rating}</span>
-                        <span>{user.review}</span>
-                        <span>{user.type}</span>
-                        <button onClick={() => viewRateReview(user)} className="rarInspect-button">
+                {rateReviewList.map((rateReview => (
+                    <div key={rateReview.username} className="rarTable-row">
+                        <span>{rateReview.rate}</span>
+                        <span>{rateReview.review}</span>
+                        <span>{rateReview.reviewer_username}</span>
+                        <button onClick={() => viewRateReview(rateReview.rateReviewId)} className="rarInspect-button">
                             View
                         </button>
                     </div>
-                ))}
-            </div>
+
+                )))}
+                </div>
         </div>
     );
 }

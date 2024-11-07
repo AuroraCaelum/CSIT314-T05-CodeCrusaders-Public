@@ -10,7 +10,6 @@ import Swal from 'sweetalert2';
 
 function BuyerUsedCarUI() {
     const [username] = useState(Cookies.get("username"));
-    //const [searchUsername, setSearchUsername] = useState("");
     const [cars, setCars] = useState([
         { car_name: "Loading...", description: "Loading...", manufacture_year: "Loading...", mileage: "Loading...", price: "Loading...", car_image: "https://placehold.co/100x100?text=Car+Image", inspectCount: 0, shortlistCount: 0 }
     ]);
@@ -36,10 +35,6 @@ function BuyerUsedCarUI() {
 
         fetchCars();
     }, []);
-
-    // if (Cookies.get("userProfile") !== "UsedCarAgent") {
-    //     window.open("/", "_self")
-    // }
 
     const handleBuyerShortlist = () => {
         console.log("Buyer Shortlist");
@@ -343,18 +338,6 @@ function BuyerUsedCarUI() {
             </div>
 
             <div className="bucSearch-bar">
-                {/* <form onSubmit={handleSearch}>
-                    <input
-                        type="text"
-                        placeholder="Used Car Name"
-                        value={searchUsername}
-                        onChange={(e) => setSearchUsername(e.target.value)}
-                    //className="search-input"
-                    />
-                    <button type="submit" className="bucSearch-button">
-                        Search
-                    </button>
-                </form> */}
                 <span>
                     <input id="car_name" class="swal2-input custom-select" placeholder="Car Name(Hyundai)"></input>
 
