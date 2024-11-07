@@ -3,14 +3,15 @@ import Cookies from "js-cookie";
 import "./BuyerUsedCarUI.css";
 import { UserLogoutController } from "../controller/UserAuthController";
 import { ViewUsedCarController, SearchUsedCarController } from "../controller/UsedCarController";
+import { LeaveRateReviewController } from "../controller/RateReviewController";
+import { SaveShortlistController } from "../controller/ShortlistController";
 
 import Swal from 'sweetalert2';
 
 function BuyerUsedCarUI() {
     const [username] = useState(Cookies.get("username"));
-    //const [searchUsername, setSearchUsername] = useState("");
     const [cars, setCars] = useState([
-        { car_name: "Loading...", manufacture_year: "Loading...", mileage: "Loading...", price: "Loading...", car_image: "https://placehold.co/100x100?text=Car+Image", inspectCount: 0, shortlistCount: 0 }
+        { car_name: "Loading...", description: "Loading...", manufacture_year: "Loading...", mileage: "Loading...", price: "Loading...", car_image: "https://placehold.co/100x100?text=Car+Image", inspectCount: 0, shortlistCount: 0 }
     ]);
 
     useEffect(() => {
@@ -20,6 +21,7 @@ function BuyerUsedCarUI() {
                 const carData = snapshot.docs.map(doc => ({
                     usedCarId: doc.id,
                     car_name: doc.data().car_name,
+                    description: doc.data().description,
                     manufacture_year: doc.data().manufacture_year,
                     mileage: doc.data().mileage,
                     price: doc.data().price,
@@ -34,10 +36,6 @@ function BuyerUsedCarUI() {
         fetchCars();
     }, []);
 
-    // if (Cookies.get("userProfile") !== "UsedCarAgent") {
-    //     window.open("/", "_self")
-    // }
-
     const handleBuyerShortlist = () => {
         console.log("Buyer Shortlist");
         window.open("/buyershortlist", "_self");
@@ -49,9 +47,7 @@ function BuyerUsedCarUI() {
         const priceRangeInput = document.getElementById('priceRange');
         const manufactureYearInput = document.getElementById('manufactureYear');
 
-        let priceRange = [];
-        priceRange[0] = priceRangeInput.value.toString().split("-")[0];
-        priceRange[1] = priceRangeInput.value.toString().split("-")[1];
+        let priceRange = priceRangeInput.value.toString().split("-");
 
         const filterCriteria = {
             car_name: carNameInput ? carNameInput.value : '',
@@ -192,11 +188,23 @@ function BuyerUsedCarUI() {
 
                 return { rating: ratingInput, review: reviewInput };
             }
-        }).then((result) => {
+        }).then(async (result) => {
             if (result.isConfirmed) {
                 const { rating, review } = result.value;
-                console.log(`Rating submitted for agent ${agent_username}:`, { rating, review });
-                Swal.fire('Thank you!', 'Your rating and review have been submitted.', 'success');
+
+                const reviewer_username = Cookies.get('username');
+                const reviewer_type = Cookies.get('userProfile');
+
+                const leaveRateReviewController = new LeaveRateReviewController(agent_username, rating, review, reviewer_username, reviewer_type);
+                const isSuccess = await leaveRateReviewController.leaveRateReview(agent_username, rating, review, reviewer_username, reviewer_type);
+
+                if(isSuccess){
+                    console.log(`Rating submitted for agent ${agent_username}:`, { rating, review });
+                    Swal.fire('Thank you!', 'Your rating and review have been submitted.', 'success');
+                } else {
+                    console.log('Rating submission failed');
+                    Swal.fire('Error', 'Failed to submit your rating and review. Please try again later.', 'error');
+                }
             }
         });
     };
@@ -252,6 +260,8 @@ function BuyerUsedCarUI() {
     };
 
     const saveToShortlist = (usedCarId) => {
+        //const username = Cookies.get('username');
+
         const updatedCars = cars.map(car => {
             if (car.usedCarId === usedCarId) {
                 car.shortlistCount += 1;  // Increment shortlist count when 'Save to Shortlist' is clicked
@@ -264,9 +274,15 @@ function BuyerUsedCarUI() {
             text: "The car has been added to your shortlist.",
             icon: 'success',
             confirmButtonText: 'OK'
-        }).then(() => {
-            // Logic to add the car to the shortlist goes here
-            console.log(`Car ${usedCarId} added to shortlist.`);
+        }).then(async () => {
+            const saveShortlistController = new SaveShortlistController();
+            const isSuccess = saveShortlistController.saveToShortlist(username, usedCarId);
+
+            if(isSuccess){
+                console.log(`Car ${usedCarId} added to shortlist.`);
+            } else {
+                console.log(`Car ${usedCarId} failed to add on shortlist.`);
+            }
         });
     };
 
@@ -322,18 +338,6 @@ function BuyerUsedCarUI() {
             </div>
 
             <div className="bucSearch-bar">
-                {/* <form onSubmit={handleSearch}>
-                    <input
-                        type="text"
-                        placeholder="Used Car Name"
-                        value={searchUsername}
-                        onChange={(e) => setSearchUsername(e.target.value)}
-                    //className="search-input"
-                    />
-                    <button type="submit" className="bucSearch-button">
-                        Search
-                    </button>
-                </form> */}
                 <span>
                     <input id="car_name" class="swal2-input custom-select" placeholder="Car Name(Hyundai)"></input>
 
@@ -396,11 +400,11 @@ function BuyerUsedCarUI() {
             <div className="bucUser-table">
                 <div className="bucTable-header">
                     <span>Car Picture</span>
-                    <span>Car Name:</span>
-                    <span>Description:</span>
-                    <span>Manufactured:</span>
-                    <span>Mileage:</span>
-                    <span>Price:</span>
+                    <span>Car Name</span>
+                    <span>Description</span>
+                    <span>Manufactured</span>
+                    <span>Mileage</span>
+                    <span>Price</span>
                     <span></span>
                 </div>
                 {cars.map((car) => (
@@ -409,8 +413,8 @@ function BuyerUsedCarUI() {
                         <span>{car.car_name}</span>
                         <span>{car.description}</span>
                         <span>{car.manufacture_year}</span>
-                        <span>{car.mileage.toLocaleString()}</span>
-                        <span>${car.price.toLocaleString()}</span>
+                        <span>{car.mileage.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</span>
+                        <span>${car.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</span>
                         <span>
                             <button onClick={() => viewUsedCar(car.usedCarId)} className="bucInspect-button">
                                 View

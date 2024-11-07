@@ -1,26 +1,30 @@
+// File path: src/entity/RateReview.js
+import FirebaseService from '../FirebaseService';
+
 class ShortList {
     static firebaseService = new FirebaseService(); // Singleton FirebaseService
-    constructor(username, usedCarID) {
+    constructor(username, usedCarId) {
         this.username = username;
-        this.usedCarID = usedCarID;
+        this.usedCarId = usedCarId;
     }
 
 
-    static async saveToShortlist(username, usedCarID) {
+    static async saveToShortlist(username, usedCarId) {
         try {
-            const timestamp = Date.now();
-            const documentID = `${timestamp}_${username}`; // Unique ID combining timestamp and BuyerID
+            const documentId = Date.now().toLocaleString().concat(username); // Unique ID combining timestamp and BuyerID
 
             const shortlistData = {
                 username: username,
-                usedCarID: usedCarID,
+                usedCarId: usedCarId,
                 addedAt: new Date() // Timestamp for when the car was added to the shortlist
             };
+            console.log(documentId, username, usedCarId)
 
             // Save to Firestore under the 'Shortlist' collection 
-            await ShortList.firebaseService.addDocument(`Shortlist/Shortlist`, documentID, shortlistData);
+            await ShortList.firebaseService.addDocument(`Shortlist`, documentId, shortlistData);
             console.log("Used car added to shortlist successfully");
-            return { success: true, message: "Used car added to shortlist successfully" };
+            return true;
+            //return { success: true, message: "Used car added to shortlist successfully" };
         } catch (error) {
             console.error("Error saving used car to shortlist:", error);
             return { success: false, message: error.message };

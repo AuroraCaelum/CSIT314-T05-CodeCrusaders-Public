@@ -6,8 +6,8 @@ class LeaveRateReviewController {
     // Create a new rate and review
     async leaveRateReview(agent_username, rate, review, reviewer_username, reviewer_type) {
         try {
-            const review = new RateReview(agent_username, rate, review, reviewer_username, reviewer_type);
-            const result = await review.leaveRateReview(agent_username, rate, review, reviewer_username, reviewer_type);
+            const rateReview = new RateReview(agent_username, rate, review, reviewer_username, reviewer_type);
+            const result = await rateReview.leaveRateReview(agent_username, rate, review, reviewer_username, reviewer_type);
             return result;
         } catch (error) {
             console.error('Error creating rate and review:', error);
@@ -16,11 +16,12 @@ class LeaveRateReviewController {
     }
 }
 
-class RateReviewController {
+class ViewRateReviewController {
     // Get all reviews for a specific agent
-    async viewRateReviewsForAgent(agentUsername) {
+
+    async viewRateReview(rateReviewId) {
         try {
-            const result = await RateReview.viewRateReview(agentUsername);
+            const result = await RateReview.viewRateReview(rateReviewId);
             return result;
         } catch (error) {
             console.error('Error fetching reviews for agent:', error);
@@ -29,4 +30,4 @@ class RateReviewController {
     }
 }
 
-export { LeaveRateReviewController, RateReviewController} ;
+export { LeaveRateReviewController, ViewRateReviewController} ;
