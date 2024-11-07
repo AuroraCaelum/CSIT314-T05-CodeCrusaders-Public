@@ -4,26 +4,26 @@ import FirebaseService from '../FirebaseService';
 class RateReview {
     static firebaseService = new FirebaseService(); // Singleton FirebaseService
 
-    constructor(rate, reviewBody, reviewBy, reviewByType, reviewTo) {
-        this.rate = rate;
-        this.reviewBody = reviewBody;
-        this.reviewBy = reviewBy;
-        this.reviewByType = reviewByType;
-        this.reviewTo = reviewTo;
-    }
+    // constructor(rate, reviewBody, reviewBy, reviewByType, reviewTo) {
+    //     this.rate = rate;
+    //     this.reviewBody = reviewBody;
+    //     this.reviewBy = reviewBy;
+    //     this.reviewByType = reviewByType;
+    //     this.reviewTo = reviewTo;
+    // }
 
     // Add a new rate and review
-    async createRateReview(reviewId) {
+    async leaveRateReview(agent_username, rate, review, reviewer_username, reviewer_type) {
         try {
             const reviewData = {
-                rate: this.rate,
-                reviewBody: this.reviewBody,
-                reviewBy: this.reviewBy,
-                reviewByType: this.reviewByType,
-                reviewTo: this.reviewTo,
+                rate: rate,
+                review: review,
+                reviewerUsername: reviewer_username,
+                reviewerType: reviewer_type,
+                reviewTo: agent_username,
             };
 
-            await RateReview.firebaseService.addDocument('RateReview', reviewId, reviewData);
+            await RateReview.firebaseService.addDocument('RateReview', reviewer_username, reviewData);
             console.log("Rate and review saved successfully");
             return { success: true, message: "Rate and review saved successfully" };
         } catch (error) {

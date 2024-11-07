@@ -232,6 +232,37 @@ class UsedCar {
             throw error;
         }
     }
-}
 
+    static async getUsedCarViewCount(usedCarId) {
+        try {
+            const firebaseService = new FirebaseService();
+            const carData = await firebaseService.getDocument('UsedCar', usedCarId);
+    
+            if (carData && carData.view_count !== undefined) {
+                return { success: true, viewCount: carData.view_count };
+            } else {
+                return { success: false, message: "View count not found for the provided used car ID" };
+            }
+        } catch (error) {
+            console.error("Error retrieving used car view count:", error);
+            return { success: false, message: error.message };
+        }
+    }
+    
+    static async getUsedCarShortlistCount(usedCarId) {
+        try {
+            const firebaseService = new FirebaseService();
+            const carData = await firebaseService.getDocument('UsedCar', usedCarId);
+    
+            if (carData && carData.shortlist_count !== undefined) {
+                return { success: true, shortlistCount: carData.shortlist_count };
+            } else {
+                return { success: false, message: "Shortlist count not found for the provided used car ID" };
+            }
+        } catch (error) {
+            console.error("Error retrieving used car shortlist count:", error);
+            return { success: false, message: error.message };
+        }
+    }
+}
 export default UsedCar;
