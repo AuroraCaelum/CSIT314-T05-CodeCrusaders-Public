@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import "./UserProfileManagementUI.css";
+import { Util } from "../Util";
 import { UserLogoutController } from "../controller/UserAuthController";
 import {ViewUserProfileController} from "../controller/UserProfileController";
 
@@ -15,7 +16,7 @@ function UserProfileManagementUI() {
 
     useEffect(() => {
         const fetchUserProfiles = async () => {
-            const snapshot = await ViewUserProfileController.getUserProfiles();
+            const snapshot = await Util.getUserProfiles();
             if (snapshot !== null) {
                 const userData = snapshot.docs.map(doc => ({
                     pName: doc.data().name,
