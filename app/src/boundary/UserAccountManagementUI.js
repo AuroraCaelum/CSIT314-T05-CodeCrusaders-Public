@@ -38,7 +38,7 @@ function UserAccountManagementUI() {
         window.open("/", "_self")
     }
 
-    const handleCreateAccount = () => {
+    const createUserAccount = () => {
         let usernameInput, fNameInput, lNameInput, passwordInput, phoneNumInput, emailInput, userProfileInput;
 
         Swal.fire({
@@ -135,7 +135,7 @@ function UserAccountManagementUI() {
         });
     };
 
-    const handleViewUserAccount = async (username) => {
+    const viewUserAccount = async (username) => {
         console.log('Fetching user account for:', username);
         const viewUserAccountController = new ViewUserAccountController();
         const userAccount = await viewUserAccountController.viewUserAccount(username);
@@ -162,7 +162,7 @@ function UserAccountManagementUI() {
                 focusConfirm: false
             }).then((result) => {
                 if (result.isConfirmed) {
-                    handleUpdateAccount(userAccount);
+                    updateUserAccount(userAccount);
                 } else if (result.isDenied) {
                     Swal.fire({
                         title: 'Are you sure?',
@@ -198,7 +198,10 @@ function UserAccountManagementUI() {
         }
     };
 
-    const handleUpdateAccount = (userAccount) => {
+
+
+    const updateUserAccount = (userAccount) => {
+
         Swal.fire({
             title: 'Update User Account',
             html: `
@@ -272,7 +275,7 @@ function UserAccountManagementUI() {
         }
     };
 
-    const handleSearch = async (e) => {
+    const searchUserAccount = async (e) => {
         e.preventDefault();
         console.log("Searched Username:", searchUsername);
 
@@ -317,7 +320,7 @@ function UserAccountManagementUI() {
             </div>
 
             <div className="uamSearch-bar">
-                <form onSubmit={handleSearch}>
+                <form onSubmit={searchUserAccount}>
                     <input
                         type="text"
                         placeholder="Search by username"
@@ -329,7 +332,7 @@ function UserAccountManagementUI() {
                         Search
                     </button>
                 </form>
-                <button onClick={handleCreateAccount} className="uamCreate-button">
+                <button onClick={createUserAccount} className="uamCreate-button">
                     Create user account
                 </button>
             </div>
@@ -345,7 +348,7 @@ function UserAccountManagementUI() {
                         <span>{`${user.fName} ${user.lName}`}</span>
                         <span>{user.username}</span>
                         <span>{user.profile}</span>
-                        <button onClick={() => handleViewUserAccount(user.username)} className="uamInspect-button">
+                        <button onClick={() => viewUserAccount(user.username)} className="uamInspect-button">
                             Inspect
                         </button>
                     </div>
