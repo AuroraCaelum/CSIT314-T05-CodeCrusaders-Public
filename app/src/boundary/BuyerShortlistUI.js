@@ -383,7 +383,7 @@ function BuyerShortlistUI() {
                         <span>{car.mileage.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</span>
                         <span>${car.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</span>
                         <span>
-                            <button onClick={() => viewUsedCar(car.usedCarId)} className="bsInspect-button">
+                            <button onClick={() => viewUsedCar(car.usedCarId)} className="bsView-button">
                                 Inspect
                             </button>
                             <button onClick={() => handleRemoveFromShortlist(car.usedCarId)} className="bsRFS-button">

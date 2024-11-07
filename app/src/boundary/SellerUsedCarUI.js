@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import "./BuyerUsedCarUI.css";
+import "./SellerUsedCarUI.css";
 import { Util } from "../Util";
 import { UserLogoutController } from "../controller/UserAuthController";
 import { ViewUsedCarController, SearchUsedCarController } from "../controller/UsedCarController";
@@ -9,7 +9,7 @@ import { SaveShortlistController } from "../controller/ShortlistController";
 
 import Swal from 'sweetalert2';
 
-function BuyerUsedCarUI() {
+function SellerUsedCarUI() {
     const [username] = useState(Cookies.get("username"));
     const [cars, setCars] = useState([
         { car_name: "Loading...", description: "Loading...", manufacture_year: "Loading...", mileage: "Loading...", price: "Loading...", car_image: "https://placehold.co/100x100?text=Car+Image", inspectCount: 0, shortlistCount: 0 }
@@ -130,8 +130,6 @@ function BuyerUsedCarUI() {
                 showCancelButton: true,
                 cancelButtonText: 'Close',
                 confirmButtonText: 'Rate and Review',
-                showDenyButton: true,
-                denyButtonText: 'Loan Calculator',
                 focusConfirm: false
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -328,24 +326,24 @@ function BuyerUsedCarUI() {
     };
 
     return (
-        <div className="bucContainer">
-            <div className="bucHeader">
-                <button onClick={handleBack} className="bucBack-button">
+        <div className="sucContainer">
+            <div className="sucHeader">
+                <button onClick={handleBack} className="sucBack-button">
                     Back
                 </button>
-                <div className="bucProfile-picture">
+                <div className="sucProfile-picture">
                     <img
                         src={"https://placehold.co/40x40?text=" + Cookies.get("username")}
                         alt="Profile"
                     />
                 </div>
-                <span className="bucUsername">{username}</span>
-                <button onClick={handleLogout} className="bucLogout-button">
+                <span className="sucUsername">{username}</span>
+                <button onClick={handleLogout} className="sucLogout-button">
                     Logout
                 </button>
             </div>
 
-            <div className="bucSearch-bar">
+            <div className="sucSearch-bar">
                 <span>
                     <input id="car_name" class="swal2-input custom-select" placeholder="Car Name(Hyundai)"></input>
 
@@ -395,18 +393,13 @@ function BuyerUsedCarUI() {
                         <option value="2010">2010</option>
                     </select>
 
-                    <button onClick={searchUsedCar} className="bucSearch-button">
+                    <button onClick={searchUsedCar} className="sucSearch-button">
                         Search
                     </button>
                 </span>
-                <span>
-                    <button onClick={handleBuyerShortlist} className="bucMyShortlist-button">
-                        My Shortlist
-                    </button>
-                </span>
             </div>
-            <div className="bucUser-table">
-                <div className="bucTable-header">
+            <div className="sucUser-table">
+                <div className="sucTable-header">
                     <span>Car Picture</span>
                     <span>Car Name</span>
                     <span>Description</span>
@@ -416,21 +409,16 @@ function BuyerUsedCarUI() {
                     <span></span>
                 </div>
                 {cars.map((car) => (
-                    <div key={car.usedCarId} className="bucTable-row">
-                        <img src={car.car_image} alt="Car" className="bucCar-image" />
+                    <div key={car.usedCarId} className="sucTable-row">
+                        <img src={car.car_image} alt="Car" className="sucCar-image" />
                         <span>{car.car_name}</span>
                         <span>{car.description}</span>
                         <span>{car.manufacture_year}</span>
                         <span>{car.mileage.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</span>
                         <span>${car.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</span>
-                        <span>
-                            <button onClick={() => viewUsedCar(car.usedCarId)} className="bucView-button">
-                                View
-                            </button>
-                            <button onClick={() => saveToShortlist(car.usedCarId)} className="bucSTS-button">
-                                Save to Shortlist
-                            </button>
-                        </span>
+                        <button onClick={() => viewUsedCar(car.usedCarId)} className="sucView-button">
+                            View
+                        </button>
                         <span>
                             <div className="counter-display">
                                 <span><img src={"https://images.app.goo.gl/GRBK8Q5G2u6xhKQA6"} alt="Inspect" className="uclInspect-png-image" />{car.inspectCount}</span>  {/* Display inspect count with an icon */}
@@ -444,4 +432,4 @@ function BuyerUsedCarUI() {
     );
 }
 
-export default BuyerUsedCarUI;
+export default SellerUsedCarUI;

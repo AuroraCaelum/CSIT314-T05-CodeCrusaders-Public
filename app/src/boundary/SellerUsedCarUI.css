@@ -1,4 +1,13 @@
-.bsContainer {
+.sucContainer {
+    /* position: relative;
+    font-family: Arial, sans-serif;
+    width: 80%;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9; */
+
     position: relative;
     font-family: Arial, sans-serif;
     width: 95vw; /* Slightly less than 100vw */
@@ -12,7 +21,7 @@
     overflow-y: auto;
 }
 
-.bsHeader {
+.sucHeader {
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -20,7 +29,7 @@
     margin-bottom: 20px;
 }
 
-.bsBack-button {
+.sucBack-button {
     padding: 8px 16px;
     border: none;
     border-radius: 5px;
@@ -30,7 +39,7 @@
     margin-right: auto;
 }
 
-.bsProfile-picture {
+.sucProfile-picture {
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -38,7 +47,7 @@
     flex-shrink: 0;
 }
 
-.bsUsername {
+.sucUsername {
     font-size: 16px;
     font-weight: bold;
     white-space: nowrap;
@@ -47,7 +56,7 @@
     max-width: 150px;
 }
 
-.bsLogout-button {
+.sucLogout-button {
     padding: 8px 16px;
     border: none;
     border-radius: 5px;
@@ -56,13 +65,13 @@
     cursor: pointer;
 }
 
-.bsSearch-bar {
+.sucSearch-bar {
     display: flex;
     justify-content: space-between;
     margin-bottom: 20px;
 }
 
-.bsSearch-input {
+.sucSearch-input {
     width: 50ch;
     /* mistake here (i want to change the legth of the search bar) */
     padding: 10px;
@@ -87,7 +96,8 @@
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Subtle shadow on focus */
 }
 
-.bsSearch-button {
+.sucSearch-button,
+.sucMyShortlist-button {
     padding: 10px 15px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -98,16 +108,16 @@
     margin-left: 10px;
 }
 
-.bsUser-table {
+.sucUser-table {
     display: grid;
-    grid-template-columns: 2fr 2fr 1fr 1fr 1fr auto;
+    grid-template-columns: 1fr 2fr 2fr 1fr 1fr 1fr auto;
     gap: 10px;
     background-color: #f1f1f1;
     border-radius: 5px;
     padding: 10px;
 }
 
-.bsTable-header {
+.sucTable-header {
     display: contents;
     font-weight: bold;
     background-color: #ddd;
@@ -115,13 +125,13 @@
     border-radius: 5px;
 }
 
-.bsTable-row {
+.sucTable-row {
     display: contents;
     padding: 10px;
     border-bottom: 1px solid #eee;
 }
 
-.bsCar-image {
+.sucCar-image {
     width: 100%;
     height: auto;
     max-width: 100px;
@@ -131,8 +141,7 @@
     grid-column: 1;
 }
 
-.bsView-button,
-.bsRFS-button {
+.sucView-button {
     padding: 8px 12px;
     border: none;
     border-radius: 5px;
@@ -143,6 +152,7 @@
     display: block;
     width: 100%;
     margin-bottom: 10px;
+    height: 50px;
 }
 
 /* Scoped for search popup */
@@ -194,3 +204,4 @@
         }
     }
 }
+
