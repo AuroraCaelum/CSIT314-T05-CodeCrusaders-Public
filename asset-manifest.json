@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/CSIT314-T05-CodeCrusaders/static/css/main.d3eb309d.css",
+    "main.js": "/CSIT314-T05-CodeCrusaders/static/js/main.42b1701f.js",
+    "static/js/453.a6a97343.chunk.js": "/CSIT314-T05-CodeCrusaders/static/js/453.a6a97343.chunk.js",
+    "index.html": "/CSIT314-T05-CodeCrusaders/index.html",
+    "main.d3eb309d.css.map": "/CSIT314-T05-CodeCrusaders/static/css/main.d3eb309d.css.map",
+    "main.42b1701f.js.map": "/CSIT314-T05-CodeCrusaders/static/js/main.42b1701f.js.map",
+    "453.a6a97343.chunk.js.map": "/CSIT314-T05-CodeCrusaders/static/js/453.a6a97343.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.d3eb309d.css",
+    "static/js/main.42b1701f.js"
+  ]
+}
