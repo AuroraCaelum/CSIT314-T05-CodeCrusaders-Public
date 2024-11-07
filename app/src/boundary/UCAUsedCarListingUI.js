@@ -610,8 +610,8 @@ function UCAUsedCarListingUI() {
 
                         <span>{car.mileage.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</span>
                         <span>${car.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</span>
-                        <button onClick={() => handleViewUsedCar(car.usedCarId)} className="uclInspect-button">
-                            Inspect
+                        <button onClick={() => viewUsedCar(car.usedCarId)} className="uclInspect-button">
+                            Inspects
                         </button>
                         <span>
                         <div className="counter-display">
