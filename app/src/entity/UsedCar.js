@@ -1,7 +1,7 @@
 // File path: src/entity/UsedCar.js
 import FirebaseService from '../FirebaseService';
 import { db } from './../firebase';  // Only import db for Firestore operations
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { doc, updateDoc, increment, collection, query, where, getDocs } from 'firebase/firestore';
 
 class UsedCar {
     constructor(
