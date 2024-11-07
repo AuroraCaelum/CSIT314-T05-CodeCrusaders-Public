@@ -172,5 +172,9 @@
             border-radius: 5px;
             color: #ccc;
         }
+
+        img {
+            margin: 0em 2em 3px;
+        }
     }
 }

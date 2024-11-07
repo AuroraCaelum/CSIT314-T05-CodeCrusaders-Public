@@ -5,6 +5,7 @@ import {
     setDoc,
     getDoc,
     updateDoc,
+    deleteDoc,
     query,
     where,
     getDocs
@@ -87,15 +88,27 @@ class FirebaseService {
         }
     }
 
+    async deleteDocument(collectionName, docId) {
+        try {
+            const docRef = doc(db, collectionName, docId);
+            await deleteDoc(docRef);
+            console.log(`Document with ID ${docId} has been deleted successfully.`);
+            return true;
+        } catch (error) {
+            console.error("Error deleting document:", error);
+            return false;
+        }
+    }
+
     // Upload a file to Firebase Storage
     async uploadFile(file, folder) {
         try {
+            console.log("File object: ", file);
             const storageRef = ref(storage, `${folder}/${file.name}`);
-            const uploadTask = uploadBytesResumable(storageRef, file);
+            const snapshot = await uploadBytesResumable(storageRef, file);
+            const url = getDownloadURL(snapshot.ref);
             // Await completion of upload and retrieve download URL
-            await uploadTask;
-            const url = await getDownloadURL(storageRef);
-            console.log("File uploaded successfully");
+            console.log("File uploaded successfully. URL: ", url);
             return url;
         } catch (error) {
             console.error("Error uploading file:", error);

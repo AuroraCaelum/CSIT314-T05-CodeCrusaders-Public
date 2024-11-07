@@ -6,9 +6,9 @@ class CreateUsedCarController {
 
     // Create a new used car entry
     async createUsedCar(
-        agent_username, seller_username, car_name, car_type,
+        usedCarId, agent_username, seller_username, car_name, car_type,
         car_manufacturer, car_image, description,
-        features, price, milage,
+        features, price, mileage,
         manufacture_year, engine_cap
     ) {
         try {
@@ -17,20 +17,14 @@ class CreateUsedCarController {
             if (!isValidSeller) {
                 return { success: false, message: 'Seller is not authorized to create used car listings.' };
             }
+            console.log("New Car Details(C):", usedCarId, agent_username, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap)
 
-            // Proceed to create the used car entry if seller is valid
-            const car = new UsedCar(
-                agent_username, seller_username, car_name, car_type,
-                car_manufacturer, car_image, description,
-                features, price, milage,
-                manufacture_year, engine_cap
-            );
-            const success = await car.createUsedCar();
-            if (success) {
-                return { success: true, message: 'Used car created successfully' };
-            } else {
-                return { success: false, message: 'Failed to create used car' };
-            }
+            const usedCar = new UsedCar(usedCarId, agent_username, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap);
+            await usedCar.createUsedCar(usedCarId, agent_username, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap);
+            console.log("Used car Creatd successfully");
+            console.log("New Car Details(C22):", usedCarId, agent_username, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap)
+            return true;
+            
         } catch (error) {
             console.error('Error creating used car:', error);
             return { success: false, message: error.message };
@@ -53,15 +47,13 @@ class ViewUsedCarController {
     // View a used car by its ID
     async viewUsedCar(usedCarId) {
         try {
-            const carData = await UsedCar.viewUsedCar(usedCarId);
-            if (carData) {
-                return { success: true, data: carData };
-            } else {
-                return { success: false, message: 'Used car not found' };
-            }
+            const usedCar = new UsedCar();
+            const carData = await usedCar.viewUsedCar(usedCarId);
+            console.log("Car Data(C):", carData);
+            return carData ;
         } catch (error) {
             console.error('Error viewing used car:', error);
-            return { success: false, message: error.message };
+            return error;
         }
     }
 }
@@ -69,44 +61,23 @@ class ViewUsedCarController {
 class UpdateUsedCarController {
 
     // Update an existing used car entry
-    async updateUsedCar(
-        usedCarId, seller_username, car_name, car_type,
-        car_manufacturer, car_image, description,
-        features, accessories, price, milage,
-        manufacture_year, engine_cap, curb_weight
-    ) {
+    async updateUsedCar(usedCarId, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap) {
         try {
             // Validate if the seller exists
             const isValidSeller = await UserAccount.validateSeller(seller_username);
             if (!isValidSeller) {
-                return { success: false, message: 'Invalid seller username' };
+                console.log("Invalid Seller username");
             }
-            const newData = {
-                usedCarId,
-                seller_username,
-                car_name,
-                car_type,
-                car_manufacturer,
-                car_image,
-                description,
-                features,
-                //accessories,
-                price,
-                milage,
-                manufacture_year,
-                engine_cap
-                //curb_weight
-            };
 
-            const success = await UsedCar.updateUsedCar(usedCarId, newData);
-            if (success) {
-                return { success: true, message: 'Used car updated successfully' };
-            } else {
-                return { success: false, message: 'Failed to update used car' };
-            }
+            const usedCar = new UsedCar(usedCarId, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap);
+            await usedCar.updateUsedCar(usedCarId, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap);
+            
+            console.log("Used car updated successfully");
+            return true;
+
         } catch (error) {
             console.error('Error updating used car:', error);
-            return { success: false, message: error.message };
+            return false;
         }
     }
 }
@@ -116,8 +87,10 @@ class DeleteUsedCarController {
     // Suspend a used car entry
     async deleteUsedCar(usedCarId) {
         try {
-            const success = await UsedCar.deleteUsedCar(usedCarId);
+            const usedCar = new UsedCar();
+            const success = await usedCar.deleteUsedCar(usedCarId);
             if (success) {
+                console.log(usedCarId);
                 return { success: true, message: 'Used car deleted successfully' };
             } else {
                 return { success: false, message: 'Failed to delete used car' };
@@ -132,10 +105,11 @@ class DeleteUsedCarController {
 class SearchUsedCarController {
 
     // Search for a used car by multiple filters
-    async searchUsedCar(carmodel, cartype, priceMin, priceMax, manufactureYear) {
+    async searchUsedCar(carmodel, cartype, priceRange, manufactureYear) {
         try {
             // Pass each filter parameter directly to the entity's search method
-            const result = await UsedCar.searchUsedCar(carmodel, cartype, priceMin, priceMax, manufactureYear);
+            const usedCar = new UsedCar();
+            const result = await usedCar.searchUsedCar(carmodel, cartype, priceRange, manufactureYear);
 
             // Return the result (success or failure with message)
             return result;
