@@ -33,7 +33,8 @@ function UCARateReviewUI() {
     //     window.open("/", "_self")
     // }
 
-    const viewRateReview = (user) => { //not done
+    const viewRateReview = (user) => {
+        const username = Cookies.get('username');
         Swal.fire({
             title: 'View Used Car',
             html: `
@@ -100,9 +101,9 @@ function UCARateReviewUI() {
 
             <div className="rarUser-table">
                 <div className="rarTable-header">
-                    <span>Ratings:</span>
-                    <span>Reviews:</span>
-                    <span>Type:</span>
+                    <span>Ratings</span>
+                    <span>Reviews</span>
+                    <span>Type</span>
                     <span></span>
                 </div>
                 {users.map((user) => (
