@@ -19,16 +19,6 @@ class CreateUserAccountController {
 
 class ViewUserAccountController {
 
-    static async getUserAccountList() {
-        try {
-            const userList = await UserAccount.getUserAccountList();
-            return userList;
-        } catch (error) {
-            console.log("Error:", error);
-            throw error;
-        }
-    }
-
     async viewUserAccount(username) {
         // const { username } = req.params;
         try {

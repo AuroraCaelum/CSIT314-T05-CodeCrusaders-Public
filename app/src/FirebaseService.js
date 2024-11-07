@@ -69,7 +69,7 @@ class FirebaseService {
 
             const snapshot = await getDocs(q);
             const results = [];
-            snapshot.forEach(doc => results.push({ ...doc.data(), userId: doc.id }));
+            snapshot.forEach(doc => results.push({ ...doc.data(), documentId: doc.id }));
             return results;
         } catch (error) {
             console.error("Error searching by fields:", error);

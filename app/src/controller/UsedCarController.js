@@ -34,16 +34,6 @@ class CreateUsedCarController {
 
 class ViewUsedCarController {
 
-    static async getUsedCarList() {
-        try {
-            const usedCarList = await UsedCar.getUsedCarList();
-            return usedCarList;
-        } catch (error) {
-            console.log("Error:", error);
-            throw error;
-        }
-    }
-
     // View a used car by its ID
     async viewUsedCar(usedCarId) {
         try {

@@ -16,11 +16,12 @@ class LeaveRateReviewController {
     }
 }
 
-class RateReviewController {
+class ViewRateReviewController {
     // Get all reviews for a specific agent
-    async viewRateReviewsForAgent(agentUsername) {
+
+    async viewRateReview(rateReviewId) {
         try {
-            const result = await RateReview.viewRateReview(agentUsername);
+            const result = await RateReview.viewRateReview(rateReviewId);
             return result;
         } catch (error) {
             console.error('Error fetching reviews for agent:', error);
@@ -29,4 +30,4 @@ class RateReviewController {
     }
 }
 
-export { LeaveRateReviewController, RateReviewController} ;
+export { LeaveRateReviewController, ViewRateReviewController} ;
