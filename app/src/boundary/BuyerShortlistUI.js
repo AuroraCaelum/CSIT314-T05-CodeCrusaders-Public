@@ -3,6 +3,7 @@ import Cookies from "js-cookie";
 import "./BuyerShortlistUI.css";
 import { UserLogoutController } from "../controller/UserAuthController";
 import { ViewUsedCarController, SearchUsedCarController } from "../controller/UsedCarController";
+import { LeaveRateReviewController } from "../controller/RateReviewController";
 
 import Swal from 'sweetalert2';
 
@@ -10,7 +11,7 @@ function BuyerShortlistUI() {
     const [username] = useState(Cookies.get("username"));
     //const [searchUsername, setSearchUsername] = useState("");
     const [cars, setCars] = useState([
-        { car_name: "Loading...", manufacture_year: "Loading...", mileage: "Loading...", price: "Loading...", car_image: "https://placehold.co/100x100?text=Car+Image" }
+        { car_name: "Loading...", description: "Loading...", manufacture_year: "Loading...", mileage: "Loading...", price: "Loading...", car_image: "https://placehold.co/100x100?text=Car+Image" }
     ]);
 
     useEffect(() => {
@@ -20,6 +21,7 @@ function BuyerShortlistUI() {
                 const carData = snapshot.docs.map(doc => ({
                     usedCarId: doc.id,
                     car_name: doc.data().car_name,
+                    description: doc.data().description,
                     manufacture_year: doc.data().manufacture_year,
                     mileage: doc.data().mileage,
                     price: doc.data().price,
@@ -43,10 +45,6 @@ function BuyerShortlistUI() {
         const manufactureYearInput = document.getElementById('manufactureYear');
 
         let priceRange = priceRangeInput.value.toString().split("-");
-
-        // let priceRange = [];
-        // priceRange[0] = priceRangeInput.value.toString().split("-")[0];
-        // priceRange[1] = priceRangeInput.value.toString().split("-")[1];
 
         const filterCriteria = {
             car_name: carNameInput ? carNameInput.value : '',
@@ -91,7 +89,9 @@ function BuyerShortlistUI() {
 
     };
 
-    const viewUsedCar = async (usedCarId) => { //not done
+    const viewUsedCar = async (usedCarId) => {
+        //const username = Cookies.get('username');
+
         console.log('Fetching used Car for:', usedCarId);
         const viewUsedCarController = new ViewUsedCarController();
         const usedCar = await viewUsedCarController.viewUsedCar(usedCarId);
@@ -116,9 +116,9 @@ function BuyerShortlistUI() {
                 focusConfirm: false
             }).then((result) => {
                 if (result.isConfirmed) {
-                    handleRateAndReview(usedCarId);
+                    leaveRateReview(usedCar.body.agent_username);
                 } else if (result.isDenied) {
-                    handleLoanCalculator(usedCar.price);
+                    openLoanCalculator(usedCar.body.price);
                 }
             });
             console.log(usedCar);
@@ -134,14 +134,14 @@ function BuyerShortlistUI() {
         }
     };
 
-    const handleRateAndReview = (usedCarId, agentName) => {
+    const leaveRateReview = (agent_username) => {
         let ratingInput = 0, reviewInput;
 
         Swal.fire({
             title: '<h2 style="text-decoration: underline;">Feedback</h2>',
             html: `
                 <div>
-                    <p><strong>Agent:</strong> ${agentName}</p>
+                    <p><strong>Agent:</strong> ${agent_username}</p>
                 </div>
                 <div id="star-rating" style="margin: 10px 0;">
                     <label>Rating:</label>
@@ -177,16 +177,28 @@ function BuyerShortlistUI() {
 
                 return { rating: ratingInput, review: reviewInput };
             }
-        }).then((result) => {
+        }).then(async (result) => {
             if (result.isConfirmed) {
                 const { rating, review } = result.value;
-                console.log(`Rating submitted for car ${usedCarId}:`, { rating, review });
-                Swal.fire('Thank you!', 'Your rating and review have been submitted.', 'success');
+
+                const reviewer_username = Cookies.get('username');
+                const reviewer_type = Cookies.get('userProfile');
+
+                const leaveRateReviewController = new LeaveRateReviewController(agent_username, rating, review, reviewer_username, reviewer_type);
+                const isSuccess = await leaveRateReviewController.leaveRateReview(agent_username, rating, review, reviewer_username, reviewer_type);
+
+                if(isSuccess){
+                    console.log(`Rating submitted for agent ${agent_username}:`, { rating, review });
+                    Swal.fire('Thank you!', 'Your rating and review have been submitted.', 'success');
+                } else {
+                    console.log('Rating submission failed');
+                    Swal.fire('Error', 'Failed to submit your rating and review. Please try again later.', 'error');
+                }
             }
         });
     };
 
-    const handleLoanCalculator = (price) => {
+    const openLoanCalculator = async (price) => {
         let interestRateInput, loanTermInput;
 
         Swal.fire({
@@ -375,20 +387,22 @@ function BuyerShortlistUI() {
             </div>
             <div className="bsUser-table">
                 <div className="bsTable-header">
-                    <span></span>
-                    <span>Car Name:</span>
-                    <span>Manufactured:</span>
-                    <span>Mileage:</span>
-                    <span>Price:</span>
+                    <span>Car Picture</span>
+                    <span>Car Name</span>
+                    <span>Description</span>
+                    <span>Manufactured</span>
+                    <span>Mileage</span>
+                    <span>Price</span>
                     <span></span>
                 </div>
                 {cars.map((car) => (
                     <div key={car.usedCarId} className="bsTable-row">
                         <img src={car.car_image} alt="Car" className="bsCar-image" />
                         <span>{car.car_name}</span>
+                        <span>{car.description}</span>
                         <span>{car.manufacture_year}</span>
-                        <span>{car.mileage.toLocaleString()}</span>
-                        <span>${car.price.toLocaleString()}</span>
+                        <span>{car.mileage.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</span>
+                        <span>${car.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</span>
                         <span>
                             <button onClick={() => viewUsedCar(car.usedCarId)} className="bsInspect-button">
                                 Inspect

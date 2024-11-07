@@ -23,7 +23,9 @@ class RateReview {
                 reviewTo: agent_username,
             };
 
-            await RateReview.firebaseService.addDocument('RateReview', reviewer_username, reviewData);
+            let documentId = Date.now().toString().concat(reviewer_username)
+
+            await RateReview.firebaseService.addDocument('RateReview', documentId, reviewData);
             console.log("Rate and review saved successfully");
             return { success: true, message: "Rate and review saved successfully" };
         } catch (error) {
