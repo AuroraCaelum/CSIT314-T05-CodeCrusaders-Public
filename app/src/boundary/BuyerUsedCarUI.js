@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import "./BuyerUsedCarUI.css";
+import { Util } from "../Util";
 import { UserLogoutController } from "../controller/UserAuthController";
 import { ViewUsedCarController, SearchUsedCarController } from "../controller/UsedCarController";
 import { LeaveRateReviewController } from "../controller/RateReviewController";
@@ -16,7 +17,7 @@ function BuyerUsedCarUI() {
 
     useEffect(() => {
         const fetchCars = async () => {
-            const snapshot = await ViewUsedCarController.getUsedCarList();
+            const snapshot = await Util.getUsedCarList();
             if (snapshot !== null) {
                 const carData = snapshot.docs.map(doc => ({
                     usedCarId: doc.id,
