@@ -35,7 +35,7 @@ function UCAUsedCarListingUI() {
     }, []);
 
     if (Cookies.get("userProfile") !== "UsedCarAgent") {
-        window.open("/", "_self")
+        window.open("/CSIT314-T05-CodeCrusaders/", "_self")
     }
 
 
@@ -459,7 +459,7 @@ function UCAUsedCarListingUI() {
                 confirmButtonText: 'Back to login',
                 timer: 1500
             }).then(() => {
-                window.open("/", "_self")
+                window.open("/CSIT314-T05-CodeCrusaders/", "_self")
             });
         } else {
             Swal.fire({

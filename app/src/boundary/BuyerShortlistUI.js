@@ -183,7 +183,7 @@ function BuyerShortlistUI() {
                 const leaveRateReviewController = new LeaveRateReviewController(agent_username, rating, review, reviewer_username, reviewer_type);
                 const isSuccess = await leaveRateReviewController.leaveRateReview(agent_username, rating, review, reviewer_username, reviewer_type);
 
-                if(isSuccess){
+                if (isSuccess) {
                     console.log(`Rating submitted for agent ${agent_username}:`, { rating, review });
                     Swal.fire('Thank you!', 'Your rating and review have been submitted.', 'success');
                 } else {
@@ -274,7 +274,7 @@ function BuyerShortlistUI() {
                 confirmButtonText: 'Back to login',
                 timer: 1500
             }).then(() => {
-                window.open("/", "_self")
+                window.open("/CSIT314-T05-CodeCrusaders/", "_self")
             });
         } else {
             Swal.fire({

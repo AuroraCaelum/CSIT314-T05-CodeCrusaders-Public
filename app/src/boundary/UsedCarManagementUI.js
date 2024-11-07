@@ -9,17 +9,17 @@ function UsedCarManagementUI() {
     const [username] = useState(Cookies.get("username"))
 
     if (Cookies.get("userProfile") !== "UsedCarAgent") {
-        window.open("/", "_self")
+        window.open("/CSIT314-T05-CodeCrusaders/", "_self")
     }
 
     const handleUsedCarListing = () => {
         console.log("Used Car Management");
-        window.open("/ucausedcarlisting", "_self");
+        window.open("/CSIT314-T05-CodeCrusaders/ucausedcarlisting", "_self");
     };
 
     const handleFeedback = () => {
         console.log("Feedback");
-        window.open("/ucarateandreview", "_self");
+        window.open("/CSIT314-T05-CodeCrusaders/ucarateandreview", "_self");
     };
 
     const handleLogout = async () => {
@@ -33,7 +33,7 @@ function UsedCarManagementUI() {
                 confirmButtonText: 'Back to login',
                 timer: 1500
             }).then(() => {
-                window.open("/", "_self")
+                window.open("/CSIT314-T05-CodeCrusaders/", "_self")
             });
         } else {
             Swal.fire({

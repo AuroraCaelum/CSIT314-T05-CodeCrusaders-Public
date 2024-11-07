@@ -39,7 +39,7 @@ function BuyerUsedCarUI() {
 
     const handleBuyerShortlist = () => {
         console.log("Buyer Shortlist");
-        window.open("/buyershortlist", "_self");
+        window.open("/CSIT314-T05-CodeCrusaders/buyershortlist", "_self");
     };
 
     const searchUsedCar = async () => {
@@ -206,7 +206,7 @@ function BuyerUsedCarUI() {
                 const leaveRateReviewController = new LeaveRateReviewController(agent_username, rating, review, reviewer_username, reviewer_type);
                 const isSuccess = await leaveRateReviewController.leaveRateReview(agent_username, rating, review, reviewer_username, reviewer_type);
 
-                if(isSuccess){
+                if (isSuccess) {
                     console.log(`Rating submitted for agent ${agent_username}:`, { rating, review });
                     Swal.fire('Thank you!', 'Your rating and review have been submitted.', 'success');
                 } else {
@@ -286,7 +286,7 @@ function BuyerUsedCarUI() {
             const saveShortlistController = new SaveShortlistController();
             const isSuccess = saveShortlistController.saveToShortlist(username, usedCarId);
 
-            if(isSuccess){
+            if (isSuccess) {
                 console.log(`Car ${usedCarId} added to shortlist.`);
             } else {
                 console.log(`Car ${usedCarId} failed to add on shortlist.`);
@@ -305,7 +305,7 @@ function BuyerUsedCarUI() {
                 confirmButtonText: 'Back to login',
                 timer: 1500
             }).then(() => {
-                window.open("/", "_self")
+                window.open("/CSIT314-T05-CodeCrusaders/", "_self")
             });
         } else {
             Swal.fire({

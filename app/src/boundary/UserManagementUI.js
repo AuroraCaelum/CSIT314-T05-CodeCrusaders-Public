@@ -9,17 +9,17 @@ function UserManagementUI() {
     const [username] = useState(Cookies.get("username"))
 
     if (Cookies.get("userProfile") !== "UserAdmin") {
-        window.open("/", "_self")
+        window.open("/CSIT314-T05-CodeCrusaders/", "_self")
     }
 
     const handleAccountManagement = () => {
         console.log("User Account Management");
-        window.open("/useraccountmanagement", "_self");
+        window.open("/CSIT314-T05-CodeCrusaders/useraccountmanagement", "_self");
     };
 
     const handleAccountProfile = () => {
         console.log("User Profile Management");
-        window.open("/userprofilemanagement", "_self");
+        window.open("/CSIT314-T05-CodeCrusaders/userprofilemanagement", "_self");
     };
 
     const handleLogout = async () => {
@@ -33,7 +33,7 @@ function UserManagementUI() {
                 confirmButtonText: 'Back to login',
                 timer: 1500
             }).then(() => {
-                window.open("/", "_self")
+                window.open("/CSIT314-T05-CodeCrusaders/", "_self")
             });
         } else {
             Swal.fire({

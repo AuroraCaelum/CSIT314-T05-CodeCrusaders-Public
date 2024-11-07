@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import "./UserProfileManagementUI.css";
 import { Util } from "../Util";
 import { UserLogoutController } from "../controller/UserAuthController";
-import {ViewUserProfileController} from "../controller/UserProfileController";
+import { ViewUserProfileController } from "../controller/UserProfileController";
 
 import Swal from 'sweetalert2';
 
@@ -31,7 +31,7 @@ function UserProfileManagementUI() {
     }, []);
 
     if (Cookies.get("userProfile") !== "UserAdmin") {
-        window.open("/", "_self")
+        window.open("/CSIT314-T05-CodeCrusaders/", "_self")
     }
 
     const createUserProfile = () => {
@@ -70,7 +70,7 @@ function UserProfileManagementUI() {
                 if (!pName || !description || !type) {
                     Swal.showValidationMessage(`Please fill in all the fields`);
                 }
-                else{
+                else {
                     Swal.fire("Profile Created!");
                 }
 
@@ -141,9 +141,9 @@ function UserProfileManagementUI() {
                 const pName = document.getElementById('profileName').value;
                 const description = document.getElementById('description').value;
                 const type = document.getElementById('type').value;
-        
-    
-                if (!pName || !description || !type ) {
+
+
+                if (!pName || !description || !type) {
                     Swal.showValidationMessage(`Please fill in all fields`);
                     return false;
                 }
@@ -173,7 +173,7 @@ function UserProfileManagementUI() {
                 confirmButtonText: 'Back to login',
                 timer: 1500
             }).then(() => {
-                window.open("/", "_self")
+                window.open("/CSIT314-T05-CodeCrusaders/", "_self")
             });
         } else {
             Swal.fire({
@@ -242,7 +242,7 @@ function UserProfileManagementUI() {
                         <span>{user.pName}</span>
                         <span>{user.description}</span>
                         <span>{user.type}</span>
-                        <button onClick={() => viewUserProfile(user)}className="upmInspect-button">Inspect</button>
+                        <button onClick={() => viewUserProfile(user)} className="upmInspect-button">Inspect</button>
                     </div>
                 ))}
             </div>
