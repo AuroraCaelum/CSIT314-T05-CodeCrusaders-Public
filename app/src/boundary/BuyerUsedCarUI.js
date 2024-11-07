@@ -10,7 +10,7 @@ function BuyerUsedCarUI() {
     const [username] = useState(Cookies.get("username"));
     //const [searchUsername, setSearchUsername] = useState("");
     const [cars, setCars] = useState([
-        { car_name: "Loading...", manufacture_year: "Loading...", mileage: "Loading...", price: "Loading...", car_image: "https://placehold.co/100x100?text=Car+Image" }
+        { car_name: "Loading...", manufacture_year: "Loading...", mileage: "Loading...", price: "Loading...", car_image: "https://placehold.co/100x100?text=Car+Image", inspectCount: 0, shortlistCount: 0  }
     ]);
 
     useEffect(() => {
@@ -23,7 +23,9 @@ function BuyerUsedCarUI() {
                     manufacture_year: doc.data().manufacture_year,
                     mileage: doc.data().mileage,
                     price: doc.data().price,
-                    car_image: (doc.data().car_image)
+                    car_image: (doc.data().car_image),
+                    inspectCount: 0,
+                    shortlistCount: 0
                 }));
                 setCars(carData);
             }
@@ -41,7 +43,7 @@ function BuyerUsedCarUI() {
         window.open("/buyershortlist", "_self");
     };
 
-    const handleSearchUsedCar = async () => {
+    const searchUsedCar = async () => {
         const carNameInput = document.getElementById('car_name');
         const vehicleTypeInput = document.getElementById('vehicleType');
         const priceRangeInput = document.getElementById('priceRange');
@@ -84,11 +86,20 @@ function BuyerUsedCarUI() {
 
     };
 
-    const handleViewUsedCar = async (usedCarId) => { //not done
+    const viewUsedCar = async (usedCarId) => { //not done
         console.log('Fetching used Car for:', usedCarId);
         const viewUsedCarController = new ViewUsedCarController();
+        const updatedCars = cars.map(car => {
+            if (car.usedCarId === usedCarId) {
+                car.inspectCount += 1;
+            }
+            return car;
+        });
+        setCars(updatedCars);
         const usedCar = await viewUsedCarController.viewUsedCar(usedCarId);
         console.log("Used Car data received:", usedCar);
+
+        
 
         if (usedCar) {
             Swal.fire({
@@ -109,7 +120,7 @@ function BuyerUsedCarUI() {
                 focusConfirm: false
             }).then((result) => {
                 if (result.isConfirmed) {
-                    handleRateAndReview(usedCar.body.agent_username);
+                    leaveRateReview(usedCar.body.agent_username);
                 } else if (result.isDenied) {
                     openLoanCalculator(usedCar.body.price);
                 }
@@ -127,7 +138,7 @@ function BuyerUsedCarUI() {
         }
     };
 
-    const handleRateAndReview = async(agent_username) => {
+    const leaveRateReview = (agent_username) => {
         let ratingInput = 0, reviewInput;
     
         Swal.fire({
@@ -229,7 +240,14 @@ function BuyerUsedCarUI() {
         });
     };
 
-    const handleAddToShortlist = (usedCarId) => {
+    const saveToShortlist = (usedCarId) => {
+        const updatedCars = cars.map(car => {
+            if (car.usedCarId === usedCarId) {
+                car.shortlistCount += 1;  // Increment shortlist count when 'Save to Shortlist' is clicked
+            }
+            return car;
+        });
+        setCars(updatedCars);
         Swal.fire({
             title: 'Car Added!',
             text: "The car has been added to your shortlist.",
@@ -354,7 +372,7 @@ function BuyerUsedCarUI() {
                         <option value="2010">2010</option>
                     </select>
                     
-                    <button onClick={handleSearchUsedCar} className="bucSearch-button">
+                    <button onClick={searchUsedCar} className="bucSearch-button">
                         Search
                     </button>
                 </span>
@@ -366,8 +384,9 @@ function BuyerUsedCarUI() {
             </div>
             <div className="bucUser-table">
                 <div className="bucTable-header">
-                    <span></span>
+                    <span>Car Picture</span>
                     <span>Car Name:</span>
+                    <span>Description:</span>
                     <span>Manufactured:</span>
                     <span>Mileage:</span>
                     <span>Price:</span>
@@ -377,14 +396,15 @@ function BuyerUsedCarUI() {
                     <div key={car.usedCarId} className="bucTable-row">
                         <img src={car.car_image} alt="Car" className="bucCar-image" />
                         <span>{car.car_name}</span>
+                        <span>{car.description}</span>
                         <span>{car.manufacture_year}</span>
                         <span>{car.mileage.toLocaleString()}</span>
                         <span>${car.price.toLocaleString()}</span>
                         <span>
-                            <button onClick={() => handleViewUsedCar(car.usedCarId)} className="bucInspect-button">
+                            <button onClick={() => viewUsedCar(car.usedCarId)} className="bucInspect-button">
                                 Inspect
                             </button>
-                            <button onClick={() => handleAddToShortlist(car.usedCarId)} className="bucSTS-button">
+                            <button onClick={() => saveToShortlist(car.usedCarId)} className="bucSTS-button">
                                 Save to Shortlist
                             </button>
                         </span>

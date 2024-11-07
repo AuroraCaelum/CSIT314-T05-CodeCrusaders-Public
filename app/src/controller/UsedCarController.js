@@ -120,4 +120,18 @@ class SearchUsedCarController {
     }
 }
 
-export { CreateUsedCarController, ViewUsedCarController, UpdateUsedCarController, DeleteUsedCarController, SearchUsedCarController };
+
+class GetUsedCarViewCountController {
+    async getUsedCarViewCount(usedCarId) {
+
+    }
+}
+
+
+class GetUsedCarShortlistCountController {
+    async getUsedCarShortlistCount(usedCarId) {
+
+    }
+}
+
+export { CreateUsedCarController, ViewUsedCarController, UpdateUsedCarController, DeleteUsedCarController, SearchUsedCarController, GetUsedCarViewCountController, GetUsedCarShortlistCountController };
