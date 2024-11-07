@@ -402,7 +402,7 @@ function BuyerUsedCarUI() {
                         <span>${car.price.toLocaleString()}</span>
                         <span>
                             <button onClick={() => viewUsedCar(car.usedCarId)} className="bucInspect-button">
-                                Inspect
+                                View
                             </button>
                             <button onClick={() => saveToShortlist(car.usedCarId)} className="bucSTS-button">
                                 Save to Shortlist
