@@ -242,13 +242,13 @@ class UsedCar {
             const carData = await firebaseService.getDocument('UsedCar', usedCarId);
 
             if (carData && carData.view_count !== undefined) {
-                return { success: true, viewCount: carData.view_count };
+                return carData.view_count; // Return only the count as an integer
             } else {
-                return { success: false, message: "View count not found for the provided used car ID" };
+                throw new Error("View count not found for the provided used car ID");
             }
         } catch (error) {
             console.error("Error retrieving used car view count:", error);
-            return { success: false, message: error.message };
+            throw error; // Throw error to be handled by controller
         }
     }
 
@@ -258,13 +258,13 @@ class UsedCar {
             const carData = await firebaseService.getDocument('UsedCar', usedCarId);
 
             if (carData && carData.shortlist_count !== undefined) {
-                return { success: true, shortlistCount: carData.shortlist_count };
+                return carData.shortlist_count; // Return only the count as an integer
             } else {
-                return { success: false, message: "Shortlist count not found for the provided used car ID" };
+                throw new Error("Shortlist count not found for the provided used car ID");
             }
         } catch (error) {
             console.error("Error retrieving used car shortlist count:", error);
-            return { success: false, message: error.message };
+            throw error; // Throw error to be handled by controller
         }
     }
 
