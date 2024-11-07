@@ -10,7 +10,7 @@ function BuyerUsedCarUI() {
     const [username] = useState(Cookies.get("username"));
     //const [searchUsername, setSearchUsername] = useState("");
     const [cars, setCars] = useState([
-        { car_name: "Loading...", manufacture_year: "Loading...", mileage: "Loading...", price: "Loading...", car_image: "https://placehold.co/100x100?text=Car+Image", inspectCount: 0, shortlistCount: 0  }
+        { car_name: "Loading...", manufacture_year: "Loading...", mileage: "Loading...", price: "Loading...", car_image: "https://placehold.co/100x100?text=Car+Image", inspectCount: 0, shortlistCount: 0 }
     ]);
 
     useEffect(() => {
@@ -59,7 +59,7 @@ function BuyerUsedCarUI() {
             priceRange: priceRange,
             manufactureYear: manufactureYearInput.value
         };
-        
+
         const searchUsedCarController = new SearchUsedCarController();
         const searchResult = await searchUsedCarController.searchUsedCar(
             filterCriteria.car_name,
@@ -71,15 +71,26 @@ function BuyerUsedCarUI() {
 
         if (searchResult) {
             console.log("Search results:", searchResult.data);
-            const carData = searchResult.data.map(doc => ({
-                usedCarId: doc.id,
-                car_name: doc.car_name,
-                manufacture_year: doc.manufacture_year,
-                mileage: doc.mileage,
-                price: doc.price,
-                car_image: doc.car_image
-            }));
-            setCars(carData);
+            if (searchResult.data === undefined || searchResult.data.length === 0) {
+                Swal.fire({
+                    title: 'No Results',
+                    text: 'No used cars found matching the search criteria.',
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            } else {
+                const carData = searchResult.data.map(doc => ({
+                    usedCarId: doc.id,
+                    car_name: doc.car_name,
+                    manufacture_year: doc.manufacture_year,
+                    mileage: doc.mileage,
+                    price: doc.price,
+                    car_image: doc.car_image
+                }));
+                setCars(carData);
+            }
+
         } else {
             console.error("Search failed:", searchResult.message);
         }
@@ -99,7 +110,7 @@ function BuyerUsedCarUI() {
         const usedCar = await viewUsedCarController.viewUsedCar(usedCarId);
         console.log("Used Car data received:", usedCar);
 
-        
+
 
         if (usedCar) {
             Swal.fire({
@@ -140,7 +151,7 @@ function BuyerUsedCarUI() {
 
     const leaveRateReview = (agent_username) => {
         let ratingInput = 0, reviewInput;
-    
+
         Swal.fire({
             title: '<h2 style="text-decoration: underline;">Feedback</h2>',
             html: `
@@ -173,12 +184,12 @@ function BuyerUsedCarUI() {
             },
             preConfirm: () => {
                 reviewInput = document.getElementById('review').value;
-    
+
                 if (!ratingInput || !reviewInput) {
                     Swal.showValidationMessage(`Please provide both a rating and a review`);
                     return false;
                 }
-    
+
                 return { rating: ratingInput, review: reviewInput };
             }
         }).then((result) => {
@@ -189,7 +200,7 @@ function BuyerUsedCarUI() {
             }
         });
     };
-    
+
     const openLoanCalculator = async (price) => {
         let interestRateInput, loanTermInput;
 
@@ -220,20 +231,20 @@ function BuyerUsedCarUI() {
                     document.getElementById("loanTerm").value = "";
                     document.getElementById("interestRate").value = "";
                 });
-    
+
                 document.getElementById("calculateButton").addEventListener("click", () => {
                     interestRateInput = document.getElementById('interestRate').value;
                     loanTermInput = document.getElementById('loanTerm').value;
-    
+
                     if (!interestRateInput || !loanTermInput) {
                         Swal.showValidationMessage(`Please provide both an interest rate and a loan term`);
                         return;
                     }
-    
+
                     const interestRate = parseFloat(interestRateInput) / 100 / 12; // Monthly interest rate
                     const loanTerm = parseFloat(loanTermInput); // Total payments (months)
                     const monthlyPayment = (price * interestRate) / (1 - Math.pow(1 + interestRate, -loanTerm));
-    
+
                     Swal.fire('Monthly Payment', `Your estimated monthly payment is $${monthlyPayment.toFixed(2)}`, 'info');
                 });
             }
@@ -324,7 +335,7 @@ function BuyerUsedCarUI() {
                     </button>
                 </form> */}
                 <span>
-                    <input id="car_name" class="swal2-input custom-select" placeholder= "Car Name(Hyundai)"></input>
+                    <input id="car_name" class="swal2-input custom-select" placeholder="Car Name(Hyundai)"></input>
 
                     <select id="vehicleType" class="swal2-input custom-select">
                         <option value="">Select Vehicle Type</option>
@@ -371,7 +382,7 @@ function BuyerUsedCarUI() {
                         <option value="2011">2011</option>
                         <option value="2010">2010</option>
                     </select>
-                    
+
                     <button onClick={searchUsedCar} className="bucSearch-button">
                         Search
                     </button>
