@@ -58,7 +58,7 @@ function LoginUI() {
                 }).then(() => {
                     if (userProfile === "UserAdmin") window.open('/usermanagement', "_self")
                     else if (userProfile === "UsedCarAgent") window.open('/usedcarmanagement', "_self")
-                    else if (userProfile === "Buyer") window.open('/buyermain', "_self")
+                    else if (userProfile === "Buyer") window.open('/buyerusedcar', "_self")
                 });
             } else {
                 Swal.fire({
