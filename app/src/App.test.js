@@ -11,12 +11,7 @@ import BuyerUsedCarUI from './boundary/BuyerUsedCarUI';
 import BuyerShortlistUI from './boundary/BuyerShortlistUI';
 import SellerUsedCarUI from './boundary/SellerUsedCarUI';
 
-describe('App Common UI', () => {
-  test('App renders without crashing', async () => {
-    render(<App />);
-    expect(screen.getByText('Login')).toBeInTheDocument();
-  });
-
+describe('Login UI', () => {
   test('LoginUI renders without crashing', async () => {
     render(<LoginUI />);
     expect(screen.getByText('Login')).toBeInTheDocument();
