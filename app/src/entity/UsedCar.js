@@ -77,7 +77,7 @@ class UsedCar {
             const firebaseService = new FirebaseService();
             const carData = await firebaseService.getDocument('UsedCar', usedCarId);
             console.log("Car data:", carData);
-            return { "usedCarId" : usedCarId, "body" : carData };
+            return { "usedCarId": usedCarId, "body": carData };
         } catch (error) {
             console.error("Error fetching car data:", error);
             throw error;
@@ -156,6 +156,9 @@ class UsedCar {
             let carQuery = collection(db, 'UsedCar');
             let priceMin = priceRange[0];
             let priceMax = priceRange[1];
+
+            console.log(priceMin);
+            console.log(priceMax);
 
             const conditions = [];
 
@@ -237,7 +240,7 @@ class UsedCar {
         try {
             const firebaseService = new FirebaseService();
             const carData = await firebaseService.getDocument('UsedCar', usedCarId);
-    
+
             if (carData && carData.view_count !== undefined) {
                 return { success: true, viewCount: carData.view_count };
             } else {
@@ -248,12 +251,12 @@ class UsedCar {
             return { success: false, message: error.message };
         }
     }
-    
+
     static async getUsedCarShortlistCount(usedCarId) {
         try {
             const firebaseService = new FirebaseService();
             const carData = await firebaseService.getDocument('UsedCar', usedCarId);
-    
+
             if (carData && carData.shortlist_count !== undefined) {
                 return { success: true, shortlistCount: carData.shortlist_count };
             } else {
