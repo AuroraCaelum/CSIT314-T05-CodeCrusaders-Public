@@ -1,27 +1,26 @@
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
+import { Util } from "../Util";
 import "./UCAUsedCarListingUI.css";
 import { UserLogoutController } from "../controller/UserAuthController";
-// import { ViewUserAccountController } from "../controller/UserAccountController";
-import { CreateUsedCarController, UpdateUsedCarController } from "../controller/UsedCarController";
-import { ViewUsedCarController, DeleteUsedCarController, SearchUsedCarController } from "../controller/UsedCarController";
+import { CreateUsedCarController, ViewUsedCarController, UpdateUsedCarController, DeleteUsedCarController, SearchUsedCarController } from "../controller/UsedCarController";
 
 import Swal from 'sweetalert2';
 
 function UCAUsedCarListingUI() {
     const [username] = useState(Cookies.get("username"));
-    //const [searchUsername, setSearchUsername] = useState("");
     const [cars, setCars] = useState([
-        { car_name: "Loading...", manufacture_year: "Loading...", mileage: "Loading...", price: "Loading...", car_image: "https://placehold.co/100x100?text=Car+Image", inspectCount: 0, shortlistCount: 0 }
+        { car_name: "Loading...", description: "Loading...", manufacture_year: "Loading...", mileage: "Loading...", price: "Loading...", car_image: "https://placehold.co/100x100?text=Car+Image", inspectCount: 0, shortlistCount: 0 }
     ]);
 
 
     const fetchCars = async () => {
-        const snapshot = await ViewUsedCarController.getUsedCarList();
+        const snapshot = await Util.getUsedCarList();
         if (snapshot !== null) {
             const carData = snapshot.docs.map(doc => ({
                 usedCarId: doc.id,
                 car_name: doc.data().car_name,
+                description: doc.data().description,
                 manufacture_year: doc.data().manufacture_year,
                 mileage: doc.data().mileage,
                 price: doc.data().price,
@@ -404,9 +403,7 @@ function UCAUsedCarListingUI() {
         const priceRangeInput = document.getElementById('priceRange');
         const manufactureYearInput = document.getElementById('manufactureYear');
 
-        let priceRange = [];
-        priceRange[0] = priceRangeInput.value.toString().split("-")[0];
-        priceRange[1] = priceRangeInput.value.toString().split("-")[1];
+        let priceRange = priceRangeInput.value.toString().split("-");
 
         const filterCriteria = {
             car_name: carNameInput ? carNameInput.value : '',
@@ -503,18 +500,6 @@ function UCAUsedCarListingUI() {
             </div>
 
             <div className="uclSearch-bar">
-                {/* <form onSubmit={handleSearch}>
-                    <input
-                        type="text"
-                        placeholder="Used Car Name"
-                        value={searchUsername}
-                        onChange={(e) => setSearchUsername(e.target.value)}
-                    //className="search-input"
-                    />
-                    <button type="submit" className="uclSearch-button">
-                        Search
-                    </button>
-                </form> */}
                 <span>
                     <input id="car_name" class="swal2-input custom-select" placeholder="Car Name(Hyundai)"></input>
 
@@ -577,11 +562,11 @@ function UCAUsedCarListingUI() {
             <div className="uclUser-table">
                 <div className="uclTable-header">
                     <span>Car Picture</span>
-                    <span>Car Name:</span>
-                    <span>Description:</span>
-                    <span>Manufactured:</span>
-                    <span>Mileage:</span>
-                    <span>Price:</span>
+                    <span>Car Name</span>
+                    <span>Description</span>
+                    <span>Manufactured</span>
+                    <span>Mileage</span>
+                    <span>Price</span>
                     <span></span>
                 </div>
                 {cars.map((car) => (
@@ -590,7 +575,6 @@ function UCAUsedCarListingUI() {
                         <span>{car.car_name}</span>
                         <span>{car.description}</span>
                         <span>{car.manufacture_year}</span>
-
                         <span>{car.mileage.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</span>
                         <span>${car.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</span>
                         <button onClick={() => viewUsedCar(car.usedCarId)} className="uclInspect-button">

@@ -18,17 +18,7 @@ class CreateUserProfileController {
     }
 }
 class ViewUserProfileController {
-
-    static async getUserProfiles() {
-        try {
-            const userProfiles = await UserProfile.getUserProfiles();
-            return userProfiles;
-        } catch (error) {
-            console.log("Error:", error);
-            throw error;
-        }
-    }
-
+    
     // View current user's profile
     async viewUserProfile(profileName) {
         try {
