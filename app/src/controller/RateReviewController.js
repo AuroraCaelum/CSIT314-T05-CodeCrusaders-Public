@@ -1,13 +1,13 @@
 // File path: src/controller/RateReviewController.js
 import RateReview from '../entity/RateReview';
 
-class CreateReviewController {
+class LeaveRateReviewController {
 
     // Create a new rate and review
-    async createRateReview(rate, reviewBody, reviewBy, reviewByType, reviewTo, reviewId) {
+    async leaveRateReview(agent_username, rate, review, reviewer_username, reviewer_type) {
         try {
-            const review = new RateReview(rate, reviewBody, reviewBy, reviewByType, reviewTo);
-            const result = await review.createRateReview(reviewId);
+            const review = new RateReview(agent_username, rate, review, reviewer_username, reviewer_type);
+            const result = await review.leaveRateReview(agent_username, rate, review, reviewer_username, reviewer_type);
             return result;
         } catch (error) {
             console.error('Error creating rate and review:', error);
@@ -29,4 +29,4 @@ class RateReviewController {
     }
 }
 
-export { CreateReviewController, RateReviewController} ;
+export { LeaveRateReviewController, RateReviewController} ;
