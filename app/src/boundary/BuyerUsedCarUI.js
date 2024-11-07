@@ -434,7 +434,7 @@ function BuyerUsedCarUI() {
                         <span>${car.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</span>
                         <span>
                             <button onClick={() => viewUsedCar(car.usedCarId)} className="bucInspect-button">
-                                Inspect
+                                View
                             </button>
                             <button onClick={() => saveToShortlist(car.usedCarId)} className="bucSTS-button">
                                 Save to Shortlist
