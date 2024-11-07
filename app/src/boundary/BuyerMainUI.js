@@ -9,12 +9,12 @@ function BuyerManagementUI() {
     const [username] = useState(Cookies.get("username"))
 
     if (Cookies.get("userProfile") !== "Buyer") {
-        window.open("/", "_self")
+        window.open("/CSIT314-T05-CodeCrusaders/", "_self")
     }
 
     const handleBuyerUsedCar = () => {
         console.log("Buyer Used Car");
-        window.open("/buyerusedcar", "_self");
+        window.open("/CSIT314-T05-CodeCrusaders/buyerusedcar", "_self");
     };
 
     const handleLogout = async () => {
@@ -28,7 +28,7 @@ function BuyerManagementUI() {
                 confirmButtonText: 'Back to login',
                 timer: 1500
             }).then(() => {
-                window.open("/", "_self")
+                window.open("/CSIT314-T05-CodeCrusaders/", "_self")
             });
         } else {
             Swal.fire({

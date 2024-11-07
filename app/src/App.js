@@ -16,7 +16,7 @@ import SellerUsedCarUI from './boundary/SellerUsedCarUI';
 
 function App() {
     return (
-        <Router>
+        <Router basename='/CSIT314-T05-CodeCrusaders'>
             <Routes>
                 <Route path="/" element={<LoginUI />} />
                 <Route path="/usermanagement" element={<UserManagementUI />} />

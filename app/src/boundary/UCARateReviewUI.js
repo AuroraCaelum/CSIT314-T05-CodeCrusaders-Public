@@ -10,9 +10,9 @@ import Swal from 'sweetalert2';
 function UCARateReviewUI() {
     const [username] = useState(Cookies.get("username"));
     const [rateReviewList, setRateReviewList] = useState([
-        { rate: "Loading...", review: "Loading...", reviewer_username: "Loading..."}
+        { rate: "Loading...", review: "Loading...", reviewer_username: "Loading..." }
     ]);
-    
+
     const fetchRateReview = async () => {
         const snapshot = await Util.getRateReviewList(username);
         console.log(snapshot)
@@ -26,7 +26,7 @@ function UCARateReviewUI() {
             setRateReviewList(rateReviewData);
         }
     };
-    
+
     useEffect(() => {
         fetchRateReview();
     }, []);
@@ -62,7 +62,7 @@ function UCARateReviewUI() {
         } catch (error) {
             console.error("Error displaying reviews", error);
         }
-        
+
     };
 
     const handleLogout = async () => {
@@ -76,7 +76,7 @@ function UCARateReviewUI() {
                 confirmButtonText: 'Back to login',
                 timer: 1500
             }).then(() => {
-                window.open("/", "_self")
+                window.open("/CSIT314-T05-CodeCrusaders/", "_self")
             });
         } else {
             Swal.fire({
@@ -129,7 +129,7 @@ function UCARateReviewUI() {
                     </div>
 
                 )))}
-                </div>
+            </div>
         </div>
     );
 }
