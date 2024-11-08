@@ -426,8 +426,8 @@ function BuyerUsedCarUI() {
                         </span>
                         <span>
                             <div className="counter-display">
-                                <span><img src={"https://images.app.goo.gl/GRBK8Q5G2u6xhKQA6"} alt="Inspect" className="uclInspect-png-image" />{car.inspectCount}</span>  {/* Display inspect count with an icon */}
-                                <span><img src={"https://images.app.goo.gl/CvYr8UrXJc1sbkKw9"} alt="Shortlist" className="uclShortlist-png-image" />{car.shortlistCount}</span>  {/* Display shortlist count with an icon */}
+                                <span><img src={"/viewIcon.png"} alt="Inspect" className="uclInspect-png-image" />{car.inspectCount}</span>  {/* Display inspect count with an icon */}
+                                <span><img src={"/saveShortlistIcon.png"} alt="Shortlist" className="uclShortlist-png-image" />{car.shortlistCount}</span>  {/* Display shortlist count with an icon */}
                             </div>
                         </span>
                     </div>
