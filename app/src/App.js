@@ -11,11 +11,12 @@ import UCAUsedCarListingUI from './boundary/UCAUsedCarListingUI';
 import UCARateReviewUI from './boundary/UCARateReviewUI';
 import BuyerUsedCarUI from './boundary/BuyerUsedCarUI';
 import BuyerShortlistUI from './boundary/BuyerShortlistUI';
+import SellerUsedCarUI from './boundary/SellerUsedCarUI';
 
 
 function App() {
     return (
-        <Router>
+        <Router basename='/CSIT314-T05-CodeCrusaders'>
             <Routes>
                 <Route path="/" element={<LoginUI />} />
                 <Route path="/usermanagement" element={<UserManagementUI />} />
@@ -26,6 +27,7 @@ function App() {
                 <Route path="/ucarateandreview" element={<UCARateReviewUI />} />
                 <Route path="/buyerusedcar" element={<BuyerUsedCarUI />} />
                 <Route path="/buyershortlist" element={<BuyerShortlistUI />} />
+                <Route path="/sellerusedcar" element={<SellerUsedCarUI />} />
             </Routes>
         </Router>
     );

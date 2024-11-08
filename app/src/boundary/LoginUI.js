@@ -56,9 +56,10 @@ function LoginUI() {
                     confirmButtonText: 'OK',
                     timer: 1500
                 }).then(() => {
-                    if (userProfile === "UserAdmin") window.open('/usermanagement', "_self")
-                    else if (userProfile === "UsedCarAgent") window.open('/usedcarmanagement', "_self")
-                    else if (userProfile === "Buyer") window.open('/buyerusedcar', "_self")
+                    if (userProfile === "UserAdmin") window.open('/CSIT314-T05-CodeCrusaders/usermanagement', "_self")
+                    else if (userProfile === "UsedCarAgent") window.open('/CSIT314-T05-CodeCrusaders/usedcarmanagement', "_self")
+                    else if (userProfile === "Buyer") window.open('/CSIT314-T05-CodeCrusaders/buyerusedcar', "_self")
+                    else if (userProfile === "Seller") window.open('/CSIT314-T05-CodeCrusaders/sellerusedcar', "_self")
                 });
             } else {
                 Swal.fire({

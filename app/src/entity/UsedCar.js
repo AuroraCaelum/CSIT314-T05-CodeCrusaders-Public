@@ -1,7 +1,7 @@
 // File path: src/entity/UsedCar.js
 import FirebaseService from '../FirebaseService';
 import { db } from './../firebase';  // Only import db for Firestore operations
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { doc, updateDoc, increment, collection, query, where, getDocs } from 'firebase/firestore';
 
 class UsedCar {
     constructor(
@@ -242,13 +242,13 @@ class UsedCar {
             const carData = await firebaseService.getDocument('UsedCar', usedCarId);
 
             if (carData && carData.view_count !== undefined) {
-                return { success: true, viewCount: carData.view_count };
+                return carData.view_count; // Return only the count as an integer
             } else {
-                return { success: false, message: "View count not found for the provided used car ID" };
+                throw new Error("View count not found for the provided used car ID");
             }
         } catch (error) {
             console.error("Error retrieving used car view count:", error);
-            return { success: false, message: error.message };
+            throw error; // Throw error to be handled by controller
         }
     }
 
@@ -258,14 +258,47 @@ class UsedCar {
             const carData = await firebaseService.getDocument('UsedCar', usedCarId);
 
             if (carData && carData.shortlist_count !== undefined) {
-                return { success: true, shortlistCount: carData.shortlist_count };
+                return carData.shortlist_count; // Return only the count as an integer
             } else {
-                return { success: false, message: "Shortlist count not found for the provided used car ID" };
+                throw new Error("Shortlist count not found for the provided used car ID");
             }
         } catch (error) {
             console.error("Error retrieving used car shortlist count:", error);
+            throw error; // Throw error to be handled by controller
+        }
+    }
+
+    // increase counter for view_count or shortlist_count when clicked
+    async increaseCount(usedCarId, countType) {
+        try {
+            // Check if countType is valid
+            if (countType !== "view_count" && countType !== "shortlist_count") {
+                throw new Error("Invalid count type. Use 'view_count' or 'shortlist_count'");
+            }
+
+            // Reference to the specific used car document in Firestore
+            const carRef = doc(db, 'UsedCar', usedCarId);
+
+            // Update Firestore document with incremented value
+            await updateDoc(carRef, {
+                [countType]: increment(1)
+            });
+
+            console.log(`Successfully incremented ${countType} for car ID: ${usedCarId}`);
+            return { success: true, message: `${countType} incremented successfully` };
+        } catch (error) {
+            console.error(`Error incrementing ${countType} for used car entry:`, error);
             return { success: false, message: error.message };
         }
     }
+
+
+
+
+
+
+
+
+
 }
 export default UsedCar;

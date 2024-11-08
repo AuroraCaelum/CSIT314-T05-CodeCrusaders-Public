@@ -35,7 +35,7 @@ function UserAccountManagementUI() {
     }, []);
 
     if (Cookies.get("userProfile") !== "UserAdmin") {
-        window.open("/", "_self")
+        window.open("/CSIT314-T05-CodeCrusaders/", "_self")
     }
 
     const createUserAccount = () => {
@@ -96,7 +96,7 @@ function UserAccountManagementUI() {
                 if (!username || !fName || !lName || !password || !phoneNum || !email || !userProfile) {
                     Swal.showValidationMessage(`Please fill in all the fields`);
                 }
-                else{
+                else {
                     Swal.fire("Account Created!");
                 }
 
@@ -117,15 +117,15 @@ function UserAccountManagementUI() {
                 // logic for handle account creation (call Controller)
                 const createUserAccountController = new CreateUserAccountController();
                 const isSuccess = await createUserAccountController.createUserAccount(
-                    fName, 
-                    lName, 
-                    username, 
-                    password, 
-                    phoneNum, 
-                    email, 
+                    fName,
+                    lName,
+                    username,
+                    password,
+                    phoneNum,
+                    email,
                     userProfile
                 );
-                
+
                 if (isSuccess) {
                     console.log("User account successfully created.");
                 } else {
@@ -175,7 +175,7 @@ function UserAccountManagementUI() {
                         if (suspendResult.isConfirmed) {
                             const suspendUserAccountController = new SuspendUserAccountController();
                             const isSuspended = await suspendUserAccountController.suspendUserAccount(username);
-                            
+
                             if (isSuspended) {
                                 Swal.fire('Suspended!', 'The user has been suspended.', 'success');
                             } else {
@@ -229,7 +229,7 @@ function UserAccountManagementUI() {
                 const phoneNum = document.getElementById('phoneNum').value;
                 const email = document.getElementById('email').value;
                 const userProfile = document.getElementById('userProfile').value;
-    
+
                 if (!username || !fName || !lName || !phoneNum || !email || !userProfile) {
                     Swal.showValidationMessage(`Please fill in all fields`);
                     return false;
@@ -249,7 +249,7 @@ function UserAccountManagementUI() {
                 }
             }
         });
-    };    
+    };
 
     const handleLogout = async () => {
         const userAuthController = new UserLogoutController();
@@ -262,7 +262,7 @@ function UserAccountManagementUI() {
                 confirmButtonText: 'Back to login',
                 timer: 1500
             }).then(() => {
-                window.open("/", "_self")
+                window.open("/CSIT314-T05-CodeCrusaders/", "_self")
             });
         } else {
             Swal.fire({
