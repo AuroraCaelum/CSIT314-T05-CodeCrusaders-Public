@@ -188,3 +188,13 @@
         }
     }
 }
+
+/* Icon image size */
+.uclShortlist-png-image {
+    width: 25px;
+    height: auto; 
+  }
+.uclInspect-png-image {
+    width: 30px;
+    height: auto; 
+  }
