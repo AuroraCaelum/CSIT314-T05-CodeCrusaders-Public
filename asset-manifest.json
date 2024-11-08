@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/CSIT314-T05-CodeCrusaders/static/css/main.d3eb309d.css",
-    "main.js": "/CSIT314-T05-CodeCrusaders/static/js/main.e601354c.js",
+    "main.css": "/CSIT314-T05-CodeCrusaders/static/css/main.faac1957.css",
+    "main.js": "/CSIT314-T05-CodeCrusaders/static/js/main.c13cadbf.js",
     "static/js/453.a6a97343.chunk.js": "/CSIT314-T05-CodeCrusaders/static/js/453.a6a97343.chunk.js",
     "index.html": "/CSIT314-T05-CodeCrusaders/index.html",
-    "main.d3eb309d.css.map": "/CSIT314-T05-CodeCrusaders/static/css/main.d3eb309d.css.map",
-    "main.e601354c.js.map": "/CSIT314-T05-CodeCrusaders/static/js/main.e601354c.js.map",
+    "main.faac1957.css.map": "/CSIT314-T05-CodeCrusaders/static/css/main.faac1957.css.map",
+    "main.c13cadbf.js.map": "/CSIT314-T05-CodeCrusaders/static/js/main.c13cadbf.js.map",
     "453.a6a97343.chunk.js.map": "/CSIT314-T05-CodeCrusaders/static/js/453.a6a97343.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.d3eb309d.css",
-    "static/js/main.e601354c.js"
+    "static/css/main.faac1957.css",
+    "static/js/main.c13cadbf.js"
   ]
 }
