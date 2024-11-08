@@ -113,14 +113,26 @@ class SearchUsedCarController {
 
 class GetUsedCarViewCountController {
     async getUsedCarViewCount(usedCarId) {
-
+        try {
+            const viewCount = await UsedCar.getUsedCarViewCount(usedCarId);
+            return viewCount; // Returns only the view count as an integer
+        } catch (error) {
+            console.error("Controller Error fetching view count:", error);
+            return null; // Or handle as needed, e.g., return -1 to indicate error
+        }
     }
 }
 
 
 class GetUsedCarShortlistCountController {
     async getUsedCarShortlistCount(usedCarId) {
-
+        try {
+            const shortlistCount = await UsedCar.getUsedCarShortlistCount(usedCarId);
+            return shortlistCount; // Returns only the shortlist count as an integer
+        } catch (error) {
+            console.error("Controller Error fetching shortlist count:", error);
+            return null; // Or handle as needed, e.g., return -1 to indicate error
+        }
     }
 }
 
