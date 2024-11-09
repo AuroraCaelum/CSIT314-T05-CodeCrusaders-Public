@@ -62,20 +62,22 @@ class UserAccount {
             if (userData && userData.username === username) {
 
                 // Check if password matches
-                if (userData.password === password) {
-                    // Save username and userProfile in cookies for session management
-                    // Cookies.set('username', user.username);
-                    // Cookies.set('userProfile', user.userProfile);
-                    if (userData.userProfile === userProfile) {
-                        console.log("Login successful");
-                        return true;
+                if (userData.suspended === true) {
+                    console.log("User account is suspended");
+                    return false;
+                } else {
+                    if (userData.password === password) {
+                        if (userData.userProfile === userProfile) {
+                            console.log("Login successful");
+                            return true;
+                        } else {
+                            console.log("User profile does not match");
+                            return false;
+                        }
                     } else {
-                        console.log("User profile does not match");
+                        console.log("Incorrect password");
                         return false;
                     }
-                } else {
-                    console.log("Incorrect password");
-                    return false;
                 }
             } else {
                 console.log("User not found");
@@ -144,13 +146,13 @@ class UserAccount {
 
     // Search for a user by username
     static async searchUserAccount(username) {
-        console.log("Searching for username:", username); 
+        console.log("Searching for username:", username);
         try {
             const firebaseService = new FirebaseService();
             const userData = await firebaseService.getDocument('UserAccount', username);
             console.log("User Data:", userData);
 
-            if(userData) {
+            if (userData) {
                 return userData; // Assuming usernames are unique
             } else {
                 throw new Error("User not found");
@@ -160,8 +162,8 @@ class UserAccount {
             throw error;
         }
     }
-// Search for a user in Firestore by the username field
-            // const userData = await FirebaseService.searchByField('UserAccount', 'username', username);
+    // Search for a user in Firestore by the username field
+    // const userData = await FirebaseService.searchByField('UserAccount', 'username', username);
     static async getUserAccountList() {
         try {
             const firebaseService = new FirebaseService();

@@ -117,6 +117,7 @@ function BuyerShortlistUI() {
             return car;
         });
         setCars(updatedCars);
+        Util.increaseCount(usedCarId, "view");
         const usedCar = await viewShortlistController.viewUsedCarFromShortlist(usedCarId);
         console.log("Used Car data received:", usedCar);
 
