@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
+import Cookies from 'js-cookie';
 import './LoginUI.css';
+import { Util } from "../Util";
 import { UserLoginController } from "../controller/UserAuthController";
 
 import Swal from 'sweetalert2';
@@ -12,12 +14,14 @@ function LoginUI() {
 
     useEffect(() => {
         const fetchUserProfiles = async () => {
-            const snapshot = await UserLoginController.getUserProfiles();
+            const snapshot = await Util.getUserProfiles();
             if (snapshot !== null) {
-                const userData = snapshot.docs.map(doc => ({
-                    pName: doc.data().profileName,
-                    type: doc.data().profileType
-                }));
+                const userData = snapshot.docs
+                    .filter(doc => !doc.data().suspended)
+                    .map(doc => ({
+                        profileName: doc.data().profileName,
+                        profileType: doc.data().profileType
+                    }));
                 setUserProfiles(userData);
             }
         };
@@ -56,19 +60,23 @@ function LoginUI() {
                     confirmButtonText: 'OK',
                     timer: 1500
                 }).then(() => {
-                    if (userProfile === "UserAdmin") window.open('/CSIT314-T05-CodeCrusaders/usermanagement', "_self")
-                    else if (userProfile === "UsedCarAgent") window.open('/CSIT314-T05-CodeCrusaders/usedcarmanagement', "_self")
-                    else if (userProfile === "Buyer") window.open('/CSIT314-T05-CodeCrusaders/buyerusedcar', "_self")
-                    else if (userProfile === "Seller") window.open('/CSIT314-T05-CodeCrusaders/sellerusedcar', "_self")
+                    const selectedProfile = userProfiles.find(profile => profile.profileName === userProfile);
+                    console.log(selectedProfile.profileType);
+                    const userProfileType = selectedProfile.profileType;
+                    Cookies.set('username', username);
+                    Cookies.set('userProfile', userProfileType);
+                    if (userProfileType === "UserAdmin") window.open('/CSIT314-T05-CodeCrusaders/usermanagement', "_self")
+                    else if (userProfileType === "UsedCarAgent") window.open('/CSIT314-T05-CodeCrusaders/usedcarmanagement', "_self")
+                    else if (userProfileType === "Buyer") window.open('/CSIT314-T05-CodeCrusaders/buyerusedcar', "_self")
+                    else if (userProfileType === "Seller") window.open('/CSIT314-T05-CodeCrusaders/sellerusedcar', "_self")
                 });
             } else {
                 Swal.fire({
                     position: "center",
                     title: 'Login Failed',
                     icon: 'error',
-                    text: 'Invalid username/password. Please try again.',
+                    html: 'Invalid username/password. Please try again.<br><br><small>If you entered the correct username and password, your account may have been suspended. Please contact the administrator.</small>',
                     confirmButtonText: 'OK',
-                    timer: 1500
                 });
             }
         }
@@ -89,7 +97,7 @@ function LoginUI() {
                 >
                     <option value="">Select</option>
                     {userProfiles.map((profile) => (
-                        <option value={profile.type}>{profile.pName}</option>
+                        <option value={profile.profileName}>{profile.profileName}</option>
                     ))}
                 </select>
                 <label htmlFor="userId">Username:</label>
