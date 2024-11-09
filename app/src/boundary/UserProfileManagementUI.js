@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import "./UserProfileManagementUI.css";
 import { Util } from "../Util";
 import { UserLogoutController } from "../controller/UserAuthController";
-import { ViewUserProfileController } from "../controller/UserProfileController";
+import { ViewUserProfileController, CreateUserProfileController, UpdateUserProfileController } from "../controller/UserProfileController";
 
 import Swal from 'sweetalert2';
 
@@ -11,22 +11,22 @@ function UserProfileManagementUI() {
     const [username] = useState(Cookies.get("username"));
     const [searchUsername, setSearchUsername] = useState("");
     const [userProfiles, setUserProfiles] = useState([
-        { pName: "Loading...", description: "Loading...", type: "Loading..." }
+        { profileName: "Loading...", description: "Loading...", profileType: "Loading..." }
     ]);
 
-    useEffect(() => {
-        const fetchUserProfiles = async () => {
-            const snapshot = await Util.getUserProfiles();
-            if (snapshot !== null) {
-                const userData = snapshot.docs.map(doc => ({
-                    pName: doc.data().name,
-                    description: (doc.data().description).substring(0, 25) + "...",
-                    type: doc.data().typeOfUser
-                }));
-                setUserProfiles(userData);
-            }
-        };
+    const fetchUserProfiles = async () => {
+        const snapshot = await Util.getUserProfiles();
+        if (snapshot !== null) {
+            const userData = snapshot.docs.map(doc => ({
+                profileName: doc.data().profileName,
+                description: (desc => desc.length >= 50 ? desc.substring(0, 50) + "..." : desc)(doc.data().description),
+                profileType: doc.data().profileType
+            }));
+            setUserProfiles(userData);
+        }
+    };
 
+    useEffect(() => {
         fetchUserProfiles();
     }, []);
 
@@ -35,13 +35,13 @@ function UserProfileManagementUI() {
     }
 
     const createUserProfile = () => {
-        let profileNameInput, descriptionInput, typeInput;
+        let profileNameInput, descriptionInput, profileTypeInput;
         Swal.fire({
             title: 'Create Profile',
             html: `
                 <input type="text" id="profileName" class="swal2-input" placeholder="profile name">
                 <input type="text" id="description" class="swal2-input" placeholder="description">
-                <input type="text" id="type" class="swal2-input" placeholder="type">
+                <input type="text" id="profileType" class="swal2-input" placeholder="Profile Type">
             `,
             confirmButtonText: 'Create Profile',
             focusConfirm: false,
@@ -49,7 +49,7 @@ function UserProfileManagementUI() {
                 const popup = Swal.getPopup();
                 profileNameInput = popup.querySelector('#profileName');
                 descriptionInput = popup.querySelector('#description');
-                typeInput = popup.querySelector('#type');
+                profileTypeInput = popup.querySelector('#profileType');
 
                 const handleEnterKey = (event) => {
                     if (event.key === 'Enter') {
@@ -59,32 +59,38 @@ function UserProfileManagementUI() {
 
                 profileNameInput.onkeyup = handleEnterKey;
                 descriptionInput.onkeyup = handleEnterKey;
-                typeInput.onkeyup = handleEnterKey;
+                profileTypeInput.onkeyup = handleEnterKey;
 
             },
             preConfirm: () => {
-                const pName = profileNameInput.value;
-                const description = descriptionInput.value;
-                const type = typeInput.value;
 
-                if (!pName || !description || !type) {
+                const profileName = profileNameInput.value;
+                const description = descriptionInput.value;
+                const profileType = profileTypeInput.value;
+
+                if (!profileName || !description || !profileType) {
                     Swal.showValidationMessage(`Please fill in all the fields`);
                 }
                 else {
                     Swal.fire("Profile Created!");
                 }
 
-                return { pName, description, type };
+                return { profileName, description, profileType };
             },
 
-        }).then((result) => {
+        }).then(async (result) => {
             if (result.isConfirmed) {
-                const { pName, description, type } = result.value;
-                console.log('New Account Details:', {
-                    pName,
-                    description,
-                    type
-                });
+                const { profileName, description, profileType } = result.value;
+                const createUserProfileController = new CreateUserProfileController();
+                const isSuccess = await createUserProfileController.createUserProfile(profileName, description, profileType);
+
+                if (isSuccess){
+                    console.log('New Account Details:', profileName, description, profileType );
+                    fetchUserProfiles();
+                } else {
+                    console.log("no", profileName, description, profileType );
+                }
+                
                 // Add logic here to handle account creation, like sending data to an API
             }
         });
@@ -95,9 +101,9 @@ function UserProfileManagementUI() {
             title: 'View User Profile',
             html: `
                 <div style="text-align: left;">
-                    <strong>Profile Name:</strong> ${user.pName}<br>
+                    <strong>Profile Name:</strong> ${user.profileName}<br>
                     <strong>Description:</strong> ${user.description}<br>
-                    <strong>Type:</strong> ${user.type}<br>
+                    <strong>Type:</strong> ${user.profileType}<br>
                 </div>
             `,
             showCancelButton: true,
@@ -119,7 +125,7 @@ function UserProfileManagementUI() {
                     cancelButtonText: 'No, cancel'
                 }).then((suspendResult) => {
                     if (suspendResult.isConfirmed) {
-                        console.log('User suspended:', user.pName);
+                        console.log('User suspended:', user.profileName);
                         Swal.fire('Suspended!', 'The user has been suspended.', 'success');
                     }
                 });
@@ -127,37 +133,36 @@ function UserProfileManagementUI() {
         });
     };
 
-    const updateUserProfile = (user) => {
+    const updateUserProfile = (userProfile) => {
         Swal.fire({
             title: 'Update User Profile',
             html: `
-                <input type="text" id="profileName" class="swal2-input" placeholder="profile name">
-                <input type="text" id="description" class="swal2-input" placeholder="description">
-                <input type="text" id="type" class="swal2-input" placeholder="type">
+                <input type="text" id="profileName" class="swal2-input" placeholder="Profile Name" value="${userProfile.profileName}">
+                <input type="text" id="description" class="swal2-input" placeholder="Description" value="${userProfile.description}">
+                <input type="text" id="profileType" class="swal2-input" placeholder="Profile Type" value="${userProfile.profileType}">
             `,
             confirmButtonText: 'Update',
             focusConfirm: false,
             preConfirm: () => {
-                const pName = document.getElementById('profileName').value;
                 const description = document.getElementById('description').value;
-                const type = document.getElementById('type').value;
+                const profileName = document.getElementById('profileName').value;
+                const profileType = document.getElementById('profileType').value;
 
 
-                if (!pName || !description || !type) {
+                if (!profileName || !description || !profileType) {
                     Swal.showValidationMessage(`Please fill in all fields`);
                     return false;
                 }
-                return { pName, description, type };
+                return { profileName, description, profileType };
             }
-        }).then((updateResult) => {
+        }).then(async (updateResult) => {
             if (updateResult.isConfirmed) {
-                const { pName, description, type } = updateResult.value;
-                console.log('Updated Profile Details:', {
-                    pName,
-                    description,
-                    type
-                });
+                const { profileName, description, profileType } = updateResult.value;
+                const updateUserProfileController = new UpdateUserProfileController();
+                await updateUserProfileController.updateUserProfile(profileName, description, profileType);
+                console.log('Updated Profile Details:', {profileName, description, profileType});
                 Swal.fire('Updated!', 'The user details have been updated.', 'success');
+                fetchUserProfiles();
             }
         });
     };
@@ -232,16 +237,16 @@ function UserProfileManagementUI() {
             </div>
             <div className="upmUser-table">
                 <div className="upmTable-header">
-                    <span>Profile Name:</span>
-                    <span>Description:</span>
-                    <span>Type:</span>
+                    <span>Profile Name</span>
+                    <span>Description</span>
+                    <span>Type</span>
                     <span></span>
                 </div>
                 {userProfiles.map((user) => (
                     <div key={user.username} className="upmTable-row">
-                        <span>{user.pName}</span>
+                        <span>{user.profileName}</span>
                         <span>{user.description}</span>
-                        <span>{user.type}</span>
+                        <span>{user.profileType}</span>
                         <button onClick={() => viewUserProfile(user)} className="upmInspect-button">Inspect</button>
                     </div>
                 ))}

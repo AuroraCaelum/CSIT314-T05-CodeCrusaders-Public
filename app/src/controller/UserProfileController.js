@@ -5,11 +5,14 @@ class CreateUserProfileController {
     // Create user profile, takes in profileName, description, profileType
     async createUserProfile(profileName, description, profileType) {
         try {
-            const profile = new UserProfile(description, profileName, profileType);
-            const success = await profile.createUserProfile(); // Changed method call to reflect new implementation
+            const profile = new UserProfile();
+            const success = await profile.createUserProfile(profileName, description, profileType); // Changed method call to reflect new implementation
             if (success) {
+                console.log("Success to create Profile(C): ", profileName, description, profileType );
                 return true;
             } else {
+                console.log("Failed to create Profile(C): ", profileName, description, profileType );
+
                 return false;
             }
         } catch (error) {
@@ -17,6 +20,7 @@ class CreateUserProfileController {
         }
     }
 }
+
 class ViewUserProfileController {
     
     // View current user's profile
@@ -37,15 +41,17 @@ class UpdateUserProfileController {
     // Update user's profile
     async updateUserProfile(profileName, description, profileType) {
         try {
-            const profile = new UserProfile(profileName, description, profileType); // Pass data to constructor
-            const success = await profile.updateUserProfile(); // Adjusted to use type as ID
+            const userProfile = new UserProfile(profileName, description, profileType); // Pass data to constructor
+            const success = await userProfile.updateUserProfile(profileName, description, profileType); // Adjusted to use type as ID
             if (success) {
+                console.log("Success update user profile: ", profileName, description, profileType);
                 return true;
             } else {
+                console.log("Failed update user profile: ", profileName, description, profileType);
                 return false;
             }
         } catch (error) {
-            return true;
+            return error;
         }
     }
 }
