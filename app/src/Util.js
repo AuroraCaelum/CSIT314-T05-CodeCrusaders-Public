@@ -58,6 +58,28 @@ class Util {
         }
     }
 
+    static async getUsedCarListByUsername(usertype, username) {
+        try {
+            const carList = await UsedCar.getUsedCarListByUsername(usertype, username);
+            console.log(carList);
+            return carList;
+        } catch (error) {
+            console.log("Error:", error);
+            throw error;
+        }
+    }
+
+    // static async getSellerList(username) {
+    //     try {
+    //         const sellerList = await UsedCar.getSellerList(username);
+    //         console.log(sellerList);
+    //         return sellerList;
+    //     } catch (error) {
+    //         console.log("Error:", error);
+    //         throw error;
+    //     }
+    // }
+
     static async increaseCount(usedCarId, countType) {
         try {
             const increase = await UsedCar.increaseCount(usedCarId, countType);

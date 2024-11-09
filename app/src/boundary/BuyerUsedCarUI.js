@@ -23,7 +23,7 @@ function BuyerUsedCarUI() {
                     usedCarId: doc.id,
                     car_name: doc.data().car_name,
                     car_type: doc.data().car_type,
-                    description: doc.data().description,
+                    description: (desc => desc.length >= 150 ? desc.substring(0, 150) + "..." : desc)(doc.data().description),
                     manufacture_year: doc.data().manufacture_year,
                     mileage: doc.data().mileage,
                     price: doc.data().price,
@@ -116,11 +116,12 @@ function BuyerUsedCarUI() {
                 html: `
                     <div style="text-align: left;">
                         <img src=${usedCar.body.car_image} alt="Car" class="uclCar-image" /><br>
-                        <strong>Product Name:</strong> ${usedCar.body.car_name}<br>
+                        <strong>Car Name:</strong> ${usedCar.body.car_name}<br>
                         <strong>Description:</strong> ${usedCar.body.description}<br>
                         <strong>Type:</strong> ${usedCar.body.car_type}<br>
                         <strong>Price:</strong> ${usedCar.body.price}<br>
-                        <strong>Manufacturer:</strong> ${usedCar.body.manufactureYear}<br>
+                        <strong>Manufacturer:</strong> ${usedCar.body.car_manufacturer}<br>
+                        <strong>Manufacture Year:</strong> ${usedCar.body.manufacture_year}<br>
                         <strong>Engine cap:</strong> ${usedCar.body.engine_cap}<br>
                         <strong>Mileage:</strong> ${usedCar.body.mileage}<br>
                         <strong>Features:</strong> ${usedCar.body.features}<br>

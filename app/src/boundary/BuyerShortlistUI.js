@@ -26,7 +26,7 @@ function BuyerShortlistUI() {
                     shortlistId: doc.documentId,
                     usedCarId: doc.usedCarId,
                     car_name: doc.car_name,
-                    description: doc.description,
+                    description: (desc => desc.length >= 150 ? desc.substring(0, 150) + "..." : desc)(doc.description),
                     manufacture_year: doc.manufacture_year,
                     mileage: doc.mileage,
                     price: doc.price,
@@ -126,11 +126,12 @@ function BuyerShortlistUI() {
                 html: `
                     <div style="text-align: left;">
                         <img src=${usedCar.body.car_image} alt="Car" class="uclCar-image" /><br>
-                        <strong>Product Name:</strong> ${usedCar.body.car_name}<br>
+                        <strong>Car Name:</strong> ${usedCar.body.car_name}<br>
                         <strong>Description:</strong> ${usedCar.body.description}<br>
                         <strong>Type:</strong> ${usedCar.body.car_type}<br>
                         <strong>Price:</strong> ${usedCar.body.price}<br>
-                        <strong>Manufacturer:</strong> ${usedCar.body.manufactureYear}<br>
+                        <strong>Manufacturer:</strong> ${usedCar.body.car_manufacturer}<br>
+                        <strong>Manufacture Year:</strong> ${usedCar.body.manufacture_year}<br>
                         <strong>Engine cap:</strong> ${usedCar.body.engine_cap}<br>
                         <strong>Mileage:</strong> ${usedCar.body.mileage}<br>
                         <strong>Features:</strong> ${usedCar.body.features}<br>

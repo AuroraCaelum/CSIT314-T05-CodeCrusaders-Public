@@ -54,10 +54,10 @@ class UsedCar {
                 car_image: imageUrl,
                 description: description,
                 features: features,
-                price: price,
-                mileage: mileage,
-                manufacture_year: manufacture_year,
-                engine_cap: engine_cap,
+                price: Number(price),
+                mileage: Number(mileage),
+                manufacture_year: Number(manufacture_year),
+                engine_cap: Number(engine_cap),
             };
 
             console.log("New Car Details(E):", usedCarId, agent_username, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap)
@@ -236,6 +236,27 @@ class UsedCar {
         }
     }
 
+    static async getUsedCarListByUsername(usertype, username) {
+        try {
+            const firebaseService = new FirebaseService();
+            // const searchQuery = {
+            //     usertype: username
+            // }
+            if (usertype === 'seller') {
+                const usedCar = await firebaseService.searchByFields('UsedCar', { seller_username: username });
+                console.log(usedCar);
+                return usedCar;
+            } else {
+                const usedCar = await firebaseService.searchByFields('UsedCar', { agent_username: username });
+                console.log(usedCar);
+                return usedCar;
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            throw error;
+        }
+    }
+
     static async getUsedCarViewCount(usedCarId) {
         try {
             const firebaseService = new FirebaseService();
@@ -291,14 +312,5 @@ class UsedCar {
             return { success: false, message: error.message };
         }
     }
-
-
-
-
-
-
-
-
-
 }
 export default UsedCar;

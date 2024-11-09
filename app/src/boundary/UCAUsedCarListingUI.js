@@ -15,16 +15,18 @@ function UCAUsedCarListingUI() {
 
 
     const fetchCars = async () => {
-        const snapshot = await Util.getUsedCarList();
+        const snapshot = await Util.getUsedCarListByUsername('agent', username);
         if (snapshot !== null) {
-            const carData = snapshot.docs.map(doc => ({
-                usedCarId: doc.id,
-                car_name: doc.data().car_name,
-                description: doc.data().description,
-                manufacture_year: doc.data().manufacture_year,
-                mileage: doc.data().mileage,
-                price: doc.data().price,
-                car_image: doc.data().car_image
+            const carData = snapshot.map(doc => ({
+                usedCarId: doc.documentId,
+                car_name: doc.car_name,
+                description: (desc => desc.length >= 150 ? desc.substring(0, 150) + "..." : desc)(doc.description),
+                manufacture_year: doc.manufacture_year,
+                mileage: doc.mileage,
+                price: doc.price,
+                car_image: doc.car_image || "https://placehold.co/100x100?text=Car+Image",
+                view_count: doc.view_count || 0,
+                shortlist_count: doc.shortlist_count || 0
             }));
             setCars(carData);
         }
@@ -81,19 +83,19 @@ function UCAUsedCarListingUI() {
                     </div>
                     <div class="item">
                         <label>Price ($)</label>
-                        <input type="text" id="price" class="swal2-input" placeholder="Ex) 150000">
+                        <input type="number" id="price" class="swal2-input" placeholder="Ex) 150000">
                     </div>
                     <div class="item">
                         <label>Manufacture Year</label>
-                        <input type="text" id="manufacture_year" class="swal2-input" placeholder="Ex) 2021">
+                        <input type="number" id="manufacture_year" class="swal2-input" placeholder="Ex) 2021">
                     </div>
                     <div class="item">
                         <label>Mileage (km)</label>
-                        <input type="text" id="mileage" class="swal2-input" placeholder="Ex) 100000">
+                        <input type="number" id="mileage" class="swal2-input" placeholder="Ex) 100000">
                     </div>
                     <div class="item">
                         <label>Engine Capacity (CC)</label>
-                        <input type="text" id="engine_cap" class="swal2-input" placeholder="Ex) 1500">
+                        <input type="number" id="engine_cap" class="swal2-input" placeholder="Ex) 1500">
                     </div>
                     <div class="item">
                         <label>Features</label>
@@ -101,7 +103,7 @@ function UCAUsedCarListingUI() {
                     </div>
                     <div class="item" style="grid-column: span 2">
                         <label>Description</label>
-                        <input type="textarea" id="description" class="swal2-input" placeholder="Enter description...">
+                        <input type="text" id="description" class="swal2-input" placeholder="Enter description...">
                     </div>
                 </div>
             `,
@@ -225,11 +227,12 @@ function UCAUsedCarListingUI() {
                 html: `
                     <div style="text-align: left;">
                         <img src=${usedCar.body.car_image} alt="Car" class="uclCar-image" /><br>
-                        <strong>Product Name:</strong> ${usedCar.body.car_name}<br>
+                        <strong>Car Name:</strong> ${usedCar.body.car_name}<br>
                         <strong>Description:</strong> ${usedCar.body.description}<br>
                         <strong>Type:</strong> ${usedCar.body.car_type}<br>
                         <strong>Price:</strong> ${usedCar.body.price}<br>
-                        <strong>Manufacturer:</strong> ${usedCar.body.manufactureYear}<br>
+                        <strong>Manufacturer:</strong> ${usedCar.body.car_manufacturer}<br>
+                        <strong>Manufacture Year:</strong> ${usedCar.body.manufacture_year}<br>
                         <strong>Engine cap:</strong> ${usedCar.body.engine_cap}<br>
                         <strong>Mileage:</strong> ${usedCar.body.mileage}<br>
                         <strong>Features:</strong> ${usedCar.body.features}<br>
@@ -267,7 +270,8 @@ function UCAUsedCarListingUI() {
                                 Swal.fire('Failed!', 'Failed to delete this car.', 'error');
                             }
                             console.log('Car Deleted:', usedCar.body.car_name);
-                            Swal.fire('Deleteed!', 'The product has been Deleted.', 'success');
+                            Swal.fire('Deleted!', 'The product has been Deleted.', 'success');
+                            fetchCars();
                         }
                     });
                 }
@@ -287,6 +291,7 @@ function UCAUsedCarListingUI() {
 
 
     const updateUsedCar = (usedCar) => {
+        console.log(usedCar.body.description)
 
         Swal.fire({
             title: 'Update Used Car Detail',
@@ -311,11 +316,11 @@ function UCAUsedCarListingUI() {
                         <label>Car Manufacturer</label>
                         <input type="text" id="car_manufacturer" class="swal2-input" value=${usedCar.body.car_manufacturer}>
                     </div>
-                    <div class="item"">
+                    <div class="item">
                         <label>Car Name</label>
-                        <input type="text" id="car_name" class="swal2-input" value=${usedCar.body.car_name}>
+                        <input type="text" id="car_name" class="swal2-input" value="${usedCar.body.car_name}">
                     </div>
-                    <div class="item"">
+                    <div class="item">
                         <label>Car Type</label>
                         <select id="car_type" class="swal2-select">
                             <option value="">Select Car Type</option>
@@ -331,29 +336,29 @@ function UCAUsedCarListingUI() {
                             <option value="Sports Car" ${(usedCar.body.car_type) === "Sports Car" ? 'selected' : ''}>Sports Car</option>
                         </select>
                     </div>
-                    <div class="item"">
+                    <div class="item">
                         <label>Price ($)</label>
-                        <input type="text" id="price" class="swal2-input" value=${usedCar.body.price}>
+                        <input type="number" id="price" class="swal2-input" value=${usedCar.body.price}>
                     </div>
-                    <div class="item"">
+                    <div class="item">
                         <label>Manufacture Year</label>
-                        <input type="text" id="manufacture_year" class="swal2-input" value=${usedCar.body.manufacture_year}>
+                        <input type="number" id="manufacture_year" class="swal2-input" value=${usedCar.body.manufacture_year}>
                     </div>
-                    <div class="item"">
+                    <div class="item">
                         <label>Mileage (km)</label>
-                        <input type="text" id="mileage" class="swal2-input" value=${usedCar.body.mileage}>
+                        <input type="number" id="mileage" class="swal2-input" value=${usedCar.body.mileage}>
                     </div>
-                    <div class="item"">
+                    <div class="item">
                         <label>Engine Capacity (cc)</label>
-                        <input type="text" id="engine_cap" class="swal2-input" value=${usedCar.body.engine_cap}>
+                        <input type="number" id="engine_cap" class="swal2-input" value=${usedCar.body.engine_cap}>
                     </div>
-                    <div class="item"">
+                    <div class="item">
                         <label>Features</label>
-                        <input type="text" id="features" class="swal2-input" value=${usedCar.body.features}>
+                        <input type="text" id="features" class="swal2-input" value="${usedCar.body.features}">
                     </div>
                     <div class="item" style="grid-column: span 2">
                         <label>Description</label>
-                        <input type="textarea" id="description" class="swal2-input" value=${usedCar.body.description}>
+                        <input type="text" id="description" class="swal2-input" value="${usedCar.body.description}">
                     </div>
                 </div>
             `,
