@@ -64,20 +64,22 @@ class UserAccount {
             if (userData && userData.username === username) {
 
                 // Check if password matches
-                if (userData.password === password) {
-                    // Save username and userProfile in cookies for session management
-                    // Cookies.set('username', user.username);
-                    // Cookies.set('userProfile', user.userProfile);
-                    if (userData.userProfile === userProfile) {
-                        console.log("Login successful");
-                        return true;
+                if (userData.suspended === true) {
+                    console.log("User account is suspended");
+                    return false;
+                } else {
+                    if (userData.password === password) {
+                        if (userData.userProfile === userProfile) {
+                            console.log("Login successful");
+                            return true;
+                        } else {
+                            console.log("User profile does not match");
+                            return false;
+                        }
                     } else {
-                        console.log("User profile does not match");
+                        console.log("Incorrect password");
                         return false;
                     }
-                } else {
-                    console.log("Incorrect password");
-                    return false;
                 }
             } else {
                 console.log("User not found");
@@ -150,7 +152,9 @@ class UserAccount {
             let rawquery = collection(db, 'UserAccount');
 
             const conditions = [];
-            conditions.push(where("username", "==", username));
+            if (username) {
+                conditions.push(where("username", "==", username));
+            }
 
             console.log(conditions)
 
@@ -170,8 +174,8 @@ class UserAccount {
             throw error;
         }
     }
-// Search for a user in Firestore by the username field
-            // const userData = await FirebaseService.searchByField('UserAccount', 'username', username);
+    // Search for a user in Firestore by the username field
+    // const userData = await FirebaseService.searchByField('UserAccount', 'username', username);
     static async getUserAccountList() {
         try {
             const firebaseService = new FirebaseService();

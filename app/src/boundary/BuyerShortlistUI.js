@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import "./BuyerShortlistUI.css";
 import { Util } from "../Util";
 import { UserLogoutController } from "../controller/UserAuthController";
-import { SearchUsedCarController} from "../controller/UsedCarController";
+import { SearchUsedCarController } from "../controller/UsedCarController";
 import { LeaveRateReviewController } from "../controller/RateReviewController";
 import { ViewShortlistController, DeleteShortlistController } from "../controller/ShortlistController";
 
@@ -117,6 +117,7 @@ function BuyerShortlistUI() {
             return car;
         });
         setCars(updatedCars);
+        Util.increaseCount(usedCarId, "view");
         const usedCar = await viewShortlistController.viewUsedCarFromShortlist(usedCarId);
         console.log("Used Car data received:", usedCar);
 
@@ -279,7 +280,7 @@ function BuyerShortlistUI() {
         });
     };
 
-    const handleRemoveFromShortlist = (shortlistId) => {
+    const handleRemoveFromShortlist = (shortlistId, usedCarId) => {
         Swal.fire({
             title: 'Are you sure?',
             text: "You will not be able to recover this car from your shortlist!",
@@ -294,6 +295,7 @@ function BuyerShortlistUI() {
                 // Logic to remove the car from the shortlist goes here
                 console.log(`Car ${shortlistId} removed from shortlist.`);
                 Swal.fire('Removed!', 'The car has been removed from your shortlist.', 'success');
+                Util.decreaseCount(usedCarId, "shortlist");
                 fetchCars();
             } else if (result.isDismissed) {
                 Swal.fire('Cancelled', 'The car is still in your shortlist.', 'info');
@@ -424,7 +426,7 @@ function BuyerShortlistUI() {
                             <button onClick={() => viewUsedCar(car.usedCarId)} className="bsView-button">
                                 View
                             </button>
-                            <button onClick={() => handleRemoveFromShortlist(car.shortlistId)} className="bsRFS-button">
+                            <button onClick={() => handleRemoveFromShortlist(car.shortlistId, car.usedCarId)} className="bsRFS-button">
                                 Remove from Shortlist
                             </button>
                         </span>
