@@ -1,19 +1,9 @@
 import UserAccount from '../entity/UserAccount';
-import UserProfile from '../entity/UserProfile';
 import Cookies from 'js-cookie';
 
 class UserLoginController {
     constructor() {
         this.authenticateLogin = this.authenticateLogin.bind(this);
-    }
-
-    static async getUserProfiles() {
-        try {
-            const profiles = await UserProfile.getUserProfiles();
-            return profiles;
-        } catch (error) {
-            return null;
-        }
     }
 
     // Login 

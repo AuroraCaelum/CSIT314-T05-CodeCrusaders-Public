@@ -1,9 +1,12 @@
 .upmContainer {
     position: relative;
     font-family: Arial, sans-serif;
-    width: 95vw; /* Slightly less than 100vw */
-    height: 90vh; /* Slightly less than 100vh to account for top margin */
-    margin: 30px auto; /* Adds a 30px margin on top and centers horizontally */
+    width: 95vw;
+    /* Slightly less than 100vw */
+    height: 90vh;
+    /* Slightly less than 100vh to account for top margin */
+    margin: 30px auto;
+    /* Adds a 30px margin on top and centers horizontally */
     padding: 20px;
     box-sizing: border-box;
     border: 1px solid #ccc;
@@ -21,13 +24,13 @@
 }
 
 .upmBack-button {
-    padding: 8px 16px; 
-    border: none; 
-    border-radius: 5px; 
-    background-color: #333; 
-    color: #fff; 
-    cursor: pointer; 
-    margin-right: auto; 
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #333;
+    color: #fff;
+    cursor: pointer;
+    margin-right: auto;
 }
 
 .upmProfile-picture {
@@ -69,7 +72,8 @@
     border-radius: 5px;
 }
 
-.upmSearch-button, .upmCreate-button {
+.upmSearch-button,
+.upmCreate-button {
     padding: 10px 15px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -94,7 +98,7 @@
     font-weight: bold;
     background-color: #ddd;
     padding: 10px;
-    border-radius:5px;
+    border-radius: 5px;
 }
 
 .upmTable-row {
@@ -111,4 +115,11 @@
     color: #fff;
     cursor: pointer;
     margin-left: auto;
+}
+
+.swal2-select {
+    margin: 1em 2em 3px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    color: #ccc;
 }

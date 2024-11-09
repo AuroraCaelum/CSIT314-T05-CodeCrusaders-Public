@@ -39,9 +39,15 @@ function UserProfileManagementUI() {
         Swal.fire({
             title: 'Create Profile',
             html: `
-                <input type="text" id="profileName" class="swal2-input" placeholder="profile name">
-                <input type="text" id="description" class="swal2-input" placeholder="description">
-                <input type="text" id="profileType" class="swal2-input" placeholder="Profile Type">
+                <input type="text" id="profileName" class="swal2-input" placeholder="Profile Name">
+                <input type="text" id="description" class="swal2-input" placeholder="Description">
+                <select id="profileType" class="swal2-select">
+                    <option value="">Select Profile Type</option>
+                    <option value="UserAdmin">User Admin</option>
+                    <option value="UsedCarAgent">Used Car Agent</option>
+                    <option value="Buyer">Buyer</option>
+                    <option value="Seller">Seller</option>
+                </select>
             `,
             confirmButtonText: 'Create Profile',
             focusConfirm: false,
@@ -84,13 +90,13 @@ function UserProfileManagementUI() {
                 const createUserProfileController = new CreateUserProfileController();
                 const isSuccess = await createUserProfileController.createUserProfile(profileName, description, profileType);
 
-                if (isSuccess){
-                    console.log('New Account Details:', profileName, description, profileType );
+                if (isSuccess) {
+                    console.log('New Account Details:', profileName, description, profileType);
                     fetchUserProfiles();
                 } else {
-                    console.log("no", profileName, description, profileType );
+                    console.log("no", profileName, description, profileType);
                 }
-                
+
                 // Add logic here to handle account creation, like sending data to an API
             }
         });
@@ -179,7 +185,7 @@ function UserProfileManagementUI() {
                 const { profileName, description, profileType } = updateResult.value;
                 const updateUserProfileController = new UpdateUserProfileController();
                 await updateUserProfileController.updateUserProfile(profileName, description, profileType);
-                console.log('Updated Profile Details:', {profileName, description, profileType});
+                console.log('Updated Profile Details:', { profileName, description, profileType });
                 Swal.fire('Updated!', 'The user details have been updated.', 'success');
                 fetchUserProfiles();
             }

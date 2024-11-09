@@ -293,22 +293,53 @@ class UsedCar {
     static async increaseCount(usedCarId, countType) {
         try {
             // Check if countType is valid
-            if (countType !== "view_count" && countType !== "shortlist_count") {
-                throw new Error("Invalid count type. Use 'view_count' or 'shortlist_count'");
+            if (countType !== "view" && countType !== "shortlist") {
+                throw new Error("Invalid count type. Use 'view' or 'shortlist'");
             }
+
+            // Get the current month in YYYY-MM format
+            const current_month = new Date().toISOString().slice(0, 7);
 
             // Reference to the specific used car document in Firestore
             const carRef = doc(db, 'UsedCar', usedCarId);
 
             // Update Firestore document with incremented value
             await updateDoc(carRef, {
-                [countType]: increment(1)
+                [countType + "_count"]: increment(1),
+                [`${countType}_history.${current_month}`]: increment(1)
             });
 
             console.log(`Successfully incremented ${countType} for car ID: ${usedCarId}`);
             return { success: true, message: `${countType} incremented successfully` };
         } catch (error) {
             console.error(`Error incrementing ${countType} for used car entry:`, error);
+            return { success: false, message: error.message };
+        }
+    }
+
+    static async decreaseCount(usedCarId, countType) {
+        try {
+            // Check if countType is valid
+            if (countType !== "view" && countType !== "shortlist") {
+                throw new Error("Invalid count type. Use 'view' or 'shortlist'");
+            }
+
+            // Get the current month in YYYY-MM format
+            const current_month = new Date().toISOString().slice(0, 7);
+
+            // Reference to the specific used car document in Firestore
+            const carRef = doc(db, 'UsedCar', usedCarId);
+
+            // Update Firestore document with decremented value
+            await updateDoc(carRef, {
+                [countType + "_count"]: increment(-1),
+                [`${countType}_history.${current_month}`]: increment(-1)
+            });
+
+            console.log(`Successfully decremented ${countType} for car ID: ${usedCarId}`);
+            return { success: true, message: `${countType} decremented successfully` };
+        } catch (error) {
+            console.error(`Error decrementing ${countType} for used car entry:`, error);
             return { success: false, message: error.message };
         }
     }

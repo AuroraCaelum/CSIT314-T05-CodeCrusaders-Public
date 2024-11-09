@@ -105,10 +105,10 @@ function BuyerUsedCarUI() {
             return car;
         });
         setCars(updatedCars);
+        Util.increaseCount(usedCarId, "view");
+
         const usedCar = await viewUsedCarController.viewUsedCar(usedCarId);
         console.log("Used Car data received:", usedCar);
-
-
 
         if (usedCar) {
             Swal.fire({
@@ -271,7 +271,7 @@ function BuyerUsedCarUI() {
 
     const saveToShortlist = (car) => {
         const username = Cookies.get('username');
-        
+
         const updatedCars = cars.map(item => {
             if (item.usedCarId === car.usedCarId) {
                 item.shortlist_count += 1;  // Increment shortlist count when 'Save to Shortlist' is clicked
@@ -279,7 +279,8 @@ function BuyerUsedCarUI() {
             return item;
         });
         setCars(updatedCars);
-        const increaseCount = Util.increaseCount(car.usedCarId, "shortlist_count");
+        Util.increaseCount(car.usedCarId, "shortlist");
+
         Swal.fire({
             title: 'Car Added!',
             text: "The car has been added to your shortlist.",
