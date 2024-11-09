@@ -76,10 +76,10 @@ class UserProfile {
     }
 
     // Suspend profile by setting 'suspended' to true
-    async suspendUserProfile() {
+    async suspendUserProfile(profileName) {
         try {
-            await this.firebaseService.updateDocument('UserProfile', this.name, { suspended: true });
-            console.log("UserProfile suspended successfully");
+            await this.firebaseService.updateDocument('UserProfile', profileName, { suspended: true });
+            console.log("UserProfile suspended successfully", profileName);
             return true;
         } catch (error) {
             console.error("Error suspending user profile:", error);
@@ -91,7 +91,8 @@ class UserProfile {
     // Search profile by name
     static async searchUserProfile(profileName) {
         try {
-            const profiles = await FirebaseService.searchByFields('UserProfile', { name: profileName });
+            const firebaseService = new FirebaseService();
+            const profiles = await firebaseService.searchByFields('UserProfile', { profileName });
             if (profiles.length > 0) {
                 return profiles[0];  // Return the first matching profile
             } else {

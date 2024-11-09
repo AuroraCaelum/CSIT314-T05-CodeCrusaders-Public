@@ -3,13 +3,13 @@ import Cookies from "js-cookie";
 import "./UserProfileManagementUI.css";
 import { Util } from "../Util";
 import { UserLogoutController } from "../controller/UserAuthController";
-import { ViewUserProfileController, CreateUserProfileController, UpdateUserProfileController } from "../controller/UserProfileController";
+import { ViewUserProfileController, CreateUserProfileController, UpdateUserProfileController, SearchUserProfileController, SuspendUserProfileController } from "../controller/UserProfileController";
 
 import Swal from 'sweetalert2';
 
 function UserProfileManagementUI() {
     const [username] = useState(Cookies.get("username"));
-    const [searchUsername, setSearchUsername] = useState("");
+    const [searchProfileName, setSearchProfileName] = useState("");
     const [userProfiles, setUserProfiles] = useState([
         { profileName: "Loading...", description: "Loading...", profileType: "Loading..." }
     ]);
@@ -96,14 +96,14 @@ function UserProfileManagementUI() {
         });
     };
 
-    const viewUserProfile = (user) => {
+    const viewUserProfile = (userProfile) => {
         Swal.fire({
             title: 'View User Profile',
             html: `
                 <div style="text-align: left;">
-                    <strong>Profile Name:</strong> ${user.profileName}<br>
-                    <strong>Description:</strong> ${user.description}<br>
-                    <strong>Type:</strong> ${user.profileType}<br>
+                    <strong>Profile Name:</strong> ${userProfile.profileName}<br>
+                    <strong>Description:</strong> ${userProfile.description}<br>
+                    <strong>Type:</strong> ${userProfile.profileType}<br>
                 </div>
             `,
             showCancelButton: true,
@@ -114,7 +114,7 @@ function UserProfileManagementUI() {
             focusConfirm: false
         }).then((result) => {
             if (result.isConfirmed) {
-                updateUserProfile(user);
+                updateUserProfile(userProfile);
             } else if (result.isDenied) {
                 Swal.fire({
                     title: 'Are you sure?',
@@ -123,9 +123,11 @@ function UserProfileManagementUI() {
                     showCancelButton: true,
                     confirmButtonText: 'Yes, suspend it!',
                     cancelButtonText: 'No, cancel'
-                }).then((suspendResult) => {
+                }).then(async (suspendResult) => {
                     if (suspendResult.isConfirmed) {
-                        console.log('User suspended:', user.profileName);
+                        const suspendUserProfileController = new SuspendUserProfileController();
+                        await suspendUserProfileController.suspendUserProfile(userProfile.profileName);
+                        console.log('User suspended:', userProfile.profileName);
                         Swal.fire('Suspended!', 'The user has been suspended.', 'success');
                     }
                 });
@@ -191,9 +193,25 @@ function UserProfileManagementUI() {
         }
     };
 
-    const searchUserProfile = (e) => {
+    const searchUserProfile = async (e) => {
         e.preventDefault();
-        console.log("Searched Username:", searchUsername);
+        const searchUserProfileController = new SearchUserProfileController();
+        const userProfile = await searchUserProfileController.searchUserProfile(searchProfileName);
+
+        if (userProfile) {
+            Swal.fire({
+                title: 'User Found',
+                text: `Profile Name: ${userProfile.profileName}`,
+                icon: 'success',
+            });
+        } else {
+            Swal.fire({
+                title: 'User Not Found',
+                text: `No profile found with the profileName: ${searchProfileName}`,
+                icon: 'error',
+            });
+        }
+        console.log("Searched Profile Name:", searchProfileName);
     };
 
     const handleBack = () => {
@@ -223,8 +241,8 @@ function UserProfileManagementUI() {
                     <input
                         type="text"
                         placeholder="Search by username"
-                        value={searchUsername}
-                        onChange={(e) => setSearchUsername(e.target.value)}
+                        value={searchProfileName}
+                        onChange={(e) => setSearchProfileName(e.target.value)}
                     //className="search-input"
                     />
                     <button type="submit" className="upmSearch-button">
