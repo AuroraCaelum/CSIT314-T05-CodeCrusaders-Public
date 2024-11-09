@@ -5,7 +5,7 @@ import { Util } from "../Util";
 import { UserLogoutController } from "../controller/UserAuthController";
 import { ViewUsedCarController, SearchUsedCarController } from "../controller/UsedCarController";
 import { LeaveRateReviewController } from "../controller/RateReviewController";
-import { SaveShortlistController } from "../controller/ShortlistController";
+//import { SaveShortlistController } from "../controller/ShortlistController";
 
 import Swal from 'sweetalert2';
 
@@ -17,30 +17,35 @@ function SellerUsedCarUI() {
 
     useEffect(() => {
         const fetchCars = async () => {
-            const snapshot = await Util.getUsedCarList();
+            const snapshot = await Util.getUsedCarListByUsername('seller', username);
             if (snapshot !== null) {
-                const carData = snapshot.docs.map(doc => ({
-                    usedCarId: doc.id,
-                    car_name: doc.data().car_name,
-                    description: doc.data().description,
-                    manufacture_year: doc.data().manufacture_year,
-                    mileage: doc.data().mileage,
-                    price: doc.data().price,
-                    car_image: (doc.data().car_image),
-                    view_count: doc.data().view_count || 0,
-                    shortlist_count: doc.data().shortlist_count || 0
-                }));
-                setCars(carData);
+                if (snapshot === undefined || snapshot.length === 0) {
+                    const carData = [{ car_name: "", description: "", manufacture_year: "", mileage: "", price: "", car_image: "https://placehold.co/100x100?text=NO+CARS+FOR+THIS+SELLER" }];
+                    setCars(carData);
+                } else {
+                    const carData = snapshot.map(doc => ({
+                        usedCarId: doc.documentId,
+                        car_name: doc.car_name,
+                        description: (desc => desc.length >= 50 ? desc.substring(0, 100) + "..." : desc)(doc.description),
+                        manufacture_year: doc.manufacture_year,
+                        mileage: doc.mileage,
+                        price: doc.price,
+                        car_image: doc.car_image || "https://placehold.co/100x100?text=Car+Image",
+                        view_count: doc.view_count || 0,
+                        shortlist_count: doc.shortlist_count || 0
+                    }));
+                    setCars(carData);
+                }
             }
         };
 
         fetchCars();
     }, []);
 
-    const handleBuyerShortlist = () => {
-        console.log("Buyer Shortlist");
-        window.open("/CSIT314-T05-CodeCrusaders/buyershortlist", "_self");
-    };
+    // const handleBuyerShortlist = () => {
+    //     console.log("Buyer Shortlist");
+    //     window.open("/CSIT314-T05-CodeCrusaders/buyershortlist", "_self");
+    // };
 
     const searchUsedCar = async () => {
         const carNameInput = document.getElementById('car_name');
@@ -64,7 +69,6 @@ function SellerUsedCarUI() {
             filterCriteria.priceRange,
             filterCriteria.manufactureYear
         );
-
 
         if (searchResult) {
             console.log("Search results:", searchResult.data);
@@ -104,10 +108,9 @@ function SellerUsedCarUI() {
             return car;
         });
         setCars(updatedCars);
+        const increaseCount = Util.increaseCount(usedCarId, "view_count");
         const usedCar = await viewUsedCarController.viewUsedCar(usedCarId);
         console.log("Used Car data received:", usedCar);
-
-
 
         if (usedCar) {
             Swal.fire({
@@ -115,11 +118,12 @@ function SellerUsedCarUI() {
                 html: `
                     <div style="text-align: left;">
                         <img src=${usedCar.body.car_image} alt="Car" class="uclCar-image" /><br>
-                        <strong>Product Name:</strong> ${usedCar.body.car_name}<br>
+                        <strong>Car Name:</strong> ${usedCar.body.car_name}<br>
                         <strong>Description:</strong> ${usedCar.body.description}<br>
                         <strong>Type:</strong> ${usedCar.body.car_type}<br>
                         <strong>Price:</strong> ${usedCar.body.price}<br>
-                        <strong>Manufacturer:</strong> ${usedCar.body.manufactureYear}<br>
+                        <strong>Manufacturer:</strong> ${usedCar.body.car_manufacturer}<br>
+                        <strong>Manufacture Year:</strong> ${usedCar.body.manufacture_year}<br>
                         <strong>Engine cap:</strong> ${usedCar.body.engine_cap}<br>
                         <strong>Mileage:</strong> ${usedCar.body.mileage}<br>
                         <strong>Features:</strong> ${usedCar.body.features}<br>
@@ -135,7 +139,7 @@ function SellerUsedCarUI() {
                 if (result.isConfirmed) {
                     leaveRateReview(usedCar.body.agent_username);
                 } else if (result.isDenied) {
-                    openLoanCalculator(usedCar.body.price);
+                   // openLoanCalculator(usedCar.body.price);
                 }
             });
             console.log(usedCar);
@@ -215,82 +219,82 @@ function SellerUsedCarUI() {
         });
     };
 
-    const openLoanCalculator = async (price) => {
-        let interestRateInput, loanTermInput;
+    // const openLoanCalculator = async (price) => {
+    //     let interestRateInput, loanTermInput;
 
-        Swal.fire({
-            title: '<u>Loan Calculator</u>',
-            html: `
-                <div>
-                    <label>Loan Amount:</label>
-                    <input type="text" class="swal2-input" value="$${price}" readonly>
-                </div>
-                <div>
-                    <label>Loan Term (months):</label>
-                    <input type="number" id="loanTerm" class="swal2-input" placeholder="Enter loan term in months" min="0">
-                </div>
-                <div>
-                    <label>Interest Rate (%):</label>
-                    <input type="number" id="interestRate" class="swal2-input" placeholder="Enter interest rate in whole numbers" min="0">
-                </div>
-                <div>
-                    <button id="clearButton" class="swal2-confirm swal2-styled" style="margin-right: 10px;">Clear</button>
-                    <button id="calculateButton" class="swal2-confirm swal2-styled">Calculate</button>
-                </div>
-            `,
-            showConfirmButton: false,
-            focusConfirm: false,
-            didOpen: () => {
-                document.getElementById("clearButton").addEventListener("click", () => {
-                    document.getElementById("loanTerm").value = "";
-                    document.getElementById("interestRate").value = "";
-                });
+    //     Swal.fire({
+    //         title: '<u>Loan Calculator</u>',
+    //         html: `
+    //             <div>
+    //                 <label>Loan Amount:</label>
+    //                 <input type="text" class="swal2-input" value="$${price}" readonly>
+    //             </div>
+    //             <div>
+    //                 <label>Loan Term (months):</label>
+    //                 <input type="number" id="loanTerm" class="swal2-input" placeholder="Enter loan term in months" min="0">
+    //             </div>
+    //             <div>
+    //                 <label>Interest Rate (%):</label>
+    //                 <input type="number" id="interestRate" class="swal2-input" placeholder="Enter interest rate in whole numbers" min="0">
+    //             </div>
+    //             <div>
+    //                 <button id="clearButton" class="swal2-confirm swal2-styled" style="margin-right: 10px;">Clear</button>
+    //                 <button id="calculateButton" class="swal2-confirm swal2-styled">Calculate</button>
+    //             </div>
+    //         `,
+    //         showConfirmButton: false,
+    //         focusConfirm: false,
+    //         didOpen: () => {
+    //             document.getElementById("clearButton").addEventListener("click", () => {
+    //                 document.getElementById("loanTerm").value = "";
+    //                 document.getElementById("interestRate").value = "";
+    //             });
 
-                document.getElementById("calculateButton").addEventListener("click", () => {
-                    interestRateInput = document.getElementById('interestRate').value;
-                    loanTermInput = document.getElementById('loanTerm').value;
+    //             document.getElementById("calculateButton").addEventListener("click", () => {
+    //                 interestRateInput = document.getElementById('interestRate').value;
+    //                 loanTermInput = document.getElementById('loanTerm').value;
 
-                    if (!interestRateInput || !loanTermInput) {
-                        Swal.showValidationMessage(`Please provide both an interest rate and a loan term`);
-                        return;
-                    }
+    //                 if (!interestRateInput || !loanTermInput) {
+    //                     Swal.showValidationMessage(`Please provide both an interest rate and a loan term`);
+    //                     return;
+    //                 }
 
-                    const interestRate = parseFloat(interestRateInput) / 100 / 12; // Monthly interest rate
-                    const loanTerm = parseFloat(loanTermInput); // Total payments (months)
-                    const monthlyPayment = (price * interestRate) / (1 - Math.pow(1 + interestRate, -loanTerm));
+    //                 const interestRate = parseFloat(interestRateInput) / 100 / 12; // Monthly interest rate
+    //                 const loanTerm = parseFloat(loanTermInput); // Total payments (months)
+    //                 const monthlyPayment = (price * interestRate) / (1 - Math.pow(1 + interestRate, -loanTerm));
 
-                    Swal.fire('Monthly Payment', `Your estimated monthly payment is $${monthlyPayment.toFixed(2)}`, 'info');
-                });
-            }
-        });
-    };
+    //                 Swal.fire('Monthly Payment', `Your estimated monthly payment is $${monthlyPayment.toFixed(2)}`, 'info');
+    //             });
+    //         }
+    //     });
+    // };
 
-    const saveToShortlist = (usedCarId) => {
-        //const username = Cookies.get('username');
+    // const saveToShortlist = (usedCarId) => {
+    //     //const username = Cookies.get('username');
 
-        const updatedCars = cars.map(car => {
-            if (car.usedCarId === usedCarId) {
-                car.shortlist_count += 1;  // Increment shortlist count when 'Save to Shortlist' is clicked
-            }
-            return car;
-        });
-        setCars(updatedCars);
-        Swal.fire({
-            title: 'Car Added!',
-            text: "The car has been added to your shortlist.",
-            icon: 'success',
-            confirmButtonText: 'OK'
-        }).then(async () => {
-            const saveShortlistController = new SaveShortlistController();
-            const isSuccess = saveShortlistController.saveToShortlist(username, usedCarId);
+    //     const updatedCars = cars.map(car => {
+    //         if (car.usedCarId === usedCarId) {
+    //             car.shortlist_count += 1;  // Increment shortlist count when 'Save to Shortlist' is clicked
+    //         }
+    //         return car;
+    //     });
+    //     setCars(updatedCars);
+    //     Swal.fire({
+    //         title: 'Car Added!',
+    //         text: "The car has been added to your shortlist.",
+    //         icon: 'success',
+    //         confirmButtonText: 'OK'
+    //     }).then(async () => {
+    //         const saveShortlistController = new SaveShortlistController();
+    //         const isSuccess = saveShortlistController.saveToShortlist(username, usedCarId);
 
-            if (isSuccess) {
-                console.log(`Car ${usedCarId} added to shortlist.`);
-            } else {
-                console.log(`Car ${usedCarId} failed to add on shortlist.`);
-            }
-        });
-    };
+    //         if (isSuccess) {
+    //             console.log(`Car ${usedCarId} added to shortlist.`);
+    //         } else {
+    //             console.log(`Car ${usedCarId} failed to add on shortlist.`);
+    //         }
+    //     });
+    // };
 
     const handleLogout = async () => {
         const userAuthController = new UserLogoutController();
