@@ -2,28 +2,28 @@ import FirebaseService from "../FirebaseService";
 
 class UserProfile {
     constructor(profileName, description, profileType) {
-        this.name = profileName;
+        this.profileName = profileName;
         this.description = description;
-        this.type = profileType;
+        this.profileType = profileType;
         this.firebaseService = new FirebaseService();
     }
 
     // Save profile to Firestore
-    async createUserProfile() {
+    async createUserProfile(profileName, description, profileType) {
         try {
             const profileData = {
-                description: this.description,
-                name: this.name,
-                typeOfUser: this.type,
+                profileName: profileName,
+                description: description,
+                profileType: profileType
             };
-            await this.firebaseService.addDocument(
-                "UserProfile",
-                this.type,
-                profileData
-            );
-            console.log("UserProfile saved successfully");
+            const firebaseService = new FirebaseService();
+            await firebaseService.addDocument("UserProfile", profileName, profileData);
+
+            console.log("UserProfile saved successfully", profileName, profileData);
             return true;
         } catch (error) {
+            console.log("success to create Profile(E): ", profileName, description, profileType );
+
             console.error("Error saving user profile:", error);
             return false;
         }
@@ -39,8 +39,8 @@ class UserProfile {
             );
             if (profileData) {
                 this.description = profileData.description;
-                this.name = profileData.name;
-                this.typeOfUser = profileData.typeOfUser;
+                this.profileName = profileData.profileName;
+                this.profileType = profileData.profileType;
                 return profileData;
             } else {
                 throw new Error("Profile not found");
@@ -52,18 +52,24 @@ class UserProfile {
     }
 
     // Update profile by profileId
-    async updateUserProfile(newProfileData) {
+    async updateUserProfile(profileName, description, profileType) {
         try {
+
+            var newProfileData = {
+                profileName,
+                description,
+                profileType
+            };
             // Use this.type as the document ID
-            await this.firebaseService.updateDocument(
-                "UserProfile",
-                this.type,
-                newProfileData
-            );
-            Object.assign(this, newProfileData); // Update current instance with new data
+            const firebaseService = new FirebaseService();
+            await firebaseService.updateDocument("UserProfile", profileName, newProfileData);
+            //Object.assign(this, newProfileData); // Update current instance with new data
             console.log("UserProfile updated successfully");
+            console.log("Success update user profile(E): ", profileName, description, profileType);
+
             return true;
         } catch (error) {
+            console.log("Failed update user profile(E): ", profileName, description, profileType);
             console.error("Error updating user profile:", error);
             return false;
         }
