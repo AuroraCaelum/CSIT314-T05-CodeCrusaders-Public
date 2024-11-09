@@ -252,7 +252,7 @@ class UsedCar {
         }
     }
 
-    static async getUsedCarShortlistCount(usedCarId) {
+    static async getUsedCarshortlist_count(usedCarId) {
         try {
             const firebaseService = new FirebaseService();
             const carData = await firebaseService.getDocument('UsedCar', usedCarId);
@@ -269,7 +269,7 @@ class UsedCar {
     }
 
     // increase counter for view_count or shortlist_count when clicked
-    async increaseCount(usedCarId, countType) {
+    static async increaseCount(usedCarId, countType) {
         try {
             // Check if countType is valid
             if (countType !== "view_count" && countType !== "shortlist_count") {

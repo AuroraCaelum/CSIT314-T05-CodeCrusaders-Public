@@ -3,8 +3,9 @@ import Cookies from "js-cookie";
 import "./BuyerShortlistUI.css";
 import { Util } from "../Util";
 import { UserLogoutController } from "../controller/UserAuthController";
-import { ViewUsedCarController, SearchUsedCarController } from "../controller/UsedCarController";
+import { SearchUsedCarController} from "../controller/UsedCarController";
 import { LeaveRateReviewController } from "../controller/RateReviewController";
+import { ViewShortlistController, DeleteShortlistController } from "../controller/ShortlistController";
 
 import Swal from 'sweetalert2';
 
@@ -14,25 +15,46 @@ function BuyerShortlistUI() {
         { car_name: "Loading...", description: "Loading...", manufacture_year: "Loading...", mileage: "Loading...", price: "Loading...", car_image: "https://placehold.co/100x100?text=Car+Image" }
     ]);
 
-    useEffect(() => {
-        const fetchCars = async () => {
-            const snapshot = await Util.getUsedCarList();
-            if (snapshot !== null) {
-                const carData = snapshot.docs.map(doc => ({
-                    usedCarId: doc.id,
-                    car_name: doc.data().car_name,
-                    description: doc.data().description,
-                    manufacture_year: doc.data().manufacture_year,
-                    mileage: doc.data().mileage,
-                    price: doc.data().price,
-                    car_image: (doc.data().car_image)
+    const fetchCars = async () => {
+        const snapshot = await Util.getShortlistList(username);
+        if (snapshot !== null) {
+            if (snapshot === undefined || snapshot.length === 0) {
+                const carData = [{ car_name: "", description: "", manufacture_year: "", mileage: "", price: "", car_image: "https://placehold.co/100x100?text=NO+SHORTLISTED+CARS" }];
+                setCars(carData);
+            } else {
+                const carData = snapshot.map(doc => ({
+                    shortlistId: doc.documentId,
+                    usedCarId: doc.usedCarId,
+                    car_name: doc.car_name,
+                    description: doc.description,
+                    manufacture_year: doc.manufacture_year,
+                    mileage: doc.mileage,
+                    price: doc.price,
+                    car_image: doc.car_image
                 }));
                 setCars(carData);
             }
-        };
+        }
+    };
 
+    useEffect(() => {
         fetchCars();
     }, []);
+
+    // useEffect(() => {
+    //     const fetchUser = async () => {
+    //         const snapshot = await Util.getShortlistList();
+    //         if (snapshot !== null) {
+    //             const shortlistData = snapshot.docs.map(doc => ({
+    //                 documentId: doc.id,
+    //                 username: username
+    //             }));
+    //             setCars(shortlistData);
+    //         }
+    //     };
+
+    //     fetchUser();
+    // }, []);
 
     const searchShortlist = async () => { //this is for saerch pop up
         const carNameInput = document.getElementById('car_name');
@@ -85,12 +107,17 @@ function BuyerShortlistUI() {
 
     };
 
-    const viewUsedCar = async (usedCarId) => {
-        //const username = Cookies.get('username');
-
+    const viewUsedCar = async (usedCarId) => { //not done
         console.log('Fetching used Car for:', usedCarId);
-        const viewUsedCarController = new ViewUsedCarController();
-        const usedCar = await viewUsedCarController.viewUsedCar(usedCarId);
+        const viewShortlistController = new ViewShortlistController();
+        const updatedCars = cars.map(car => {
+            if (car.usedCarId === usedCarId) {
+                car.view_count += 1;
+            }
+            return car;
+        });
+        setCars(updatedCars);
+        const usedCar = await viewShortlistController.viewUsedCarFromShortlist(usedCarId);
         console.log("Used Car data received:", usedCar);
 
         if (usedCar) {
@@ -98,10 +125,17 @@ function BuyerShortlistUI() {
                 title: 'View Used Car',
                 html: `
                     <div style="text-align: left;">
+                        <img src=${usedCar.body.car_image} alt="Car" class="uclCar-image" /><br>
                         <strong>Product Name:</strong> ${usedCar.body.car_name}<br>
                         <strong>Description:</strong> ${usedCar.body.description}<br>
                         <strong>Type:</strong> ${usedCar.body.car_type}<br>
                         <strong>Price:</strong> ${usedCar.body.price}<br>
+                        <strong>Manufacturer:</strong> ${usedCar.body.manufactureYear}<br>
+                        <strong>Engine cap:</strong> ${usedCar.body.engine_cap}<br>
+                        <strong>Mileage:</strong> ${usedCar.body.mileage}<br>
+                        <strong>Features:</strong> ${usedCar.body.features}<br>
+                        <strong>Description:</strong> ${usedCar.body.description}<br>
+                        <strong>Seller Username:</strong> ${usedCar.body.seller_username}<br>
                     </div>
                 `,
                 showCancelButton: true,
@@ -120,7 +154,7 @@ function BuyerShortlistUI() {
             console.log(usedCar);
             console.log("display success in UI for: ", usedCarId);
         } else {
-            console.error("Failed to load car information:", usedCarId);
+            console.error("Failed to load car information:", usedCar.body.price);
             Swal.fire({
                 title: 'Error',
                 text: 'Failed to load car information.',
@@ -244,7 +278,7 @@ function BuyerShortlistUI() {
         });
     };
 
-    const handleRemoveFromShortlist = (usedCarId) => {
+    const handleRemoveFromShortlist = (shortlistId) => {
         Swal.fire({
             title: 'Are you sure?',
             text: "You will not be able to recover this car from your shortlist!",
@@ -252,11 +286,14 @@ function BuyerShortlistUI() {
             showCancelButton: true,
             confirmButtonText: 'Yes, remove it!',
             cancelButtonText: 'No, keep it'
-        }).then((result) => {
+        }).then(async (result) => {
             if (result.isConfirmed) {
+                const deleteShortlistController = new DeleteShortlistController();
+                await deleteShortlistController.deleteShortlist(shortlistId);
                 // Logic to remove the car from the shortlist goes here
-                console.log(`Car ${usedCarId} removed from shortlist.`);
+                console.log(`Car ${shortlistId} removed from shortlist.`);
                 Swal.fire('Removed!', 'The car has been removed from your shortlist.', 'success');
+                fetchCars();
             } else if (result.isDismissed) {
                 Swal.fire('Cancelled', 'The car is still in your shortlist.', 'info');
             }
@@ -311,9 +348,9 @@ function BuyerShortlistUI() {
 
             <div className="bsSearch-bar">
                 <span>
-                    <input id="car_name" class="swal2-input custom-select" placeholder="Car Name(Hyundai)"></input>
+                    <input id="car_name" className="swal2-input custom-select" placeholder="Car Name(Hyundai)"></input>
 
-                    <select id="vehicleType" class="swal2-input custom-select">
+                    <select id="vehicleType" className="swal2-input custom-select">
                         <option value="">Select Vehicle Type</option>
                         <option value="Sedan">Sedan</option>
                         <option value="SUV">SUV</option>
@@ -327,7 +364,7 @@ function BuyerShortlistUI() {
                         <option value="Sports Car">Sports Car</option>
                     </select>
 
-                    <select id="priceRange" class="swal2-input custom-select">
+                    <select id="priceRange" className="swal2-input custom-select">
                         <option value="">Select price range</option>
                         <option value="0-10000">$0 - $10,000</option>
                         <option value="10001-20000">$10,001 - $20,000</option>
@@ -341,7 +378,7 @@ function BuyerShortlistUI() {
                         <option value="90001-100000">$90,001 - $100,000</option>
                     </select>
 
-                    <select id="manufactureYear" class="swal2-input custom-select">
+                    <select id="manufactureYear" className="swal2-input custom-select">
                         <option value="">Select manufacture year</option>
                         <option value="2023">2023</option>
                         <option value="2022">2022</option>
@@ -384,9 +421,9 @@ function BuyerShortlistUI() {
                         <span>${car.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</span>
                         <span>
                             <button onClick={() => viewUsedCar(car.usedCarId)} className="bsView-button">
-                                Inspect
+                                View
                             </button>
-                            <button onClick={() => handleRemoveFromShortlist(car.usedCarId)} className="bsRFS-button">
+                            <button onClick={() => handleRemoveFromShortlist(car.shortlistId)} className="bsRFS-button">
                                 Remove from Shortlist
                             </button>
                         </span>

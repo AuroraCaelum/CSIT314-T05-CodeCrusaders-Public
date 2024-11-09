@@ -1,7 +1,7 @@
 // File path: src/entity/RateReview.js
 import FirebaseService from '../FirebaseService';
 
-class ShortList {
+class Shortlist {
     static firebaseService = new FirebaseService(); // Singleton FirebaseService
     constructor(username, usedCarId) {
         this.username = username;
@@ -9,19 +9,27 @@ class ShortList {
     }
 
 
-    static async saveToShortlist(username, usedCarId) {
+    static async saveToShortlist(username, car) {
         try {
-            const documentId = Date.now().toLocaleString().concat(username); // Unique ID combining timestamp and BuyerID
+            const timestamp = Date.now(); // Unique ID combining timestamp and BuyerID
+            const documentId = `${timestamp}_${username}`;
 
             const shortlistData = {
                 username: username,
-                usedCarId: usedCarId,
-                addedAt: new Date() // Timestamp for when the car was added to the shortlist
+                usedCarId: car.usedCarId,
+                car_name: car.car_name,
+                // car_type: car.car_type,
+                car_image: car.car_image,
+                manufacture_year: car.manufacture_year,
+                mileage: car.mileage,
+                price: car.price,
+                description: car.description
             };
-            console.log(documentId, username, usedCarId)
+            console.log("Check save Shortlist at Entity", username, car.car_name);
+
 
             // Save to Firestore under the 'Shortlist' collection 
-            await ShortList.firebaseService.addDocument(`Shortlist`, documentId, shortlistData);
+            await Shortlist.firebaseService.addDocument(`Shortlist`, documentId, shortlistData);
             console.log("Used car added to shortlist successfully");
             return true;
             //return { success: true, message: "Used car added to shortlist successfully" };
@@ -34,7 +42,7 @@ class ShortList {
     // Method to search for a used car within a user's shortlist by multiple filters
     static async searchShortlist(username, car_name, car_type, priceMin, priceMax, manufactureYear) {
         try {
-            let query = ShortList.firebaseService.collection(`Shortlist`);
+            let query = Shortlist.firebaseService.collection(`Shortlist`);
 
             // Apply filters as necessary for each field
             if (car_name) {
@@ -68,6 +76,31 @@ class ShortList {
             return { success: false, message: error.message };
         }
     }
+
+    static async getShortlistList(username) {
+        try {
+            const firebaseService = new FirebaseService();
+            const shortlist = await firebaseService.searchByFields('Shortlist', { username: username });
+            console.log("Fetched shortlist:", shortlist);
+            return shortlist;
+        } catch (error) {
+            console.error("Error:", error);
+            throw error;
+        }
+    }
+
+    async deleteShortlist(shortlistId) {
+        try {
+            const firebaseService = new FirebaseService();
+            await firebaseService.deleteDocument('Shortlist', shortlistId);
+            console.log("Shortlist entry deleted successfully");
+            return true;
+            //return { success: true, message: "Used car entry deleted successfully" };
+        } catch (error) {
+            console.error("Error delete shortlist entry:", error);
+            return { success: false, message: error.message };
+        }
+    }
 }
 
-export default ShortList;
+export default Shortlist;

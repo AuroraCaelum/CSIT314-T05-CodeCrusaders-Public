@@ -1,12 +1,31 @@
-import ShortList from '../entity/Shortlist';
+import Shortlist from '../entity/Shortlist';
 import UsedCar from '../entity/UsedCar';
+
+
+class ViewShortlistController {
+
+    // View a used car by its ID
+    async viewUsedCarFromShortlist(usedCarId) {
+        try {
+            const usedCar = new UsedCar();
+            const carData = await usedCar.viewUsedCar(usedCarId);
+            console.log("Car Data(C):", carData);
+            return carData ;
+        } catch (error) {
+            console.error('Error viewing used car:', error);
+            return error;
+        }
+    }
+}
 
 class SaveShortlistController {
 
     // Method to save a car to the user's shortlist
-    async saveToShortlist(username, usedCarID) {
+    async saveToShortlist(username, car) {
         try {
-            const result = await ShortList.saveToShortlist(username, usedCarID);
+
+            console.log("Check save Shortlist at Controller: ", username, car.car_name);
+            const result = await Shortlist.saveToShortlist(username, car);
             return result;
         } catch (error) {
             console.error('Error saving car to shortlist:', error);
@@ -21,7 +40,7 @@ class SearchShortlistController {
     async searchShortlist(username, car_name, car_type, priceMin, priceMax, manufactureYear) {
         try {
             // First, retrieve the list of shortlisted car IDs that match the criteria
-            const shortlistResult = await ShortList.searchShortlist(username, car_name, car_type, priceMin, priceMax, manufactureYear);
+            const shortlistResult = await Shortlist.searchShortlist(username, car_name, car_type, priceMin, priceMax, manufactureYear);
             if (!shortlistResult.success) {
                 return { success: false, message: "No cars found in shortlist matching the criteria." };
             }
@@ -43,4 +62,23 @@ class SearchShortlistController {
     }
 }
 
-export { SaveShortlistController, SearchShortlistController};
+class DeleteShortlistController {
+    // Suspend a used car entry
+    async deleteShortlist(shortlistId) {
+        try {
+            const shortlist = new Shortlist();
+            const success = await shortlist.deleteShortlist(shortlistId);
+            if (success) {
+                console.log(shortlistId);
+                return { success: true, message: 'Shortlist entry deleted successfully' };
+            } else {
+                return { success: false, message: 'Failed to delete shortlist' };
+            }
+        } catch (error) {
+            console.error('Error suspending used car:', error);
+            return { success: false, message: error.message };
+        }
+    }
+}
+
+export { SaveShortlistController, SearchShortlistController, ViewShortlistController, DeleteShortlistController };

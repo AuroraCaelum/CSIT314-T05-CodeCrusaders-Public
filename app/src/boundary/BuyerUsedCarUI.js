@@ -12,7 +12,7 @@ import Swal from 'sweetalert2';
 function BuyerUsedCarUI() {
     const [username] = useState(Cookies.get("username"));
     const [cars, setCars] = useState([
-        { car_name: "Loading...", description: "Loading...", manufacture_year: "Loading...", mileage: "Loading...", price: "Loading...", car_image: "https://placehold.co/100x100?text=Car+Image", inspectCount: 0, shortlistCount: 0 }
+        { car_name: "Loading...", description: "Loading...", manufacture_year: "Loading...", mileage: "Loading...", price: "Loading...", car_image: "https://placehold.co/100x100?text=Car+Image", view_count: 0, shortlist_count: 0 }
     ]);
 
     useEffect(() => {
@@ -22,13 +22,14 @@ function BuyerUsedCarUI() {
                 const carData = snapshot.docs.map(doc => ({
                     usedCarId: doc.id,
                     car_name: doc.data().car_name,
+                    car_type: doc.data().car_type,
                     description: doc.data().description,
                     manufacture_year: doc.data().manufacture_year,
                     mileage: doc.data().mileage,
                     price: doc.data().price,
                     car_image: (doc.data().car_image),
-                    inspectCount: 0,
-                    shortlistCount: 0
+                    view_count: doc.data().view_count || 0,
+                    shortlist_count: doc.data().shortlist_count || 0
                 }));
                 setCars(carData);
             }
@@ -99,7 +100,7 @@ function BuyerUsedCarUI() {
         const viewUsedCarController = new ViewUsedCarController();
         const updatedCars = cars.map(car => {
             if (car.usedCarId === usedCarId) {
-                car.inspectCount += 1;
+                car.view_count += 1;
             }
             return car;
         });
@@ -267,16 +268,17 @@ function BuyerUsedCarUI() {
         });
     };
 
-    const saveToShortlist = (usedCarId) => {
-        //const username = Cookies.get('username');
-
-        const updatedCars = cars.map(car => {
-            if (car.usedCarId === usedCarId) {
-                car.shortlistCount += 1;  // Increment shortlist count when 'Save to Shortlist' is clicked
+    const saveToShortlist = (car) => {
+        const username = Cookies.get('username');
+        
+        const updatedCars = cars.map(item => {
+            if (item.usedCarId === car.usedCarId) {
+                item.shortlist_count += 1;  // Increment shortlist count when 'Save to Shortlist' is clicked
             }
-            return car;
+            return item;
         });
         setCars(updatedCars);
+        const increaseCount = Util.increaseCount(car.usedCarId, "shortlist_count");
         Swal.fire({
             title: 'Car Added!',
             text: "The car has been added to your shortlist.",
@@ -284,12 +286,14 @@ function BuyerUsedCarUI() {
             confirmButtonText: 'OK'
         }).then(async () => {
             const saveShortlistController = new SaveShortlistController();
-            const isSuccess = saveShortlistController.saveToShortlist(username, usedCarId);
+            const isSuccess = saveShortlistController.saveToShortlist(username, car);
+
+            console.log("Check save Shortlist at Boundary", username, car.usedCarId, car.car_name, car.car_type, car.manufacture_year, car.price);
 
             if (isSuccess) {
-                console.log(`Car ${usedCarId} added to shortlist.`);
+                console.log(`Car ${car.usedCarId} added to shortlist.`);
             } else {
-                console.log(`Car ${usedCarId} failed to add on shortlist.`);
+                console.log(`Car ${car.usedCarId} failed to add on shortlist.`);
             }
         });
     };
@@ -347,9 +351,9 @@ function BuyerUsedCarUI() {
 
             <div className="bucSearch-bar">
                 <span>
-                    <input id="car_name" class="swal2-input custom-select" placeholder="Car Name(Hyundai)"></input>
+                    <input id="car_name" className="swal2-input custom-select" placeholder="Car Name(Hyundai)"></input>
 
-                    <select id="vehicleType" class="swal2-input custom-select">
+                    <select id="vehicleType" className="swal2-input custom-select">
                         <option value="">Select Vehicle Type</option>
                         <option value="Sedan">Sedan</option>
                         <option value="SUV">SUV</option>
@@ -363,7 +367,7 @@ function BuyerUsedCarUI() {
                         <option value="Sports Car">Sports Car</option>
                     </select>
 
-                    <select id="priceRange" class="swal2-input custom-select">
+                    <select id="priceRange" className="swal2-input custom-select">
                         <option value="">Select price range</option>
                         <option value="0-10000">$0 - $10,000</option>
                         <option value="10001-20000">$10,001 - $20,000</option>
@@ -377,7 +381,7 @@ function BuyerUsedCarUI() {
                         <option value="90001-100000">$90,001 - $100,000</option>
                     </select>
 
-                    <select id="manufactureYear" class="swal2-input custom-select">
+                    <select id="manufactureYear" className="swal2-input custom-select">
                         <option value="">Select manufacture year</option>
                         <option value="2023">2023</option>
                         <option value="2022">2022</option>
@@ -427,14 +431,14 @@ function BuyerUsedCarUI() {
                             <button onClick={() => viewUsedCar(car.usedCarId)} className="bucView-button">
                                 View
                             </button>
-                            <button onClick={() => saveToShortlist(car.usedCarId)} className="bucSTS-button">
+                            <button onClick={() => saveToShortlist(car)} className="bucSTS-button">
                                 Save to Shortlist
                             </button>
                         </span>
                         <span>
                             <div className="counter-display">
-                                <span><img src={"viewIcon.png"} alt="Inspect" className="uclInspect-png-image" />{car.inspectCount}</span>  {/* Display inspect count with an icon */}
-                                <span><img src={"saveShortlistIcon.png"} alt="Shortlist" className="uclShortlist-png-image" />{car.shortlistCount}</span>  {/* Display shortlist count with an icon */}
+                                <span><img src={"viewIcon.png"} alt="Inspect" className="uclInspect-png-image" />{car.view_count}</span>  {/* Display inspect count with an icon */}
+                                <span><img src={"saveShortlistIcon.png"} alt="Shortlist" className="uclShortlist-png-image" />{car.shortlist_count}</span>  {/* Display shortlist count with an icon */}
                             </div>
                         </span>
                     </div>
