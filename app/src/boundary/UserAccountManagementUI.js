@@ -275,31 +275,54 @@ function UserAccountManagementUI() {
         }
     };
 
-    const searchUserAccount = async (e) => {
-        e.preventDefault();
-        console.log("Searched Username:", searchUsername);
+    const searchUserAccount = async () => {
+        const usernameInput = document.getElementById('username');
 
-        const searchUserController = new SearchUserAccountController();
-        const user = await searchUserController.searchUserAccount(searchUsername);
+        const filterCriteria = {
+            username: usernameInput ? usernameInput.value : ''
+        };
 
-        if (user) {
-            Swal.fire({
-                title: 'User Found',
-                text: `Username: ${user.username}, Name: ${user.name}, Profile: ${user.profile}`,
-                icon: 'success',
-            });
+        const searchUserAccountController = new SearchUserAccountController();
+        const searchResult = await searchUserAccountController.searchUserAccount(
+            filterCriteria.username
+        );
+
+        console.log(searchResult)
+
+
+        if (searchResult) {
+            console.log("Search results:", searchResult.data);
+            if (searchResult.success === false || searchResult.data.length === 0) {
+                Swal.fire({
+                    title: 'No Results',
+                    text: 'No user account found matching the search criteria.',
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            } else {
+                const accountData = searchResult.data.map(doc => ({
+                    fName: doc.fName,
+                    lName: doc.lName,
+                    username: doc.username,
+                    password: doc.password,
+                    phone: doc.phoneNum,
+                    email: doc.email,
+                    profile: doc.userProfile
+                }));
+                setUsers(accountData);
+            }
         } else {
-            Swal.fire({
-                title: 'User Not Found',
-                text: `No user found with the username: ${searchUsername}`,
-                icon: 'error',
-            });
+            console.error("Search failed:", searchResult.message);
         }
     };
 
     const handleBack = () => {
         window.history.back();
     };
+    // <input type="text" placeholder="Search by username" value={username} onChange={(e) => setSearchUsername(e.target.value)}
+    //                 //className="search-input"
+    //                 />
 
     return (
         <div className="uamContainer">
@@ -320,21 +343,18 @@ function UserAccountManagementUI() {
             </div>
 
             <div className="uamSearch-bar">
-                <form onSubmit={searchUserAccount}>
-                    <input
-                        type="text"
-                        placeholder="Search by username"
-                        value={searchUsername}
-                        onChange={(e) => setSearchUsername(e.target.value)}
-                    //className="search-input"
-                    />
-                    <button type="submit" className="uamSearch-button">
-                        Search
+                <span>
+                    <input id="username" className="uamSearch-input" placeholder="Search by username"/>
+                    <button onClick={searchUserAccount} className="uamSearch-button">
+                            Search
                     </button>
-                </form>
-                <button onClick={createUserAccount} className="uamCreate-button">
-                    Create user account
-                </button>
+                </span>
+
+                <span>
+                    <button onClick={createUserAccount} className="uamCreate-button">
+                        Create user account
+                    </button>
+                </span>
             </div>
             <div className="uamUser-table">
                 <div className="uamTable-header">
