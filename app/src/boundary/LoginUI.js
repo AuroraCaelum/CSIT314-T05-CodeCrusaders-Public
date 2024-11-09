@@ -15,8 +15,8 @@ function LoginUI() {
             const snapshot = await UserLoginController.getUserProfiles();
             if (snapshot !== null) {
                 const userData = snapshot.docs.map(doc => ({
-                    pName: doc.data().name,
-                    type: doc.data().typeOfUser
+                    pName: doc.data().profileName,
+                    type: doc.data().profileType
                 }));
                 setUserProfiles(userData);
             }
