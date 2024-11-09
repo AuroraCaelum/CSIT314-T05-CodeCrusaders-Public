@@ -96,43 +96,60 @@ function UserProfileManagementUI() {
         });
     };
 
-    const viewUserProfile = (userProfile) => {
-        Swal.fire({
-            title: 'View User Profile',
-            html: `
-                <div style="text-align: left;">
-                    <strong>Profile Name:</strong> ${userProfile.profileName}<br>
-                    <strong>Description:</strong> ${userProfile.description}<br>
-                    <strong>Type:</strong> ${userProfile.profileType}<br>
-                </div>
-            `,
-            showCancelButton: true,
-            cancelButtonText: 'close',
-            confirmButtonText: 'Update Details',
-            showDenyButton: true,
-            denyButtonText: 'Suspend',
-            focusConfirm: false
-        }).then((result) => {
-            if (result.isConfirmed) {
-                updateUserProfile(userProfile);
-            } else if (result.isDenied) {
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You are about to suspend this user.",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, suspend it!',
-                    cancelButtonText: 'No, cancel'
-                }).then(async (suspendResult) => {
-                    if (suspendResult.isConfirmed) {
-                        const suspendUserProfileController = new SuspendUserProfileController();
-                        await suspendUserProfileController.suspendUserProfile(userProfile.profileName);
-                        console.log('User suspended:', userProfile.profileName);
-                        Swal.fire('Suspended!', 'The user has been suspended.', 'success');
-                    }
-                });
-            }
-        });
+    const viewUserProfile = async (profileName) => {
+        console.log('Fetching user account for:', profileName);
+        const viewUserProfileController = new ViewUserProfileController();
+        const userProfile = await viewUserProfileController.viewUserProfile(profileName);
+        console.log("User account data received:", userProfile);
+
+        if (userProfile) {
+            Swal.fire({
+                title: 'View User Profile',
+                html: `
+                    <div style="text-align: left;">
+                        <strong>Profile Name:</strong> ${userProfile.profileName}<br>
+                        <strong>Description:</strong> ${userProfile.description}<br>
+                        <strong>Type:</strong> ${userProfile.profileType}<br>
+                    </div>
+                `,
+                showCancelButton: true,
+                cancelButtonText: 'close',
+                confirmButtonText: 'Update Details',
+                showDenyButton: true,
+                denyButtonText: 'Suspend',
+                focusConfirm: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    updateUserProfile(userProfile);
+                } else if (result.isDenied) {
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You are about to suspend this user.",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, suspend it!',
+                        cancelButtonText: 'No, cancel'
+                    }).then(async (suspendResult) => {
+                        if (suspendResult.isConfirmed) {
+                            const suspendUserProfileController = new SuspendUserProfileController();
+                            await suspendUserProfileController.suspendUserProfile(userProfile.profileName);
+                            console.log('User suspended:', userProfile.profileName);
+                            Swal.fire('Suspended!', 'The user has been suspended.', 'success');
+                        }
+                    });
+                }
+            });
+            console.log(userProfile);
+            console.log("display success in UI for: ", profileName);
+        } else {
+            console.error("Failed to load profile information:", profileName);
+            Swal.fire({
+                title: 'Error',
+                text: 'Failed to load profile information.',
+                icon: 'error',
+                confirmButtonText: 'Close'
+            });
+        }
     };
 
     const updateUserProfile = (userProfile) => {

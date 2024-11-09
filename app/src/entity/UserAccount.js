@@ -1,4 +1,6 @@
 import FirebaseService from '../FirebaseService';
+import { db } from './../firebase';
+import { doc, collection, where, query, getDocs } from 'firebase/firestore';
 
 class UserAccount {
     constructor(username, fName, lName, password, phoneNum, email, userProfile) {
@@ -143,17 +145,25 @@ class UserAccount {
     }
 
     // Search for a user by username
-    static async searchUserAccount(username) {
-        console.log("Searching for username:", username); 
+    async searchUserAccount(username) {
         try {
-            const firebaseService = new FirebaseService();
-            const userData = await firebaseService.getDocument('UserAccount', username);
-            console.log("User Data:", userData);
+            let rawquery = collection(db, 'UserAccount');
 
-            if(userData) {
-                return userData; // Assuming usernames are unique
+            const conditions = [];
+            conditions.push(where("username", "==", username));
+
+            console.log(conditions)
+
+            const finalQuery = query(rawquery, ...conditions);
+            const snapshot = await getDocs(finalQuery);
+            const userAccount = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+            console.log(userAccount)
+
+            if(userAccount.length > 0) {
+                return { success: true, data: userAccount };
             } else {
-                throw new Error("User not found");
+                return { success: false, data: null };
             }
         } catch (error) {
             console.error("Error searching for user:", error);

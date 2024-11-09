@@ -76,9 +76,10 @@ class SearchUserAccountController {
     async searchUserAccount(username) {
         // const { username } = req.params;
         try {
-            const userAccount = await UserAccount.searchUserAccount(username); // Call the static method to search by username
+            const userAccount = new UserAccount();
+            const userAccountData = await userAccount.searchUserAccount(username); // Call the static method to search by username
             // res.status(200).json(userData);
-            return userAccount;
+            return userAccountData;
         } catch (error) {
             // res.status(500).json({ error: 'Failed to search user account: ' + error.message });
             return null;
