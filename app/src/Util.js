@@ -91,6 +91,16 @@ class Util {
         }
     }
 
+    static async decreaseCount(usedCarId, countType) {
+        try {
+            const decrease = await UsedCar.decreaseCount(usedCarId, countType);
+            console.log(decrease);
+            return decrease;
+        } catch (error) {
+            console.log("Error:", error);
+            throw error;
+        }
+    }
 }
 
 export { Util };

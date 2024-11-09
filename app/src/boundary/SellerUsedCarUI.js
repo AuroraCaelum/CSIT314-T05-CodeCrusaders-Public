@@ -109,7 +109,7 @@ function SellerUsedCarUI() {
             return car;
         });
         setCars(updatedCars);
-        const increaseCount = Util.increaseCount(usedCarId, "view_count");
+        Util.increaseCount(usedCarId, "view");
         const usedCar = await viewUsedCarController.viewUsedCar(usedCarId);
         console.log("Used Car data received:", usedCar);
 
