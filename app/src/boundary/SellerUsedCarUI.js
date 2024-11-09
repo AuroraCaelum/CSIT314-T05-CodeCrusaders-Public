@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
+import Chart from 'chart.js/auto';
 import "./SellerUsedCarUI.css";
 import { Util } from "../Util";
 import { UserLogoutController } from "../controller/UserAuthController";
-import { ViewUsedCarController, SearchUsedCarController } from "../controller/UsedCarController";
+import { ViewUsedCarController, SearchUsedCarController, TrackViewCountController, TrackShortlistCountController } from "../controller/UsedCarController";
 import { LeaveRateReviewController } from "../controller/RateReviewController";
 //import { SaveShortlistController } from "../controller/ShortlistController";
 
@@ -26,7 +27,7 @@ function SellerUsedCarUI() {
                     const carData = snapshot.map(doc => ({
                         usedCarId: doc.documentId,
                         car_name: doc.car_name,
-                        description: (desc => desc.length >= 50 ? desc.substring(0, 100) + "..." : desc)(doc.description),
+                        description: (desc => desc.length >= 150 ? desc.substring(0, 150) + "..." : desc)(doc.description),
                         manufacture_year: doc.manufacture_year,
                         mileage: doc.mileage,
                         price: doc.price,
@@ -139,7 +140,7 @@ function SellerUsedCarUI() {
                 if (result.isConfirmed) {
                     leaveRateReview(usedCar.body.agent_username);
                 } else if (result.isDenied) {
-                   // openLoanCalculator(usedCar.body.price);
+                    // openLoanCalculator(usedCar.body.price);
                 }
             });
             console.log(usedCar);
@@ -153,6 +154,132 @@ function SellerUsedCarUI() {
                 confirmButtonText: 'Close'
             });
         }
+    };
+
+    const trackViewCount = async (usedCarId) => {
+        Swal.fire({
+            title: 'View Count History',
+            width: 800,
+            html: `
+                <canvas id="viewCountChart" width="400" height="200"></canvas>
+                <h3 id="viewCountChartLoading">Loading Chart...</h3>
+                <h3 id="viewCountErrorText" style="display: none;">View Count History Data Not Found!</h3>
+            `,
+            confirmButtonText: 'Close',
+            focusConfirm: false,
+            didOpen: async () => {
+                const trackViewCountController = new TrackViewCountController();
+                const viewCountHistory = await trackViewCountController.trackViewCount(usedCarId);
+
+                if (viewCountHistory === undefined || viewCountHistory === null) {
+                    document.getElementById("viewCountChart").style.display = "none";
+                    document.getElementById("viewCountChartLoading").style.display = "none";
+                    document.getElementById("viewCountErrorText").style.display = "block";
+                } else {
+                    const orderedViewCountHistory = {};
+                    Object.keys(viewCountHistory).sort().forEach(key => {
+                        orderedViewCountHistory[key] = viewCountHistory[key];
+                    });
+
+                    const accumulatedViewCountHistory = {};
+                    Object.keys(orderedViewCountHistory).forEach((key, index) => {
+                        if (index === 0) {
+                            accumulatedViewCountHistory[key] = orderedViewCountHistory[key];
+                        } else {
+                            accumulatedViewCountHistory[key] = orderedViewCountHistory[key] + accumulatedViewCountHistory[Object.keys(accumulatedViewCountHistory)[index - 1]];
+                        }
+                    });
+
+                    const ctx = document.getElementById('viewCountChart');
+                    new Chart(ctx, {
+                        data: {
+                            labels: Object.keys(orderedViewCountHistory),
+                            datasets: [{
+                                type: 'line',
+                                label: 'Monthly View Count',
+                                data: Object.values(orderedViewCountHistory),
+                                fill: false,
+                                borderColor: 'rgb(230, 212, 110)',
+                                tension: 0.1
+                            }, {
+                                type: 'line',
+                                label: 'Cumulative View Count',
+                                data: Object.values(accumulatedViewCountHistory),
+                                fill: true,
+                                showLine: false,
+                                backgroundColor: 'rgba(110, 136, 229, 0.6)',
+                                tension: 0.1
+                            }]
+                        }
+                    });
+
+                    document.getElementById("viewCountChartLoading").style.display = "none";
+                }
+            }
+        });
+    };
+
+    const trackShortlistCount = async (usedCarId) => {
+        Swal.fire({
+            title: 'Shortlist Count History',
+            width: 800,
+            html: `
+                <canvas id="shortlistCountChart" width="400" height="200"></canvas>
+                <h3 id="shortlistCountChartLoading">Loading Chart...</h3>
+                <h3 id="shortlistCountErrorText" style="display: none;">Shortlist Count History Data Not Found!</h3>
+            `,
+            confirmButtonText: 'Close',
+            focusConfirm: false,
+            didOpen: async () => {
+                const trackShortlistCountController = new TrackShortlistCountController();
+                const shortlistCountHistory = await trackShortlistCountController.trackShortlistCount(usedCarId);
+
+                if (shortlistCountHistory === undefined || shortlistCountHistory === null) {
+                    document.getElementById("shortlistCountChart").style.display = "none";
+                    document.getElementById("shortlistCountChartLoading").style.display = "none";
+                    document.getElementById("shortlistCountErrorText").style.display = "block";
+                } else {
+                    const orderedShortlistCountHistory = {};
+                    Object.keys(shortlistCountHistory).sort().forEach(key => {
+                        orderedShortlistCountHistory[key] = shortlistCountHistory[key];
+                    });
+
+                    const accumulatedShortlistCountHistory = {};
+                    Object.keys(orderedShortlistCountHistory).forEach((key, index) => {
+                        if (index === 0) {
+                            accumulatedShortlistCountHistory[key] = orderedShortlistCountHistory[key];
+                        } else {
+                            accumulatedShortlistCountHistory[key] = orderedShortlistCountHistory[key] + accumulatedShortlistCountHistory[Object.keys(accumulatedShortlistCountHistory)[index - 1]];
+                        }
+                    });
+
+                    const ctx = document.getElementById('shortlistCountChart');
+                    new Chart(ctx, {
+                        data: {
+                            labels: Object.keys(orderedShortlistCountHistory),
+                            datasets: [{
+                                type: 'line',
+                                label: 'Monthly View Count',
+                                data: Object.values(orderedShortlistCountHistory),
+                                fill: false,
+                                borderColor: 'rgb(230, 212, 110)',
+                                tension: 0.1
+                            }, {
+                                type: 'line',
+                                label: 'Cumulative View Count',
+                                data: Object.values(accumulatedShortlistCountHistory),
+                                fill: true,
+                                showLine: false,
+                                backgroundColor: 'rgba(110, 136, 229, 0.6)',
+                                tension: 0.1
+                            }]
+                        }
+                    });
+
+                    document.getElementById("shortlistCountChartLoading").style.display = "none";
+                }
+            }
+        });
     };
 
     const leaveRateReview = (agent_username) => {
@@ -425,8 +552,8 @@ function SellerUsedCarUI() {
                         </button>
                         <span>
                             <div className="counter-display">
-                                <span><img src={"viewIcon.png"} alt="Inspect" className="uclInspect-png-image" />{car.view_count}</span>  {/* Display inspect count with an icon */}
-                                <span><img src={"saveShortlistIcon.png"} alt="Shortlist" className="uclShortlist-png-image" />{car.shortlist_count}</span>  {/* Display shortlist count with an icon */}
+                                <span onClick={() => trackViewCount(car.usedCarId)} title="Click to track view count"><img src={"viewIcon.png"} alt="Inspect" className="uclInspect-png-image" />{car.view_count}</span>  {/* Display inspect count with an icon */}
+                                <span onClick={() => trackShortlistCount(car.usedCarId)} title="Click to track shortlist count"><img src={"saveShortlistIcon.png"} alt="Shortlist" className="uclShortlist-png-image" />{car.shortlist_count}</span>  {/* Display shortlist count with an icon */}
                             </div>
                         </span>
                     </div>

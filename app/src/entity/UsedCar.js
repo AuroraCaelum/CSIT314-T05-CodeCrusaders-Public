@@ -312,5 +312,37 @@ class UsedCar {
             return { success: false, message: error.message };
         }
     }
+
+    static async trackViewCount(usedCarId) {
+        try {
+            const firebaseService = new FirebaseService();
+            const carData = await firebaseService.getDocument('UsedCar', usedCarId);
+
+            if (carData && carData.view_history !== undefined) {
+                return carData.view_history; // Return only the count as an integer
+            } else {
+                throw new Error("View count not found for the provided used car ID");
+            }
+        } catch (error) {
+            console.error("Error tracking view count:", error);
+            return null; // Or handle as needed, e.g., return -1 to indicate error
+        }
+    }
+
+    static async trackShortlistCount(usedCarId) {
+        try {
+            const firebaseService = new FirebaseService();
+            const carData = await firebaseService.getDocument('UsedCar', usedCarId);
+
+            if (carData && carData.shortlist_history !== undefined) {
+                return carData.shortlist_history; // Return only the count as an integer
+            } else {
+                throw new Error("View count not found for the provided used car ID");
+            }
+        } catch (error) {
+            console.error("Error tracking view count:", error);
+            return null; // Or handle as needed, e.g., return -1 to indicate error
+        }
+    }
 }
 export default UsedCar;

@@ -24,7 +24,7 @@ class CreateUsedCarController {
             console.log("Used car Creatd successfully");
             console.log("New Car Details(C22):", usedCarId, agent_username, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap)
             return true;
-            
+
         } catch (error) {
             console.error('Error creating used car:', error);
             return { success: false, message: error.message };
@@ -40,7 +40,7 @@ class ViewUsedCarController {
             const usedCar = new UsedCar();
             const carData = await usedCar.viewUsedCar(usedCarId);
             console.log("Car Data(C):", carData);
-            return carData ;
+            return carData;
         } catch (error) {
             console.error('Error viewing used car:', error);
             return error;
@@ -61,7 +61,7 @@ class UpdateUsedCarController {
 
             const usedCar = new UsedCar(usedCarId, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap);
             await usedCar.updateUsedCar(usedCarId, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap);
-            
+
             console.log("Used car updated successfully");
             return true;
 
@@ -136,4 +136,28 @@ class GetUsedCarshortlist_countController {
     }
 }
 
-export { CreateUsedCarController, ViewUsedCarController, UpdateUsedCarController, DeleteUsedCarController, SearchUsedCarController, GetUsedCarViewCountController, GetUsedCarshortlist_countController };
+class TrackViewCountController {
+    async trackViewCount(usedCarId) {
+        try {
+            const viewCountHistory = await UsedCar.trackViewCount(usedCarId);
+            return viewCountHistory; // Returns true if successful, false otherwise
+        } catch (error) {
+            console.error("Controller Error tracking view count:", error);
+            return false; // Or handle as needed
+        }
+    }
+}
+
+class TrackShortlistCountController {
+    async trackShortlistCount(usedCarId) {
+        try {
+            const shortlistCountHistory = await UsedCar.trackShortlistCount(usedCarId);
+            return shortlistCountHistory; // Returns true if successful, false otherwise
+        } catch (error) {
+            console.error("Controller Error tracking shortlist count:", error);
+            return false; // Or handle as needed
+        }
+    }
+}
+
+export { CreateUsedCarController, ViewUsedCarController, UpdateUsedCarController, DeleteUsedCarController, SearchUsedCarController, GetUsedCarViewCountController, GetUsedCarshortlist_countController, TrackViewCountController, TrackShortlistCountController };
