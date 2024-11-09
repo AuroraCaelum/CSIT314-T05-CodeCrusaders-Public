@@ -2,6 +2,7 @@ import UsedCar from './entity/UsedCar'
 import UserAccount from './entity/UserAccount'
 import UserProfile from './entity/UserProfile'
 import RateReview from './entity/RateReview'
+import Shortlist from './entity/Shortlist'
 
 class Util {
 
@@ -45,6 +46,29 @@ class Util {
             throw error;
         }
     }
+
+    static async getShortlistList(username) {
+        try {
+            const shortlistList = await Shortlist.getShortlistList(username);
+            console.log(shortlistList);
+            return shortlistList;
+        } catch (error) {
+            console.log("Error:", error);
+            throw error;
+        }
+    }
+
+    static async increaseCount(usedCarId, countType) {
+        try {
+            const increase = await UsedCar.increaseCount(usedCarId, countType);
+            console.log(increase);
+            return increase;
+        } catch (error) {
+            console.log("Error:", error);
+            throw error;
+        }
+    }
+
 }
 
 export { Util };

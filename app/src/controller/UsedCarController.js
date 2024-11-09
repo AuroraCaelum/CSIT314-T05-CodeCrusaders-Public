@@ -124,11 +124,11 @@ class GetUsedCarViewCountController {
 }
 
 
-class GetUsedCarShortlistCountController {
-    async getUsedCarShortlistCount(usedCarId) {
+class GetUsedCarshortlist_countController {
+    async getUsedCarshortlist_count(usedCarId) {
         try {
-            const shortlistCount = await UsedCar.getUsedCarShortlistCount(usedCarId);
-            return shortlistCount; // Returns only the shortlist count as an integer
+            const shortlist_count = await UsedCar.getUsedCarshortlist_count(usedCarId);
+            return shortlist_count; // Returns only the shortlist count as an integer
         } catch (error) {
             console.error("Controller Error fetching shortlist count:", error);
             return null; // Or handle as needed, e.g., return -1 to indicate error
@@ -136,4 +136,4 @@ class GetUsedCarShortlistCountController {
     }
 }
 
-export { CreateUsedCarController, ViewUsedCarController, UpdateUsedCarController, DeleteUsedCarController, SearchUsedCarController, GetUsedCarViewCountController, GetUsedCarShortlistCountController };
+export { CreateUsedCarController, ViewUsedCarController, UpdateUsedCarController, DeleteUsedCarController, SearchUsedCarController, GetUsedCarViewCountController, GetUsedCarshortlist_countController };

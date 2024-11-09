@@ -12,7 +12,7 @@ import Swal from 'sweetalert2';
 function SellerUsedCarUI() {
     const [username] = useState(Cookies.get("username"));
     const [cars, setCars] = useState([
-        { car_name: "Loading...", description: "Loading...", manufacture_year: "Loading...", mileage: "Loading...", price: "Loading...", car_image: "https://placehold.co/100x100?text=Car+Image", inspectCount: 0, shortlistCount: 0 }
+        { car_name: "Loading...", description: "Loading...", manufacture_year: "Loading...", mileage: "Loading...", price: "Loading...", car_image: "https://placehold.co/100x100?text=Car+Image", view_count: 0, shortlist_count: 0 }
     ]);
 
     useEffect(() => {
@@ -27,8 +27,8 @@ function SellerUsedCarUI() {
                     mileage: doc.data().mileage,
                     price: doc.data().price,
                     car_image: (doc.data().car_image),
-                    inspectCount: 0,
-                    shortlistCount: 0
+                    view_count: doc.data().view_count || 0,
+                    shortlist_count: doc.data().shortlist_count || 0
                 }));
                 setCars(carData);
             }
@@ -99,7 +99,7 @@ function SellerUsedCarUI() {
         const viewUsedCarController = new ViewUsedCarController();
         const updatedCars = cars.map(car => {
             if (car.usedCarId === usedCarId) {
-                car.inspectCount += 1;
+                car.view_count += 1;
             }
             return car;
         });
@@ -270,7 +270,7 @@ function SellerUsedCarUI() {
 
         const updatedCars = cars.map(car => {
             if (car.usedCarId === usedCarId) {
-                car.shortlistCount += 1;  // Increment shortlist count when 'Save to Shortlist' is clicked
+                car.shortlist_count += 1;  // Increment shortlist count when 'Save to Shortlist' is clicked
             }
             return car;
         });
@@ -421,8 +421,8 @@ function SellerUsedCarUI() {
                         </button>
                         <span>
                             <div className="counter-display">
-                                <span><img src={"viewIcon.png"} alt="Inspect" className="uclInspect-png-image" />{car.inspectCount}</span>  {/* Display inspect count with an icon */}
-                                <span><img src={"saveShortlistIcon.png"} alt="Shortlist" className="uclShortlist-png-image" />{car.shortlistCount}</span>  {/* Display shortlist count with an icon */}
+                                <span><img src={"viewIcon.png"} alt="Inspect" className="uclInspect-png-image" />{car.view_count}</span>  {/* Display inspect count with an icon */}
+                                <span><img src={"saveShortlistIcon.png"} alt="Shortlist" className="uclShortlist-png-image" />{car.shortlist_count}</span>  {/* Display shortlist count with an icon */}
                             </div>
                         </span>
                     </div>
