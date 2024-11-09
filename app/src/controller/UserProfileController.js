@@ -64,11 +64,8 @@ class SuspendUserProfileController {
         try {
             const profile = new UserProfile(profileName, null, null); // Assuming constructor still needed
             const success = await profile.suspendUserProfile(profileName); // No need for profileId
-            if (success) {
-                return true;
-            } else {
-                return false;
-            }
+            console.log("Success to Suspend User Profile(Controller)", profileName);
+            return true;
         } catch (error) {
             return false;
         }
