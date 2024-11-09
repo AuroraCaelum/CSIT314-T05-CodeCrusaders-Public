@@ -42,6 +42,11 @@ describe('Used Car Agent UI', () => {
   });
 
   test('UCAUsedCarListingUI renders without crashing', async () => {
+    // Set fake Cookie
+    Object.defineProperty(document, 'cookie', {
+      writable: true,
+      value: 'username=usedcaragent'
+    });
     render(<UCAUsedCarListingUI />);
     expect(screen.getByText('Car Name')).toBeInTheDocument();
   });
@@ -70,6 +75,11 @@ describe('Buyer and Seller UI', () => {
 
   test('SellerUsedCarUI renders without crashing', async () => {
     render(<SellerUsedCarUI />);
+    // Set fake Cookie
+    Object.defineProperty(document, 'cookie', {
+      writable: true,
+      value: 'username=seller'
+    });
     expect(screen.getByText('Manufactured')).toBeInTheDocument();
   });
 });
