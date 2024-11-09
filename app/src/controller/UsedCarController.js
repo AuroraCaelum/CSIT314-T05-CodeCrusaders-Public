@@ -19,7 +19,7 @@ class CreateUsedCarController {
             }
             console.log("New Car Details(C):", usedCarId, agent_username, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap)
 
-            const usedCar = new UsedCar(usedCarId, agent_username, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap);
+            const usedCar = new UsedCar();
             await usedCar.createUsedCar(usedCarId, agent_username, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap);
             console.log("Used car Creatd successfully");
             console.log("New Car Details(C22):", usedCarId, agent_username, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap)
