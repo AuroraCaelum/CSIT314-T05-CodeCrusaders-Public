@@ -59,6 +59,7 @@ class UserAccount {
             // Search for the user by username in Firestore
             const userData = await this.firebaseService.getDocument('UserAccount', username);
             console.log("User data:", userData);
+            //console.log("User data:", userData.username);
             console.log("Params:", username, password, userProfile);
 
             if (userData && userData.username === username) {
@@ -174,8 +175,7 @@ class UserAccount {
             throw error;
         }
     }
-    // Search for a user in Firestore by the username field
-    // const userData = await FirebaseService.searchByField('UserAccount', 'username', username);
+
     static async getUserAccountList() {
         try {
             const firebaseService = new FirebaseService();

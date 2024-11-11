@@ -1,4 +1,7 @@
 import FirebaseService from "../FirebaseService";
+import { db } from './../firebase';
+import { doc, collection, where, query, getDocs } from 'firebase/firestore';
+
 
 class UserProfile {
     constructor(profileName, description, profileType) {
@@ -30,22 +33,23 @@ class UserProfile {
     }
 
     // Fetch profile by profileId from Firestore
-    async viewUserProfile() {
+    async viewUserProfile(profileName) {
         try {
             // Use this.type as the document ID
-            const profileData = await this.firebaseService.getDocument(
-                "UserProfile",
-                this.type
-            );
-            if (profileData) {
-                this.description = profileData.description;
-                this.profileName = profileData.profileName;
-                this.profileType = profileData.profileType;
+            const profileData = await this.firebaseService.getDocument("UserProfile", profileName);
+            //  if (profileData) {
+                // this.description = profileData.description;
+                // this.profileName = profileData.profileName;
+                // this.profileType = profileData.profileType;
+                console.log("Success to display Profile: ", profileName);
+                console.log("connected with data base at(E)s(profileData):", profileData);
                 return profileData;
-            } else {
-                throw new Error("Profile not found");
-            }
+                
+            // } else {
+            //     throw new Error("Profile not found");
+            // }
         } catch (error) {
+            console.log("connected with data base at(E)s(profileName):", profileName);
             console.error("Error getting user profile:", error);
             throw error;
         }
@@ -89,17 +93,30 @@ class UserProfile {
 
 
     // Search profile by name
-    static async searchUserProfile(profileName) {
+    async searchUserProfile(profileName) {
         try {
-            const firebaseService = new FirebaseService();
-            const profiles = await firebaseService.searchByFields('UserProfile', { profileName });
-            if (profiles.length > 0) {
-                return profiles[0];  // Return the first matching profile
+            let rawquery = collection(db, 'UserProfile');
+
+            const conditions = [];
+            if (profileName) {
+                conditions.push(where("profileName", "==", profileName));
+            }
+
+            console.log(conditions)
+
+            const finalQuery = query(rawquery, ...conditions);
+            const snapshot = await getDocs(finalQuery);
+            const userProfile = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+            console.log(userProfile)
+
+            if(userProfile.length > 0) {
+                return { success: true, data: userProfile };
             } else {
-                throw new Error("Profile not found");
+                return { success: false, data: null };
             }
         } catch (error) {
-            console.error("Error searching for user profile:", error);
+            console.error("Error searching for user:", error);
             throw error;
         }
     }

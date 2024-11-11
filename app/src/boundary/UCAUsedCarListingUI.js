@@ -20,7 +20,7 @@ function UCAUsedCarListingUI() {
             const carData = snapshot.map(doc => ({
                 usedCarId: doc.documentId,
                 car_name: doc.car_name,
-                description: (desc => desc.length >= 150 ? desc.substring(0, 150) + "..." : desc)(doc.description),
+                description: (desc => desc.length >= 50 ? desc.substring(0, 10) + "..." : desc)(doc.description),
                 manufacture_year: doc.manufacture_year,
                 mileage: doc.mileage,
                 price: doc.price,
@@ -208,7 +208,7 @@ function UCAUsedCarListingUI() {
         });
     };
 
-    const viewUsedCar = async (usedCarId) => { //not done
+    const viewUsedCar = async (usedCarId) => {
         console.log('Fetching used Car for:', usedCarId);
         const viewUsedCarController = new ViewUsedCarController();
         const updatedCars = cars.map(car => {
@@ -437,6 +437,57 @@ function UCAUsedCarListingUI() {
                 });
                 return;
             } else {
+                const handleSearchUsedCar = async () => {
+                    const carNameInput = document.getElementById('car_name');
+                    const vehicleTypeInput = document.getElementById('vehicleType');
+                    const priceRangeInput = document.getElementById('priceRange');
+                    const manufactureYearInput = document.getElementById('manufactureYear');
+            
+                    let priceRange = priceRangeInput.value.toString().split("-");
+            
+                    const filterCriteria = {
+                        car_name: carNameInput ? carNameInput.value : '',
+                        vehicleType: vehicleTypeInput.value,
+                        priceRange: priceRange,
+                        manufactureYear: manufactureYearInput.value
+                    };
+            
+                    const searchUsedCarController = new SearchUsedCarController();
+                    const searchResult = await searchUsedCarController.searchUsedCar(
+                        filterCriteria.car_name,
+                        filterCriteria.vehicleType,
+                        filterCriteria.priceRange,
+                        filterCriteria.manufactureYear
+                    );
+            
+            
+                    if (searchResult) {
+                        console.log("Search results:", searchResult.data);
+                        if (searchResult.data === undefined || searchResult.data.length === 0) {
+                            Swal.fire({
+                                title: 'No Results',
+                                text: 'No used cars found matching the search criteria.',
+                                icon: 'info',
+                                confirmButtonText: 'OK'
+                            });
+                            return;
+                        } else {
+                            const carData = searchResult.data.map(doc => ({
+                                usedCarId: doc.id,
+                                car_name: doc.car_name,
+                                manufacture_year: doc.manufacture_year,
+                                mileage: doc.mileage,
+                                price: doc.price,
+                                car_image: doc.car_image
+                            }));
+                            setCars(carData);
+                        }
+                    } else {
+                        console.error("Search failed:", searchResult.message);
+                    }
+            
+                };
+
                 const carData = searchResult.data.map(doc => ({
                     usedCarId: doc.id,
                     car_name: doc.car_name,
@@ -506,9 +557,9 @@ function UCAUsedCarListingUI() {
 
             <div className="uclSearch-bar">
                 <span>
-                    <input id="car_name" class="swal2-input custom-select" placeholder="Car Name(Hyundai)"></input>
+                    <input id="car_name" className="swal2-input custom-select" placeholder="Car Name(Hyundai)"></input>
 
-                    <select id="vehicleType" class="swal2-input custom-select">
+                    <select id="vehicleType" className="swal2-input custom-select">
                         <option value="">Select Vehicle Type</option>
                         <option value="Sedan">Sedan</option>
                         <option value="SUV">SUV</option>
@@ -522,7 +573,7 @@ function UCAUsedCarListingUI() {
                         <option value="Sports Car">Sports Car</option>
                     </select>
 
-                    <select id="priceRange" class="swal2-input custom-select">
+                    <select id="priceRange" className="swal2-input custom-select">
                         <option value="">Select price range</option>
                         <option value="0-10000">$0 - $10,000</option>
                         <option value="10001-20000">$10,001 - $20,000</option>
@@ -536,7 +587,7 @@ function UCAUsedCarListingUI() {
                         <option value="90001-100000">$90,001 - $100,000</option>
                     </select>
 
-                    <select id="manufactureYear" class="swal2-input custom-select">
+                    <select id="manufactureYear" className="swal2-input custom-select">
                         <option value="">Select manufacture year</option>
                         <option value="2023">2023</option>
                         <option value="2022">2022</option>

@@ -14,6 +14,7 @@ class UserLoginController {
 
             // Attempt to login with username and password
             const loginSuccess = await user.authenticateLogin(username, password, userProfile);
+            console.log("check id/pw valid or not(AuthC): ", username, password, userProfile);
 
             if (loginSuccess) {
                 Cookies.set('username', username);
