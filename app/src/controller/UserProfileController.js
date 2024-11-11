@@ -26,10 +26,14 @@ class ViewUserProfileController {
     // View current user's profile
     async viewUserProfile(profileName) {
         try {
-            const profile = new UserProfile(); // Assuming constructor is still needed
-            const profileData = await profile.viewUserProfile(profileName); // Change to viewUserProfile
+            const userProfile = new UserProfile(); // Assuming constructor is still needed
+            const profileData = await userProfile.viewUserProfile(profileName); // Change to viewUserProfile
+            console.log("display User Profile(C)(profileData): ", profileData);
             return profileData;
+
         } catch (error) {
+            console.log("display User Profile(C)(profileName): ", profileName);
+
             console.log("Error:", error);
             throw error;
         }
@@ -77,7 +81,8 @@ class SearchUserProfileController {
     // Search for user's profile
     async searchUserProfile(profileName) {
         try {
-            const profile = await UserProfile.searchUserProfile(profileName); // Adjusted to correct method
+            const userProfile = new UserProfile();
+            const profile = await userProfile.searchUserProfile(profileName); // Adjusted to correct method
             return profile;
         } catch (error) {
             throw error;

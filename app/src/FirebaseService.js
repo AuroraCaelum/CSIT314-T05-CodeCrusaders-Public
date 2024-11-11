@@ -36,6 +36,7 @@ class FirebaseService {
                 return null;
             }
         } catch (error) {
+            console.log("connected with data base at(FirebaseSearvice):", collectionName, docId)
             console.error("Error getting document:", error);
             throw error;
         }

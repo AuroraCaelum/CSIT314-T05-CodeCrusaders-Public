@@ -26,6 +26,7 @@ class ViewUserAccountController {
             const userAccount = new UserAccount();
             const userData = await userAccount.viewUserAccount(username); // Fetch user data by username
             console.log("Fetched user account:", userData);
+            console.log("connected with data base at(c):", username)
             return userData;
         } catch (error) {
             console.error("Error fetching user account:", error);

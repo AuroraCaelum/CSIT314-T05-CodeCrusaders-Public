@@ -106,7 +106,7 @@ function UserProfileManagementUI() {
         console.log('Fetching user account for:', profileName);
         const viewUserProfileController = new ViewUserProfileController();
         const userProfile = await viewUserProfileController.viewUserProfile(profileName);
-        console.log("User account data received:", userProfile);
+        console.log("User profile data received:", userProfile);
 
         if (userProfile) {
             Swal.fire({
@@ -162,9 +162,15 @@ function UserProfileManagementUI() {
         Swal.fire({
             title: 'Update User Profile',
             html: `
-                <input type="text" id="profileName" class="swal2-input" placeholder="Profile Name" value="${userProfile.profileName}">
+                <input type="text" id="profileName" class="swal2-input" placeholder="Profile Name" value="${userProfile.profileName}" disabled>
                 <input type="text" id="description" class="swal2-input" placeholder="Description" value="${userProfile.description}">
-                <input type="text" id="profileType" class="swal2-input" placeholder="Profile Type" value="${userProfile.profileType}">
+                <select id="profileType" class="swal2-select">
+                    <option value="">Select Profile Type</option>
+                    <option value="Buyer" ${userProfile.profileType === "Buyer" ? "selected" : ""}>Buyer</option>
+                    <option value="Seller" ${userProfile.profileType === "Seller" ? "selected" : ""}>Seller</option>
+                    <option value="UsedCarAgent" ${userProfile.profileType === "UsedCarAgent" ? "selected" : ""}>Used Car Agent</option>
+                    <option value="UserAdmin" ${userProfile.profileType === "UserAdmin" ? "selected" : ""}>User Admin</option>
+                </select>
             `,
             confirmButtonText: 'Update',
             focusConfirm: false,
@@ -174,6 +180,7 @@ function UserProfileManagementUI() {
                 const profileType = document.getElementById('profileType').value;
 
 
+                console.log("after input update value: ",profileName, description, profileType);
                 if (!profileName || !description || !profileType) {
                     Swal.showValidationMessage(`Please fill in all fields`);
                     return false;
@@ -216,25 +223,43 @@ function UserProfileManagementUI() {
         }
     };
 
-    const searchUserProfile = async (e) => {
-        e.preventDefault();
-        const searchUserProfileController = new SearchUserProfileController();
-        const userProfile = await searchUserProfileController.searchUserProfile(searchProfileName);
+    const searchUserProfile = async () => {
 
-        if (userProfile) {
-            Swal.fire({
-                title: 'User Found',
-                text: `Profile Name: ${userProfile.profileName}`,
-                icon: 'success',
-            });
+        const profileNameInput = document.getElementById('searchProfileName');
+
+        const filterCriteria = {
+            profileName: profileNameInput ? profileNameInput.value : ''
+        };
+
+        const searchUserProfileController = new SearchUserProfileController();
+        const searchResult = await searchUserProfileController.searchUserProfile(
+            filterCriteria.profileName
+        );
+
+        console.log(searchResult)
+
+
+        if (searchResult) {
+            console.log("Search results:", searchResult.data);
+            if (searchResult.success === false || searchResult.data.length === 0) {
+                Swal.fire({
+                    title: 'No Results',
+                    text: 'No user account found matching the search criteria.',
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            } else {
+                const profileData = searchResult.data.map(doc => ({
+                    profileName: doc.profileName,
+                    description: doc.description,
+                    profileType: doc.profileType
+                }));
+                setUserProfiles(profileData);
+            }
         } else {
-            Swal.fire({
-                title: 'User Not Found',
-                text: `No profile found with the profileName: ${searchProfileName}`,
-                icon: 'error',
-            });
+            console.error("Search failed:", searchResult.message);
         }
-        console.log("Searched Profile Name:", searchProfileName);
     };
 
     const handleBack = () => {
@@ -260,21 +285,17 @@ function UserProfileManagementUI() {
             </div>
 
             <div className="upmSearch-bar">
-                <form onSubmit={searchUserProfile}>
-                    <input
-                        type="text"
-                        placeholder="Search by username"
-                        value={searchProfileName}
-                        onChange={(e) => setSearchProfileName(e.target.value)}
-                    //className="search-input"
-                    />
-                    <button type="submit" className="upmSearch-button">
-                        Search
-                    </button>
-                </form>
-                <button onClick={createUserProfile} className="upmCreate-button">
-                    Create user profile
-                </button>
+                <span>
+                        <input id="searchProfileName" className="upmSearch-input" placeholder="Search by profile name"/>
+                        <button onClick={searchUserProfile} className="upmSearch-button">
+                                Search
+                        </button>
+                    </span>
+                    <span>
+                        <button onClick={createUserProfile} className="upmCreate-button">
+                            Create user profile
+                        </button>
+                    </span>
             </div>
             <div className="upmUser-table">
                 <div className="upmTable-header">
@@ -288,7 +309,7 @@ function UserProfileManagementUI() {
                         <span>{user.profileName}</span>
                         <span>{user.description}</span>
                         <span>{user.profileType}</span>
-                        <button onClick={() => viewUserProfile(user)} className="upmInspect-button">Inspect</button>
+                        <button onClick={() => viewUserProfile(user.profileName)} className="upmInspect-button">Inspect</button>
                     </div>
                 ))}
             </div>

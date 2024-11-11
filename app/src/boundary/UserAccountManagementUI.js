@@ -14,23 +14,23 @@ function UserAccountManagementUI() {
         { name: "Loading...", username: "Loading...", profile: "Loading..." }
     ]);
 
-    useEffect(() => {
-        const fetchUsers = async () => {
-            const snapshot = await Util.getUserAccountList();
-            if (snapshot !== null) {
-                const userData = snapshot.docs.map(doc => ({
-                    fName: doc.data().fName,
-                    lName: doc.data().lName,
-                    username: doc.data().username,
-                    password: doc.data().password,
-                    phone: doc.data().phoneNum,
-                    email: doc.data().email,
-                    profile: doc.data().userProfile
-                }));
-                setUsers(userData);
-            }
-        };
 
+    const fetchUsers = async () => {
+        const snapshot = await Util.getUserAccountList();
+        if (snapshot !== null) {
+            const userData = snapshot.docs.map(doc => ({
+                fName: doc.data().fName,
+                lName: doc.data().lName,
+                username: doc.data().username,
+                password: doc.data().password,
+                phone: doc.data().phoneNum,
+                email: doc.data().email,
+                profile: doc.data().userProfile
+            }));
+            setUsers(userData);
+        }
+    };
+    useEffect(() => {
         fetchUsers();
     }, []);
 
@@ -54,7 +54,7 @@ function UserAccountManagementUI() {
                     <option value="">Select User Profile</option>
                     <option value="Buyer">Buyer</option>
                     <option value="Seller">Seller</option>
-                    <option value="UsedCarAgent">Used Car Agent</option>
+                    <option value="Used Car Agent">Used Car Agent</option>
                     <option value="UserAdmin">User Admin</option>
                 </select>
             `,
@@ -215,7 +215,7 @@ function UserAccountManagementUI() {
                     <option value="">Select User Profile</option>
                     <option value="Buyer" ${userAccount.profile === "Buyer" ? "selected" : ""}>Buyer</option>
                     <option value="Seller" ${userAccount.profile === "Seller" ? "selected" : ""}>Seller</option>
-                    <option value="UsedCarAgent" ${userAccount.profile === "UsedCarAgent" ? "selected" : ""}>Used Car Agent</option>
+                    <option value="Used Car Agent" ${userAccount.profile === "UsedCarAgent" ? "selected" : ""}>Used Car Agent</option>
                     <option value="UserAdmin" ${userAccount.profile === "UserAdmin" ? "selected" : ""}>User Admin</option>
                 </select>
             `,
@@ -276,7 +276,7 @@ function UserAccountManagementUI() {
     };
 
     const searchUserAccount = async () => {
-        const usernameInput = document.getElementById('username');
+        const usernameInput = document.getElementById('searchUsername');
 
         const filterCriteria = {
             username: usernameInput ? usernameInput.value : ''
@@ -344,7 +344,7 @@ function UserAccountManagementUI() {
 
             <div className="uamSearch-bar">
                 <span>
-                    <input id="username" className="uamSearch-input" placeholder="Search by username"/>
+                    <input id="searchUsername" className="uamSearch-input" placeholder="Search by username"/>
                     <button onClick={searchUserAccount} className="uamSearch-button">
                             Search
                     </button>
