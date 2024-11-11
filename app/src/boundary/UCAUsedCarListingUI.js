@@ -437,56 +437,22 @@ function UCAUsedCarListingUI() {
                 });
                 return;
             } else {
-                const handleSearchUsedCar = async () => {
-                    const carNameInput = document.getElementById('car_name');
-                    const vehicleTypeInput = document.getElementById('vehicleType');
-                    const priceRangeInput = document.getElementById('priceRange');
-                    const manufactureYearInput = document.getElementById('manufactureYear');
-            
-                    let priceRange = priceRangeInput.value.toString().split("-");
-            
-                    const filterCriteria = {
-                        car_name: carNameInput ? carNameInput.value : '',
-                        vehicleType: vehicleTypeInput.value,
-                        priceRange: priceRange,
-                        manufactureYear: manufactureYearInput.value
-                    };
-            
-                    const searchUsedCarController = new SearchUsedCarController();
-                    const searchResult = await searchUsedCarController.searchUsedCar(
-                        filterCriteria.car_name,
-                        filterCriteria.vehicleType,
-                        filterCriteria.priceRange,
-                        filterCriteria.manufactureYear
-                    );
-            
-            
-                    if (searchResult) {
-                        console.log("Search results:", searchResult.data);
-                        if (searchResult.data === undefined || searchResult.data.length === 0) {
-                            Swal.fire({
-                                title: 'No Results',
-                                text: 'No used cars found matching the search criteria.',
-                                icon: 'info',
-                                confirmButtonText: 'OK'
-                            });
-                            return;
-                        } else {
-                            const carData = searchResult.data.map(doc => ({
-                                usedCarId: doc.id,
-                                car_name: doc.car_name,
-                                manufacture_year: doc.manufacture_year,
-                                mileage: doc.mileage,
-                                price: doc.price,
-                                car_image: doc.car_image
-                            }));
-                            setCars(carData);
-                        }
-                    } else {
-                        console.error("Search failed:", searchResult.message);
-                    }
-            
-                };
+                // const carListByUsername = await Util.getUsedCarListByUsername('Used Car Agent', username);
+
+                
+                // const filteredCars = searchResult.data.filter(doc => 
+                //     carListByUsername.some(car => car.usedCarId === doc.id)
+                // );
+    
+                // if (filteredCars.length === 0) {
+                //     Swal.fire({
+                //         title: 'No Results',
+                //         text: 'No used cars found matching the search criteria and user filter.',
+                //         icon: 'info',
+                //         confirmButtonText: 'OK'
+                //     });
+                //     return;
+                // }
 
                 const carData = searchResult.data.map(doc => ({
                     usedCarId: doc.id,
