@@ -1,8 +1,7 @@
-// File path: src/controller/UsedCarController.js
 import UsedCar from '../entity/UsedCar';
 import UserAccount from '../entity/UserAccount';
 
-class CreateUsedCarController {
+class UCACreateUsedCarController {
 
     // Create a new used car entry
     async createUsedCar(
@@ -32,7 +31,7 @@ class CreateUsedCarController {
     }
 }
 
-class ViewUsedCarController {
+class UCAViewUsedCarController {
 
     // View a used car by its ID
     async viewUsedCar(usedCarId) {
@@ -48,7 +47,7 @@ class ViewUsedCarController {
     }
 }
 
-class UpdateUsedCarController {
+class UCAUpdateUsedCarController {
 
     // Update an existing used car entry
     async updateUsedCar(usedCarId, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap) {
@@ -59,7 +58,7 @@ class UpdateUsedCarController {
                 console.log("Invalid Seller username");
             }
 
-            const usedCar = new UsedCar();
+            const usedCar = new UsedCar(usedCarId, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap);
             await usedCar.updateUsedCar(usedCarId, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap);
 
             console.log("Used car updated successfully");
@@ -72,7 +71,7 @@ class UpdateUsedCarController {
     }
 }
 
-class DeleteUsedCarController {
+class UCADeleteUsedCarController {
 
     // Suspend a used car entry
     async deleteUsedCar(usedCarId) {
@@ -92,14 +91,14 @@ class DeleteUsedCarController {
     }
 }
 
-class SearchUsedCarController {
+class UCASearchUsedCarController {
 
     // Search for a used car by multiple filters
-    async searchUsedCar(carName, cartype, priceRange, manufactureYear) {
+    async searchUsedCar(carName, cartype, priceRange, manufactureYear, agent_username) {
         try {
             // Pass each filter parameter directly to the entity's search method
             const usedCar = new UsedCar();
-            const result = await usedCar.searchUsedCar(carName, cartype, priceRange, manufactureYear);
+            const result = await usedCar.searchUsedCar(carName, cartype, priceRange, manufactureYear, agent_username, null);
 
             // Return the result (success or failure with message)
             return result;
@@ -110,54 +109,4 @@ class SearchUsedCarController {
     }
 }
 
-
-class GetUsedCarViewCountController {
-    async getUsedCarViewCount(usedCarId) {
-        try {
-            const viewCount = await UsedCar.getUsedCarViewCount(usedCarId);
-            return viewCount; // Returns only the view count as an integer
-        } catch (error) {
-            console.error("Controller Error fetching view count:", error);
-            return null; // Or handle as needed, e.g., return -1 to indicate error
-        }
-    }
-}
-
-
-class GetUsedCarshortlist_countController {
-    async getUsedCarshortlist_count(usedCarId) {
-        try {
-            const shortlist_count = await UsedCar.getUsedCarshortlist_count(usedCarId);
-            return shortlist_count; // Returns only the shortlist count as an integer
-        } catch (error) {
-            console.error("Controller Error fetching shortlist count:", error);
-            return null; // Or handle as needed, e.g., return -1 to indicate error
-        }
-    }
-}
-
-class TrackViewCountController {
-    async trackViewCount(usedCarId) {
-        try {
-            const viewCountHistory = await UsedCar.trackViewCount(usedCarId);
-            return viewCountHistory; // Returns true if successful, false otherwise
-        } catch (error) {
-            console.error("Controller Error tracking view count:", error);
-            return false; // Or handle as needed
-        }
-    }
-}
-
-class TrackShortlistCountController {
-    async trackShortlistCount(usedCarId) {
-        try {
-            const shortlistCountHistory = await UsedCar.trackShortlistCount(usedCarId);
-            return shortlistCountHistory; // Returns true if successful, false otherwise
-        } catch (error) {
-            console.error("Controller Error tracking shortlist count:", error);
-            return false; // Or handle as needed
-        }
-    }
-}
-
-export { CreateUsedCarController, ViewUsedCarController, UpdateUsedCarController, DeleteUsedCarController, SearchUsedCarController, GetUsedCarViewCountController, GetUsedCarshortlist_countController, TrackViewCountController, TrackShortlistCountController };
+export { UCACreateUsedCarController, UCAViewUsedCarController, UCAUpdateUsedCarController, UCADeleteUsedCarController, UCASearchUsedCarController }

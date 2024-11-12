@@ -1,11 +1,14 @@
 // File path: src/entity/RateReview.js
 import FirebaseService from '../FirebaseService';
+import { db } from './../firebase';  // Only import db for Firestore operations
+import { doc, updateDoc, increment, collection, query, where, getDocs } from 'firebase/firestore';
 
 class Shortlist {
     static firebaseService = new FirebaseService(); // Singleton FirebaseService
     constructor(username, usedCarId) {
         this.username = username;
         this.usedCarId = usedCarId;
+        this.firebaseService = new FirebaseService();
     }
 
 
@@ -18,7 +21,7 @@ class Shortlist {
                 username: username,
                 usedCarId: car.usedCarId,
                 car_name: car.car_name,
-                // car_type: car.car_type,
+                car_type: car.car_type,
                 car_image: car.car_image,
                 manufacture_year: car.manufacture_year,
                 mileage: car.mileage,
@@ -40,36 +43,56 @@ class Shortlist {
     }
 
     // Method to search for a used car within a user's shortlist by multiple filters
-    static async searchShortlist(username, car_name, car_type, priceMin, priceMax, manufactureYear) {
+    static async searchShortlist(username, carName, carType, priceRange, manufactureYear) {
         try {
-            let query = Shortlist.firebaseService.collection(`Shortlist`);
+            let carQuery = collection(db, 'Shortlist');
+            let priceMin = priceRange[0];
+            let priceMax = priceRange[1];
 
-            // Apply filters as necessary for each field
-            if (car_name) {
-                query = query.where("car_name", "==", car_name);
+            console.log(priceMin);
+            console.log(priceMax);
+            console.log(username);
+            console.log(carName);
+            console.log(carType);
+            console.log(manufactureYear);
+
+            const conditions = [];
+
+            conditions.push(where("username", "==", username));
+
+            // Apply `carName` (car_name) filter if provided
+            if (carName) {
+                conditions.push(where("car_name", "==", carName));
             }
-            if (car_type) {
-                query = query.where("car_type", "==", car_type);
+
+            // Apply `cartype` (car_type) filter if provided
+            if (carType) {
+                conditions.push(where("car_type", "==", carType));
             }
+
+            // Apply `price` range filter if provided
             if (priceMin !== undefined && priceMax !== undefined) {
-                query = query.where("price", ">=", priceMin).where("price", "<=", priceMax);
-            } else if (priceMin !== undefined) {
-                query = query.where("price", ">=", priceMin);
-            } else if (priceMax !== undefined) {
-                query = query.where("price", "<=", priceMax);
-            }
-            if (manufactureYear) {
-                query = query.where("manufacture_year", "==", manufactureYear);
+                conditions.push(where("price", ">=", Number(priceMin)));
+                conditions.push(where("price", "<=", Number(priceMax)));
             }
 
-            // Execute the query and get matching documents
-            const snapshot = await query.get();
+            // Apply `manufactureYear` filter if provided
+            if (manufactureYear) {
+                conditions.push(where("manufacture_year", "==", Number(manufactureYear)));
+            }
+
+            const finalQuery = query(carQuery, ...conditions);
+
+            console.log(finalQuery)
+
+            // Execute the query and retrieve matching documents
+            const snapshot = await getDocs(finalQuery)
             const cars = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
             if (cars.length > 0) {
                 return { success: true, data: cars };
             } else {
-                return { success: false, message: "No cars found in shortlist matching the criteria" };
+                return { success: false, message: "No cars found matching the criteria" };
             }
         } catch (error) {
             console.error("Error searching in shortlist:", error);

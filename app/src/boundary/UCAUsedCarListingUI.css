@@ -60,6 +60,10 @@
     display: flex;
     justify-content: space-between;
     margin-bottom: 20px;
+
+    span {
+        align-content: center;
+    }
 }
 
 .uclSearch-input {
@@ -70,8 +74,7 @@
     border-radius: 5px;
 }
 
-.uclSearch-button,
-.uclCreate-button {
+.uclSearch-button{
     padding: 10px 15px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -80,6 +83,16 @@
     border: none;
     cursor: pointer;
     margin-left: 10px;
+}
+
+.uclCreate-button {
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
 }
 
 .uclUser-table {

@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import "./UserProfileManagementUI.css";
 import { Util } from "../Util";
 import { UserLogoutController } from "../controller/UserAuthController";
-import { ViewUserProfileController, CreateUserProfileController, UpdateUserProfileController, SearchUserProfileController, SuspendUserProfileController } from "../controller/UserProfileController";
+import { UAViewUserProfileController, UACreateUserProfileController, UAUpdateUserProfileController, UASearchUserProfileController, UASuspendUserProfileController } from "../controller/UAUserProfileController";
 
 import Swal from 'sweetalert2';
 
@@ -87,8 +87,8 @@ function UserProfileManagementUI() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 const { profileName, description, profileType } = result.value;
-                const createUserProfileController = new CreateUserProfileController();
-                const isSuccess = await createUserProfileController.createUserProfile(profileName, description, profileType);
+                const uaCreateUserProfileController = new UACreateUserProfileController();
+                const isSuccess = await uaCreateUserProfileController.createUserProfile(profileName, description, profileType);
 
                 if (isSuccess) {
                     console.log('New Account Details:', profileName, description, profileType);
@@ -104,8 +104,8 @@ function UserProfileManagementUI() {
 
     const viewUserProfile = async (profileName) => {
         console.log('Fetching user account for:', profileName);
-        const viewUserProfileController = new ViewUserProfileController();
-        const userProfile = await viewUserProfileController.viewUserProfile(profileName);
+        const uaViewUserProfileController = new UAViewUserProfileController();
+        const userProfile = await uaViewUserProfileController.viewUserProfile(profileName);
         console.log("User profile data received:", userProfile);
 
         if (userProfile) {
@@ -137,8 +137,8 @@ function UserProfileManagementUI() {
                         cancelButtonText: 'No, cancel'
                     }).then(async (suspendResult) => {
                         if (suspendResult.isConfirmed) {
-                            const suspendUserProfileController = new SuspendUserProfileController();
-                            await suspendUserProfileController.suspendUserProfile(userProfile.profileName);
+                            const uaSuspendUserProfileController = new UASuspendUserProfileController();
+                            await uaSuspendUserProfileController.suspendUserProfile(userProfile.profileName);
                             console.log('User suspended:', userProfile.profileName);
                             Swal.fire('Suspended!', 'The user has been suspended.', 'success');
                         }
@@ -190,8 +190,8 @@ function UserProfileManagementUI() {
         }).then(async (updateResult) => {
             if (updateResult.isConfirmed) {
                 const { profileName, description, profileType } = updateResult.value;
-                const updateUserProfileController = new UpdateUserProfileController();
-                await updateUserProfileController.updateUserProfile(profileName, description, profileType);
+                const uaUpdateUserProfileController = new UAUpdateUserProfileController();
+                await uaUpdateUserProfileController.updateUserProfile(profileName, description, profileType);
                 console.log('Updated Profile Details:', { profileName, description, profileType });
                 Swal.fire('Updated!', 'The user details have been updated.', 'success');
                 fetchUserProfiles();
@@ -231,8 +231,8 @@ function UserProfileManagementUI() {
             profileName: profileNameInput ? profileNameInput.value : ''
         };
 
-        const searchUserProfileController = new SearchUserProfileController();
-        const searchResult = await searchUserProfileController.searchUserProfile(
+        const uaSearchUserProfileController = new UASearchUserProfileController();
+        const searchResult = await uaSearchUserProfileController.searchUserProfile(
             filterCriteria.profileName
         );
 

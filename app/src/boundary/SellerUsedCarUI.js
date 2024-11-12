@@ -4,9 +4,11 @@ import Chart from 'chart.js/auto';
 import "./SellerUsedCarUI.css";
 import { Util } from "../Util";
 import { UserLogoutController } from "../controller/UserAuthController";
-import { ViewUsedCarController, SearchUsedCarController, TrackViewCountController, TrackShortlistCountController } from "../controller/UsedCarController";
-import { LeaveRateReviewController } from "../controller/RateReviewController";
+//import { ViewUsedCarController, SearchUsedCarController, TrackViewCountController, TrackShortlistCountController } from "../controller/UsedCarController";
+//import { LeaveRateReviewController } from "../controller/RateReviewController";
 //import { SaveShortlistController } from "../controller/ShortlistController";
+import { SellerSearchUsedCarController, SellerTrackViewCountController, SellerViewUsedCarController, SellerTrackShortlistCountController } from "../controller/SellerUsedCarController";
+import { SellerLeaveRateReviewController } from "../controller/SellerRateReviewController";
 
 import Swal from 'sweetalert2';
 
@@ -43,11 +45,6 @@ function SellerUsedCarUI() {
         fetchCars();
     }, []);
 
-    // const handleBuyerShortlist = () => {
-    //     console.log("Buyer Shortlist");
-    //     window.open("/CSIT314-T05-CodeCrusaders/buyershortlist", "_self");
-    // };
-
     const searchUsedCar = async () => {
         const carNameInput = document.getElementById('car_name');
         const vehicleTypeInput = document.getElementById('vehicleType');
@@ -63,12 +60,13 @@ function SellerUsedCarUI() {
             manufactureYear: manufactureYearInput.value
         };
 
-        const searchUsedCarController = new SearchUsedCarController();
-        const searchResult = await searchUsedCarController.searchUsedCar(
+        const sellerSearchUsedCarController = new SellerSearchUsedCarController();
+        const searchResult = await sellerSearchUsedCarController.searchUsedCar(
             filterCriteria.car_name,
             filterCriteria.vehicleType,
             filterCriteria.priceRange,
-            filterCriteria.manufactureYear
+            filterCriteria.manufactureYear,
+            Cookies.get('username')
         );
 
         if (searchResult) {
@@ -101,7 +99,7 @@ function SellerUsedCarUI() {
 
     const viewUsedCar = async (usedCarId) => { //not done
         console.log('Fetching used Car for:', usedCarId);
-        const viewUsedCarController = new ViewUsedCarController();
+        const sellerViewUsedCarController = new SellerViewUsedCarController();
         const updatedCars = cars.map(car => {
             if (car.usedCarId === usedCarId) {
                 car.view_count += 1;
@@ -110,7 +108,7 @@ function SellerUsedCarUI() {
         });
         setCars(updatedCars);
         Util.increaseCount(usedCarId, "view");
-        const usedCar = await viewUsedCarController.viewUsedCar(usedCarId);
+        const usedCar = await sellerViewUsedCarController.viewUsedCar(usedCarId);
         console.log("Used Car data received:", usedCar);
 
         if (usedCar) {
@@ -168,8 +166,8 @@ function SellerUsedCarUI() {
             confirmButtonText: 'Close',
             focusConfirm: false,
             didOpen: async () => {
-                const trackViewCountController = new TrackViewCountController();
-                const viewCountHistory = await trackViewCountController.trackViewCount(usedCarId);
+                const sellerTrackViewCountController = new SellerTrackViewCountController();
+                const viewCountHistory = await sellerTrackViewCountController.trackViewCount(usedCarId);
 
                 if (viewCountHistory === undefined || viewCountHistory === null) {
                     document.getElementById("viewCountChart").style.display = "none";
@@ -231,8 +229,8 @@ function SellerUsedCarUI() {
             confirmButtonText: 'Close',
             focusConfirm: false,
             didOpen: async () => {
-                const trackShortlistCountController = new TrackShortlistCountController();
-                const shortlistCountHistory = await trackShortlistCountController.trackShortlistCount(usedCarId);
+                const sellerTrackShortlistCountController = new SellerTrackShortlistCountController();
+                const shortlistCountHistory = await sellerTrackShortlistCountController.trackShortlistCount(usedCarId);
 
                 if (shortlistCountHistory === undefined || shortlistCountHistory === null) {
                     document.getElementById("shortlistCountChart").style.display = "none";
@@ -332,8 +330,8 @@ function SellerUsedCarUI() {
                 const reviewer_username = Cookies.get('username');
                 const reviewer_type = Cookies.get('userProfile');
 
-                const leaveRateReviewController = new LeaveRateReviewController(agent_username, rating, review, reviewer_username, reviewer_type);
-                const isSuccess = await leaveRateReviewController.leaveRateReview(agent_username, rating, review, reviewer_username, reviewer_type);
+                const sellerleaveRateReviewController = new SellerLeaveRateReviewController(agent_username, rating, review, reviewer_username, reviewer_type);
+                const isSuccess = await sellerleaveRateReviewController.leaveRateReview(agent_username, rating, review, reviewer_username, reviewer_type);
 
                 if (isSuccess) {
                     console.log(`Rating submitted for agent ${agent_username}:`, { rating, review });
@@ -345,83 +343,6 @@ function SellerUsedCarUI() {
             }
         });
     };
-
-    // const openLoanCalculator = async (price) => {
-    //     let interestRateInput, loanTermInput;
-
-    //     Swal.fire({
-    //         title: '<u>Loan Calculator</u>',
-    //         html: `
-    //             <div>
-    //                 <label>Loan Amount:</label>
-    //                 <input type="text" class="swal2-input" value="$${price}" readonly>
-    //             </div>
-    //             <div>
-    //                 <label>Loan Term (months):</label>
-    //                 <input type="number" id="loanTerm" class="swal2-input" placeholder="Enter loan term in months" min="0">
-    //             </div>
-    //             <div>
-    //                 <label>Interest Rate (%):</label>
-    //                 <input type="number" id="interestRate" class="swal2-input" placeholder="Enter interest rate in whole numbers" min="0">
-    //             </div>
-    //             <div>
-    //                 <button id="clearButton" class="swal2-confirm swal2-styled" style="margin-right: 10px;">Clear</button>
-    //                 <button id="calculateButton" class="swal2-confirm swal2-styled">Calculate</button>
-    //             </div>
-    //         `,
-    //         showConfirmButton: false,
-    //         focusConfirm: false,
-    //         didOpen: () => {
-    //             document.getElementById("clearButton").addEventListener("click", () => {
-    //                 document.getElementById("loanTerm").value = "";
-    //                 document.getElementById("interestRate").value = "";
-    //             });
-
-    //             document.getElementById("calculateButton").addEventListener("click", () => {
-    //                 interestRateInput = document.getElementById('interestRate').value;
-    //                 loanTermInput = document.getElementById('loanTerm').value;
-
-    //                 if (!interestRateInput || !loanTermInput) {
-    //                     Swal.showValidationMessage(`Please provide both an interest rate and a loan term`);
-    //                     return;
-    //                 }
-
-    //                 const interestRate = parseFloat(interestRateInput) / 100 / 12; // Monthly interest rate
-    //                 const loanTerm = parseFloat(loanTermInput); // Total payments (months)
-    //                 const monthlyPayment = (price * interestRate) / (1 - Math.pow(1 + interestRate, -loanTerm));
-
-    //                 Swal.fire('Monthly Payment', `Your estimated monthly payment is $${monthlyPayment.toFixed(2)}`, 'info');
-    //             });
-    //         }
-    //     });
-    // };
-
-    // const saveToShortlist = (usedCarId) => {
-    //     //const username = Cookies.get('username');
-
-    //     const updatedCars = cars.map(car => {
-    //         if (car.usedCarId === usedCarId) {
-    //             car.shortlist_count += 1;  // Increment shortlist count when 'Save to Shortlist' is clicked
-    //         }
-    //         return car;
-    //     });
-    //     setCars(updatedCars);
-    //     Swal.fire({
-    //         title: 'Car Added!',
-    //         text: "The car has been added to your shortlist.",
-    //         icon: 'success',
-    //         confirmButtonText: 'OK'
-    //     }).then(async () => {
-    //         const saveShortlistController = new SaveShortlistController();
-    //         const isSuccess = saveShortlistController.saveToShortlist(username, usedCarId);
-
-    //         if (isSuccess) {
-    //             console.log(`Car ${usedCarId} added to shortlist.`);
-    //         } else {
-    //             console.log(`Car ${usedCarId} failed to add on shortlist.`);
-    //         }
-    //     });
-    // };
 
     const handleLogout = async () => {
         const userAuthController = new UserLogoutController();
@@ -446,11 +367,6 @@ function SellerUsedCarUI() {
             });
         }
     };
-
-    // const handleSearch = (e) => {
-    //     e.preventDefault();
-    //     console.log("Searched Username:", searchUsername);
-    // };
 
     const handleBack = () => {
         window.history.back();

@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import "./UCARateReviewUI.css";
 import { Util } from "../Util";
 import { UserLogoutController } from "../controller/UserAuthController";
-import { ViewRateReviewController } from "../controller/RateReviewController";
+import { UCAViewRateReviewController } from "../controller/UCAViewRateReviewController";
 
 import Swal from 'sweetalert2';
 
@@ -32,10 +32,10 @@ function UCARateReviewUI() {
     }, []);
 
     const viewRateReview = async (rateReviewId) => {
-        const viewRateReviewController = new ViewRateReviewController();
+        const ucaViewRateReviewController = new UCAViewRateReviewController();
 
         try {
-            const rateReview = await viewRateReviewController.viewRateReview(rateReviewId);
+            const rateReview = await ucaViewRateReviewController.viewRateReview(rateReviewId);
             console.log(rateReview)
             if (rateReview) {
                 Swal.fire({

@@ -1,0 +1,66 @@
+[User Admin]
+==== UserAuthController.js ====
+1. As a User Admin, I want to log in to the system so that I can use the system.
+2. As a User Admin, I want to log out from the system so that other users cannot access my system features.
+
+==== UAUserAccountController.js ==== (Done)
+3. As a User Admin, I want to create a user account so that the new user can use the system.
+4. As a User Admin, I want to view user accounts so that I can see the background of the users.
+5. As a User Admin, I want to update user accounts so that the latest information is available
+6. As a User Admin, I want to suspend the user account so that the user can't log in anymore.
+7. As a User Admin, I want to search user accounts so that I can find a particular user.
+
+==== UAUserProfileController.js ==== (Done)
+8. As a User Admin, I want to create a user profile so that new user accounts can use the profile.
+9. As a User Admin, I want to view a user profile so that I can know what a user profile can do.
+10. As a User Admin, I want to update a user profile so that the latest information is available.
+11. As a User Admin, I want to suspend a user profile so that the user profile can be suspended and no longer in use.
+12. As a User Admin, I want to search a user profile so that I can find a particular user profile.
+
+
+[Used Car Agents]
+==== UserAuthController.js ====
+1. As a Used Car Agent, I want to log in to the system so that I can use the system.
+2. As a Used Car Agent, I want to log out from the system so that other users cannot access my system features.
+
+==== UCAUsedCarController.js ==== (Done)
+3. As a Used Car Agent, I want to create a used car so that I can register the new used cars.
+4. As a Used Car Agent, I want to view a used car so that I can see what used cars I have registered.
+5. As a Used Car Agent, I want to update a used car so that I can keep the details of the used cars to the latest status.
+6. As a Used Car Agent, I want to delete a used car so that I can remove the used cars I have registered.
+7. As a Used Car Agent, I want to search a used car so that I can find a particular used car.
+
+==== UCAViewRateReviewController.js ==== (Done)
+8. As a Used Car Agent, I want to view rate/review so that I can see buyer’s and seller’s feedback.
+
+[Buyer]
+==== UserAuthController.js ====
+1. As a Buyer, I want to log in to the system so that I can use the system.
+2. As a Buyer, I want to log out from the system so that other users cannot access my system features.
+
+==== BuyerUsedCarController.js ==== (Done)
+3. As a Buyer, I want to search for a used car so that I can see a particular used car.
+4. As a Buyer, I want to view a used car so that I can see the used car’s details.
+5. As a Buyer, I want to save a used car to shortlist so that I can come back to the particular used car at any time.
+
+==== BuyerShortlistController.js ==== (Done)
+6. As a Buyer, I want to search for a used car from a shortlist so that I can see a particular used car that I saved there.
+7. As a Buyer, I want to view a used car in a shortlist so that I can see the details of used cars that I saved there.
+
+==== LoanCalculatorController.js ==== (????)
+8. As a Buyer, I want to use a loan calculator so that I can determine the used car is in my budget.
+
+==== BuyerRateReviewContrroller.js ==== (Done)
+9. As a Buyer, I want to rate and review the used car agent so that I can leave feedback to them.
+
+[Seller]
+==== UserAuthController.js ====
+1. As a Seller, I want to log in to the system so that I can use the system.
+2. As a Seller, I want to log out from the system so that other users cannot access my system features.
+
+==== SellerUsedCarController.js ====
+3. As a Seller, I want to track the number of views on used cars so that I can see how many times the particular used car has been visited.
+4. As a Seller, I want to track the number of times my used car has been shortlisted so that I can see how many buyers were interested in the particular used car.
+
+==== SellerRateReviewController.js ====
+5. As a Seller, I want to rate and review the used car agent so that I can leave feedback to them.

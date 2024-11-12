@@ -1,4 +1,5 @@
 import UserAccount from '../entity/UserAccount';
+import UserProfile from '../entity/UserProfile';
 import Cookies from 'js-cookie';
 
 class UserLoginController {
@@ -7,16 +8,20 @@ class UserLoginController {
     }
 
     // Login 
-    async authenticateLogin(username, password, userProfile) {
+    async authenticateLogin(username, password, profileType) {
         // const { username, password, userProfile } = req.body;
         try {
-            const user = new UserAccount(null, null, null, password, null, userProfile, username);
+            const user = new UserAccount(null, null, null, password, null, null, username);
 
             // Attempt to login with username and password
-            const loginSuccess = await user.authenticateLogin(username, password, userProfile);
-            console.log("check id/pw valid or not(AuthC): ", username, password, userProfile);
+            const profileName = await user.verifyUserAccount(username, password);
+            console.log("ID/PW Matched: ", username, password);
+            console.log("User Profile: ", profileName)
 
-            if (loginSuccess) {
+            const userProfile = new UserProfile(profileName, null, profileType);
+            const verifyLogin = await userProfile.verifyUserProfile(profileName, profileType);
+
+            if (verifyLogin) {
                 Cookies.set('username', username);
                 Cookies.set('userProfile', userProfile);
                 console.log("Login successful");
