@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import { Util } from "../Util";
 import "./UCAUsedCarListingUI.css";
 import { UserLogoutController } from "../controller/UserAuthController";
-import { CreateUsedCarController, ViewUsedCarController, UpdateUsedCarController, DeleteUsedCarController, SearchUsedCarController } from "../controller/UsedCarController";
+import { UCACreateUsedCarController, UCAViewUsedCarController, UCAUpdateUsedCarController, UCADeleteUsedCarController, UCASearchUsedCarController } from "../controller/UCAUsedCarController";
 
 import Swal from 'sweetalert2';
 
@@ -194,8 +194,8 @@ function UCAUsedCarListingUI() {
                 });
 
                 // Add logic here to handle account creation, like sending data to an API
-                const createUsedCarController = new CreateUsedCarController();
-                const isSuccess = await createUsedCarController.createUsedCar(usedCarId, Cookies.get("username"), seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap);
+                const ucaCreateUsedCarController = new UCACreateUsedCarController();
+                const isSuccess = await ucaCreateUsedCarController.createUsedCar(usedCarId, Cookies.get("username"), seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap);
 
                 if (isSuccess) {
                     console.log(usedCarId);
@@ -210,14 +210,14 @@ function UCAUsedCarListingUI() {
 
     const viewUsedCar = async (usedCarId) => {
         console.log('Fetching used Car for:', usedCarId);
-        const viewUsedCarController = new ViewUsedCarController();
-        const updatedCars = cars.map(car => {
-            if (car.usedCarId === usedCarId) {
-                car.view_count += 1;
-            }
-            return car;
-        });
-        const usedCar = await viewUsedCarController.viewUsedCar(usedCarId);
+        const ucaViewUsedCarController = new UCAViewUsedCarController();
+        // const updatedCars = cars.map(car => {
+        //     if (car.usedCarId === usedCarId) {
+        //         car.view_count += 1;
+        //     }
+        //     return car;
+        // });
+        const usedCar = await ucaViewUsedCarController.viewUsedCar(usedCarId);
         console.log("Used Car data received:", usedCar);
         console.log(usedCarId);
 
@@ -261,8 +261,8 @@ function UCAUsedCarListingUI() {
                         cancelButtonText: 'No, cancel'
                     }).then(async (DeleteResult) => {
                         if (DeleteResult.isConfirmed) {
-                            const deleteUsedCarController = new DeleteUsedCarController();
-                            const isDeleted = await deleteUsedCarController.deleteUsedCar(usedCarId);
+                            const ucaDeleteUsedCarController = new UCADeleteUsedCarController();
+                            const isDeleted = await ucaDeleteUsedCarController.deleteUsedCar(usedCarId);
 
                             if (isDeleted) {
                                 Swal.fire('Deleted!', 'This car has been deleted.', 'success');
@@ -386,8 +386,8 @@ function UCAUsedCarListingUI() {
         }).then(async (updateResult) => {
             if (updateResult.isConfirmed) {
                 const { seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap } = updateResult.value;
-                const updateUsedCarController = new UpdateUsedCarController();
-                const isSuccess = await updateUsedCarController.updateUsedCar(usedCar.usedCarId, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap);
+                const ucaUpdateUsedCarController = new UCAUpdateUsedCarController();
+                const isSuccess = await ucaUpdateUsedCarController.updateUsedCar(usedCar.usedCarId, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap);
 
                 if (isSuccess) {
                     console.log('Updated Used Car Details:', {
@@ -417,12 +417,13 @@ function UCAUsedCarListingUI() {
             manufactureYear: manufactureYearInput.value
         };
 
-        const searchUsedCarController = new SearchUsedCarController();
-        const searchResult = await searchUsedCarController.searchUsedCar(
+        const ucaSearchUsedCarController = new UCASearchUsedCarController();
+        const searchResult = await ucaSearchUsedCarController.searchUsedCar(
             filterCriteria.car_name,
             filterCriteria.vehicleType,
             filterCriteria.priceRange,
-            filterCriteria.manufactureYear
+            filterCriteria.manufactureYear,
+            Cookies.get('username'),
         );
 
 
@@ -437,31 +438,17 @@ function UCAUsedCarListingUI() {
                 });
                 return;
             } else {
-                // const carListByUsername = await Util.getUsedCarListByUsername('Used Car Agent', username);
-
-                
-                // const filteredCars = searchResult.data.filter(doc => 
-                //     carListByUsername.some(car => car.usedCarId === doc.id)
-                // );
-    
-                // if (filteredCars.length === 0) {
-                //     Swal.fire({
-                //         title: 'No Results',
-                //         text: 'No used cars found matching the search criteria and user filter.',
-                //         icon: 'info',
-                //         confirmButtonText: 'OK'
-                //     });
-                //     return;
-                // }
-
                 const carData = searchResult.data.map(doc => ({
                     usedCarId: doc.id,
                     car_name: doc.car_name,
                     manufacture_year: doc.manufacture_year,
                     mileage: doc.mileage,
                     price: doc.price,
-                    car_image: doc.car_image
+                    car_image: doc.car_image,
+                    view_count: doc.view_count || 0,
+                    shortlist_count: doc.shortlist_count || 0
                 }));
+
                 setCars(carData);
             }
         } else {

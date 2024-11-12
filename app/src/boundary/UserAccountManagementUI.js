@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import "./UserAccountManagementUI.css";
 import { Util } from "../Util";
 import { UserLogoutController } from "../controller/UserAuthController";
-import { CreateUserAccountController, ViewUserAccountController, UpdateUserAccountController, SuspendUserAccountController, SearchUserAccountController } from "../controller/UserAccountController";
+import { UACreateUserAccountController, UAViewUserAccountController, UAUpdateUserAccountController, UASuspendUserAccountController, UASearchUserAccountController } from "../controller/UAUserAccountController";
 
 import Swal from 'sweetalert2';
 
@@ -13,6 +13,7 @@ function UserAccountManagementUI() {
     const [users, setUsers] = useState([
         { name: "Loading...", username: "Loading...", profile: "Loading..." }
     ]);
+    const [profiles, setUserProfiles] = useState([{ profileName: "Loading", profileType: "Loading" }]);
 
 
     const fetchUsers = async () => {
@@ -30,8 +31,23 @@ function UserAccountManagementUI() {
             setUsers(userData);
         }
     };
+    
+    const fetchUserProfiles = async () => {
+        const snapshot = await Util.getUserProfiles();
+        if (snapshot !== null) {
+            const profileData = snapshot.docs
+                .filter(doc => !doc.data().suspended)
+                .map(doc => ({
+                    profileName: doc.data().profileName,
+                    profileType: doc.data().profileType
+                }));
+            setUserProfiles(profileData);
+        }
+    };
+
     useEffect(() => {
         fetchUsers();
+        fetchUserProfiles();
     }, []);
 
     if (Cookies.get("userProfile") !== "UserAdmin") {
@@ -40,7 +56,7 @@ function UserAccountManagementUI() {
 
     const createUserAccount = () => {
         let usernameInput, fNameInput, lNameInput, passwordInput, phoneNumInput, emailInput, userProfileInput;
-
+        // console.log(profiles);
         Swal.fire({
             title: 'Create Account',
             html: `
@@ -52,15 +68,20 @@ function UserAccountManagementUI() {
                 <input type="email" id="email" class="swal2-input" placeholder="Email">
                 <select id="userProfile" class="swal2-input">
                     <option value="">Select User Profile</option>
-                    <option value="Buyer">Buyer</option>
-                    <option value="Seller">Seller</option>
-                    <option value="Used Car Agent">Used Car Agent</option>
-                    <option value="UserAdmin">User Admin</option>
                 </select>
             `,
             confirmButtonText: 'Create Account',
             focusConfirm: false,
             didOpen: () => {
+                var select = document.getElementById('userProfile');
+
+                for (var i = 0; i < profiles.length; i++) {
+                    var opt = document.createElement('option');
+                    opt.value = profiles[i].profileName;
+                    opt.innerHTML = profiles[i].profileName;
+                    select.appendChild(opt);
+                }
+
                 const popup = Swal.getPopup();
                 fNameInput = popup.querySelector('#fName');
                 lNameInput = popup.querySelector('#lName');
@@ -115,8 +136,8 @@ function UserAccountManagementUI() {
                     userProfile
                 });
                 // logic for handle account creation (call Controller)
-                const createUserAccountController = new CreateUserAccountController();
-                const isSuccess = await createUserAccountController.createUserAccount(
+                const uaCreateUserAccountController = new UACreateUserAccountController();
+                const isSuccess = await uaCreateUserAccountController.createUserAccount(
                     fName,
                     lName,
                     username,
@@ -137,8 +158,8 @@ function UserAccountManagementUI() {
 
     const viewUserAccount = async (username) => {
         console.log('Fetching user account for:', username);
-        const viewUserAccountController = new ViewUserAccountController();
-        const userAccount = await viewUserAccountController.viewUserAccount(username);
+        const uaViewUserAccountController = new UAViewUserAccountController();
+        const userAccount = await uaViewUserAccountController.viewUserAccount(username);
         console.log("User account data received:", userAccount);
 
         if (userAccount) {
@@ -173,8 +194,8 @@ function UserAccountManagementUI() {
                         cancelButtonText: 'No, cancel'
                     }).then(async (suspendResult) => {
                         if (suspendResult.isConfirmed) {
-                            const suspendUserAccountController = new SuspendUserAccountController();
-                            const isSuspended = await suspendUserAccountController.suspendUserAccount(username);
+                            const uaSuspendUserAccountController = new UASuspendUserAccountController();
+                            const isSuspended = await uaSuspendUserAccountController.suspendUserAccount(username);
 
                             if (isSuspended) {
                                 Swal.fire('Suspended!', 'The user has been suspended.', 'success');
@@ -213,14 +234,25 @@ function UserAccountManagementUI() {
                 <input type="email" id="email" class="swal2-input" placeholder="Email" value="${userAccount.email || ''}">
                 <select id="userProfile" class="swal2-input">
                     <option value="">Select User Profile</option>
-                    <option value="Buyer" ${userAccount.profile === "Buyer" ? "selected" : ""}>Buyer</option>
-                    <option value="Seller" ${userAccount.profile === "Seller" ? "selected" : ""}>Seller</option>
-                    <option value="Used Car Agent" ${userAccount.profile === "UsedCarAgent" ? "selected" : ""}>Used Car Agent</option>
-                    <option value="UserAdmin" ${userAccount.profile === "UserAdmin" ? "selected" : ""}>User Admin</option>
                 </select>
             `,
             confirmButtonText: 'Update',
             focusConfirm: false,
+            didOpen: () => {
+                var select = document.getElementById('userProfile');
+
+                for (var i = 0; i < profiles.length; i++) {
+                    var opt = document.createElement('option');
+                    var profileName = profiles[i].profileName;
+                    opt.value = profileName;
+                    console.log(userAccount.userProfile, profileName)
+                    if (userAccount.userProfile === profileName) {
+                        opt.selected = true;
+                    }
+                    opt.innerHTML = profileName;
+                    select.appendChild(opt);
+                }
+            },
             preConfirm: () => {
                 const fName = document.getElementById('fName').value;
                 const lName = document.getElementById('lName').value;
@@ -239,8 +271,8 @@ function UserAccountManagementUI() {
         }).then(async (updateResult) => {
             if (updateResult.isConfirmed) {
                 const { username, fName, lName, password, phoneNum, email, userProfile } = updateResult.value;
-                const controller = new UpdateUserAccountController();
-                const isSuccess = await controller.updateUserAccount(username, fName, lName, password, phoneNum, email, userProfile);
+                const uaUpdateUserAccountController = new UAUpdateUserAccountController();
+                const isSuccess = await uaUpdateUserAccountController.updateUserAccount(username, fName, lName, password, phoneNum, email, userProfile);
 
                 if (isSuccess) {
                     Swal.fire('Updated!', 'The user details have been updated.', 'success');
@@ -282,8 +314,8 @@ function UserAccountManagementUI() {
             username: usernameInput ? usernameInput.value : ''
         };
 
-        const searchUserAccountController = new SearchUserAccountController();
-        const searchResult = await searchUserAccountController.searchUserAccount(
+        const uaSearchUserAccountController = new UASearchUserAccountController();
+        const searchResult = await uaSearchUserAccountController.searchUserAccount(
             filterCriteria.username
         );
 

@@ -3,9 +3,9 @@ import Cookies from "js-cookie";
 import "./BuyerShortlistUI.css";
 import { Util } from "../Util";
 import { UserLogoutController } from "../controller/UserAuthController";
-import { SearchUsedCarController } from "../controller/UsedCarController";
-import { LeaveRateReviewController } from "../controller/RateReviewController";
-import { ViewShortlistController, DeleteShortlistController } from "../controller/ShortlistController";
+import { BuyerLeaveRateReviewController } from "../controller/BuyerRateReviewController";
+import { BuyerLoanCalculatorController } from "../controller/BuyerLoanCalculatorController";
+import { BuyerViewShortlistController, BuyerSearchShortlistController, BuyerDeleteShortlistController } from "../controller/BuyerShortlistController";
 
 import Swal from 'sweetalert2';
 
@@ -41,20 +41,14 @@ function BuyerShortlistUI() {
         fetchCars();
     }, []);
 
-    // useEffect(() => {
-    //     const fetchUser = async () => {
-    //         const snapshot = await Util.getShortlistList();
-    //         if (snapshot !== null) {
-    //             const shortlistData = snapshot.docs.map(doc => ({
-    //                 documentId: doc.id,
-    //                 username: username
-    //             }));
-    //             setCars(shortlistData);
-    //         }
-    //     };
+    const clearSearch = async () => {
+        document.getElementById('car_name').value = '';
+        document.getElementById('vehicleType').value = '';
+        document.getElementById('priceRange').value = '';
+        document.getElementById('manufactureYear').value = '';
 
-    //     fetchUser();
-    // }, []);
+        fetchCars();
+    }
 
     const searchShortlist = async () => { //this is for saerch pop up
         const carNameInput = document.getElementById('car_name');
@@ -71,14 +65,16 @@ function BuyerShortlistUI() {
             manufactureYear: manufactureYearInput.value
         };
 
-        const searchUsedCarController = new SearchUsedCarController();
-        const searchResult = await searchUsedCarController.searchUsedCar(
+        const buyerSearchShortlistController = new BuyerSearchShortlistController();
+        const searchResult = await buyerSearchShortlistController.searchShortlist(
+            Cookies.get('username'),
             filterCriteria.car_name,
             filterCriteria.vehicleType,
             filterCriteria.priceRange,
             filterCriteria.manufactureYear
         );
 
+        console.log(searchResult)
 
         if (searchResult) {
             console.log("Search results:", searchResult.data);
@@ -95,6 +91,7 @@ function BuyerShortlistUI() {
                     usedCarId: doc.id,
                     car_name: doc.car_name,
                     manufacture_year: doc.manufacture_year,
+                    description: doc.description,
                     mileage: doc.mileage,
                     price: doc.price,
                     car_image: doc.car_image
@@ -109,7 +106,7 @@ function BuyerShortlistUI() {
 
     const viewUsedCar = async (usedCarId) => { //not done
         console.log('Fetching used Car for:', usedCarId);
-        const viewShortlistController = new ViewShortlistController();
+        const buyerViewShortlistController = new BuyerViewShortlistController();
         const updatedCars = cars.map(car => {
             if (car.usedCarId === usedCarId) {
                 car.view_count += 1;
@@ -118,7 +115,7 @@ function BuyerShortlistUI() {
         });
         setCars(updatedCars);
         Util.increaseCount(usedCarId, "view");
-        const usedCar = await viewShortlistController.viewUsedCarFromShortlist(usedCarId);
+        const usedCar = await buyerViewShortlistController.viewUsedCarFromShortlist(usedCarId);
         console.log("Used Car data received:", usedCar);
 
         if (usedCar) {
@@ -216,8 +213,8 @@ function BuyerShortlistUI() {
                 const reviewer_username = Cookies.get('username');
                 const reviewer_type = Cookies.get('userProfile');
 
-                const leaveRateReviewController = new LeaveRateReviewController(agent_username, rating, review, reviewer_username, reviewer_type);
-                const isSuccess = await leaveRateReviewController.leaveRateReview(agent_username, rating, review, reviewer_username, reviewer_type);
+                const buyerLeaveRateReviewController = new BuyerLeaveRateReviewController(agent_username, rating, review, reviewer_username, reviewer_type);
+                const isSuccess = await buyerLeaveRateReviewController.leaveRateReview(agent_username, rating, review, reviewer_username, reviewer_type);
 
                 if (isSuccess) {
                     console.log(`Rating submitted for agent ${agent_username}:`, { rating, review });
@@ -231,14 +228,14 @@ function BuyerShortlistUI() {
     };
 
     const openLoanCalculator = async (price) => {
-        let interestRateInput, loanTermInput;
+        let priceInput, interestRateInput, loanTermInput;
 
         Swal.fire({
             title: '<u>Loan Calculator</u>',
             html: `
                 <div>
-                    <label>Loan Amount:</label>
-                    <input type="text" class="swal2-input" value="$${price}" readonly>
+                    <label>Loan Amount: ($)</label>
+                    <input type="number" id="loanAmount" class="swal2-input" value="${price}">
                 </div>
                 <div>
                     <label>Loan Term (months):</label>
@@ -255,26 +252,28 @@ function BuyerShortlistUI() {
             `,
             showConfirmButton: false,
             focusConfirm: false,
-            didOpen: () => {
+            didOpen: async () => {
                 document.getElementById("clearButton").addEventListener("click", () => {
+                    document.getElementById("loanAmount").value = price;
                     document.getElementById("loanTerm").value = "";
                     document.getElementById("interestRate").value = "";
                 });
 
-                document.getElementById("calculateButton").addEventListener("click", () => {
+                document.getElementById("calculateButton").addEventListener("click", async () => {
+                    priceInput = document.getElementById('loanAmount').value;
                     interestRateInput = document.getElementById('interestRate').value;
                     loanTermInput = document.getElementById('loanTerm').value;
 
-                    if (!interestRateInput || !loanTermInput) {
+                    console.log(priceInput, interestRateInput, loanTermInput);
+
+                    if ( !priceInput || !interestRateInput || !loanTermInput) {
                         Swal.showValidationMessage(`Please provide both an interest rate and a loan term`);
                         return;
                     }
+                    
+                    const monthlyPayment = await BuyerLoanCalculatorController.loanCalculator(priceInput, loanTermInput, interestRateInput);
 
-                    const interestRate = parseFloat(interestRateInput) / 100 / 12; // Monthly interest rate
-                    const loanTerm = parseFloat(loanTermInput); // Total payments (months)
-                    const monthlyPayment = (price * interestRate) / (1 - Math.pow(1 + interestRate, -loanTerm));
-
-                    Swal.fire('Monthly Payment', `Your estimated monthly payment is $${monthlyPayment.toFixed(2)}`, 'info');
+                    Swal.fire('Monthly Payment', `Your estimated monthly payment is $${monthlyPayment}`, 'info');
                 });
             }
         });
@@ -290,8 +289,8 @@ function BuyerShortlistUI() {
             cancelButtonText: 'No, keep it'
         }).then(async (result) => {
             if (result.isConfirmed) {
-                const deleteShortlistController = new DeleteShortlistController();
-                await deleteShortlistController.deleteShortlist(shortlistId);
+                const buyerDeleteShortlistController = new BuyerDeleteShortlistController();
+                await buyerDeleteShortlistController.deleteShortlist(shortlistId);
                 // Logic to remove the car from the shortlist goes here
                 console.log(`Car ${shortlistId} removed from shortlist.`);
                 Swal.fire('Removed!', 'The car has been removed from your shortlist.', 'success');
@@ -401,6 +400,9 @@ function BuyerShortlistUI() {
 
                     <button onClick={searchShortlist} className="bucSearch-button">
                         Search
+                    </button>
+                    <button onClick={clearSearch} className="bucSearch-button">
+                        Clear
                     </button>
                 </span>
             </div>

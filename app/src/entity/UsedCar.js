@@ -150,7 +150,7 @@ class UsedCar {
     }
 
     // Search for used cars by car name
-    async searchUsedCar(carName, cartype, priceRange, manufactureYear) {
+    async searchUsedCar(carName, carType, priceRange, manufactureYear, agent_username, seller_username) {
         try {
             // const firebaseService = new FirebaseService();
             let carQuery = collection(db, 'UsedCar');
@@ -162,14 +162,22 @@ class UsedCar {
 
             const conditions = [];
 
+            if (agent_username) {
+                conditions.push(where("agent_username", "==", agent_username));
+            }
+
+            if (seller_username) {
+                conditions.push(where("seller_username", "==", seller_username));
+            }
+
             // Apply `carName` (car_name) filter if provided
             if (carName) {
                 conditions.push(where("car_name", "==", carName));
             }
 
             // Apply `cartype` (car_type) filter if provided
-            if (cartype) {
-                conditions.push(where("car_type", "==", cartype));
+            if (carType) {
+                conditions.push(where("car_type", "==", carType));
             }
 
             // Apply `price` range filter if provided

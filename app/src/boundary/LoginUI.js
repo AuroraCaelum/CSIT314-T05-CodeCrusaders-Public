@@ -12,23 +12,6 @@ function LoginUI() {
     const [password, setPassword] = useState("");
     const [userProfiles, setUserProfiles] = useState([]);
 
-    useEffect(() => {
-        const fetchUserProfiles = async () => {
-            const snapshot = await Util.getUserProfiles();
-            if (snapshot !== null) {
-                const userData = snapshot.docs
-                    .filter(doc => !doc.data().suspended)
-                    .map(doc => ({
-                        profileName: doc.data().profileName,
-                        profileType: doc.data().profileType
-                    }));
-                setUserProfiles(userData);
-            }
-        };
-
-        fetchUserProfiles();
-    }, []);
-
     const handleLogin = async (e) => {
         e.preventDefault();
         if (userProfile === "") {
@@ -60,15 +43,12 @@ function LoginUI() {
                     confirmButtonText: 'OK',
                     timer: 1500
                 }).then(() => {
-                    const selectedProfile = userProfiles.find(profile => profile.profileName === userProfile);
-                    console.log(selectedProfile.profileType);
-                    const userProfileType = selectedProfile.profileType;
                     Cookies.set('username', username);
-                    Cookies.set('userProfile', userProfileType);
-                    if (userProfileType === "UserAdmin") window.open('/CSIT314-T05-CodeCrusaders/usermanagement', "_self")
-                    else if (userProfileType === "UsedCarAgent") window.open('/CSIT314-T05-CodeCrusaders/usedcarmanagement', "_self")
-                    else if (userProfileType === "Buyer") window.open('/CSIT314-T05-CodeCrusaders/buyerusedcar', "_self")
-                    else if (userProfileType === "Seller") window.open('/CSIT314-T05-CodeCrusaders/sellerusedcar', "_self")
+                    Cookies.set('userProfile', userProfile);
+                    if (userProfile === "UserAdmin") window.open('/CSIT314-T05-CodeCrusaders/usermanagement', "_self")
+                    else if (userProfile === "UsedCarAgent") window.open('/CSIT314-T05-CodeCrusaders/usedcarmanagement', "_self")
+                    else if (userProfile === "Buyer") window.open('/CSIT314-T05-CodeCrusaders/buyerusedcar', "_self")
+                    else if (userProfile === "Seller") window.open('/CSIT314-T05-CodeCrusaders/sellerusedcar', "_self")
                 });
             } else {
                 Swal.fire({
@@ -96,9 +76,10 @@ function LoginUI() {
                     className="input"
                 >
                     <option value="">Select</option>
-                    {userProfiles.map((profile) => (
-                        <option value={profile.profileName}>{profile.profileName}</option>
-                    ))}
+                    <option value="UsedCarAgent">Used Car Agent</option>
+                    <option value="Buyer">Buyer</option>
+                    <option value="Seller">Seller</option>
+                    <option value="UserAdmin">User Admin</option>
                 </select>
                 <label htmlFor="userId">Username:</label>
                 <input

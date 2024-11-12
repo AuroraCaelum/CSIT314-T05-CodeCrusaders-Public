@@ -3,9 +3,10 @@ import Cookies from "js-cookie";
 import "./BuyerUsedCarUI.css";
 import { Util } from "../Util";
 import { UserLogoutController } from "../controller/UserAuthController";
-import { ViewUsedCarController, SearchUsedCarController } from "../controller/UsedCarController";
-import { LeaveRateReviewController } from "../controller/RateReviewController";
-import { SaveShortlistController } from "../controller/ShortlistController";
+import { BuyerViewUsedCarController, BuyerSearchUsedCarController } from "../controller/BuyerUsedCarController";
+import { BuyerLeaveRateReviewController } from "../controller/BuyerRateReviewController";
+import { BuyerLoanCalculatorController } from "../controller/BuyerLoanCalculatorController";
+import { BuyerSaveShortlistController } from "../controller/BuyerShortlistController";
 
 import Swal from 'sweetalert2';
 
@@ -15,26 +16,26 @@ function BuyerUsedCarUI() {
         { car_name: "Loading...", description: "Loading...", manufacture_year: "Loading...", mileage: "Loading...", price: "Loading...", car_image: "https://placehold.co/100x100?text=Car+Image", view_count: 0, shortlist_count: 0 }
     ]);
 
-    useEffect(() => {
-        const fetchCars = async () => {
-            const snapshot = await Util.getUsedCarList();
-            if (snapshot !== null) {
-                const carData = snapshot.docs.map(doc => ({
-                    usedCarId: doc.id,
-                    car_name: doc.data().car_name,
-                    car_type: doc.data().car_type,
-                    description: (desc => desc.length >= 150 ? desc.substring(0, 150) + "..." : desc)(doc.data().description),
-                    manufacture_year: doc.data().manufacture_year,
-                    mileage: doc.data().mileage,
-                    price: doc.data().price,
-                    car_image: (doc.data().car_image),
-                    view_count: doc.data().view_count || 0,
-                    shortlist_count: doc.data().shortlist_count || 0
-                }));
-                setCars(carData);
-            }
-        };
+    const fetchCars = async () => {
+        const snapshot = await Util.getUsedCarList();
+        if (snapshot !== null) {
+            const carData = snapshot.docs.map(doc => ({
+                usedCarId: doc.id,
+                car_name: doc.data().car_name,
+                car_type: doc.data().car_type,
+                description: (desc => desc.length >= 150 ? desc.substring(0, 150) + "..." : desc)(doc.data().description),
+                manufacture_year: doc.data().manufacture_year,
+                mileage: doc.data().mileage,
+                price: doc.data().price,
+                car_image: (doc.data().car_image),
+                view_count: doc.data().view_count || 0,
+                shortlist_count: doc.data().shortlist_count || 0
+            }));
+            setCars(carData);
+        }
+    };
 
+    useEffect(() => {
         fetchCars();
     }, []);
 
@@ -42,6 +43,15 @@ function BuyerUsedCarUI() {
         console.log("Buyer Shortlist");
         window.open("/CSIT314-T05-CodeCrusaders/buyershortlist", "_self");
     };
+
+    const clearUsedCar = async () => {
+        document.getElementById('car_name').value = '';
+        document.getElementById('vehicleType').value = '';
+        document.getElementById('priceRange').value = '';
+        document.getElementById('manufactureYear').value = '';
+
+        fetchCars();
+    }
 
     const searchUsedCar = async () => {
         const carNameInput = document.getElementById('car_name');
@@ -58,12 +68,13 @@ function BuyerUsedCarUI() {
             manufactureYear: manufactureYearInput.value
         };
 
-        const searchUsedCarController = new SearchUsedCarController();
-        const searchResult = await searchUsedCarController.searchUsedCar(
+        const buyerSearchUsedCarController = new BuyerSearchUsedCarController();
+        const searchResult = await buyerSearchUsedCarController.BuyerSearchUsedCar(
             filterCriteria.car_name,
             filterCriteria.vehicleType,
             filterCriteria.priceRange,
-            filterCriteria.manufactureYear
+            filterCriteria.manufactureYear,
+            Cookies.get('username')
         );
 
 
@@ -81,10 +92,14 @@ function BuyerUsedCarUI() {
                 const carData = searchResult.data.map(doc => ({
                     usedCarId: doc.id,
                     car_name: doc.car_name,
+                    car_type: doc.car_type,
+                    description: (desc => desc.length >= 150 ? desc.substring(0, 150) + "..." : desc)(doc.description),
                     manufacture_year: doc.manufacture_year,
                     mileage: doc.mileage,
                     price: doc.price,
-                    car_image: doc.car_image
+                    car_image: doc.car_image,
+                    view_count: doc.view_count || 0,
+                    shortlist_count: doc.shortlist_count || 0
                 }));
                 setCars(carData);
             }
@@ -97,7 +112,7 @@ function BuyerUsedCarUI() {
 
     const viewUsedCar = async (usedCarId) => { //not done
         console.log('Fetching used Car for:', usedCarId);
-        const viewUsedCarController = new ViewUsedCarController();
+        const buyerViewUsedCarController = new BuyerViewUsedCarController();
         const updatedCars = cars.map(car => {
             if (car.usedCarId === usedCarId) {
                 car.view_count += 1;
@@ -107,7 +122,7 @@ function BuyerUsedCarUI() {
         setCars(updatedCars);
         Util.increaseCount(usedCarId, "view");
 
-        const usedCar = await viewUsedCarController.viewUsedCar(usedCarId);
+        const usedCar = await buyerViewUsedCarController.viewUsedCar(usedCarId);
         console.log("Used Car data received:", usedCar);
 
         if (usedCar) {
@@ -205,8 +220,8 @@ function BuyerUsedCarUI() {
                 const reviewer_username = Cookies.get('username');
                 const reviewer_type = Cookies.get('userProfile');
 
-                const leaveRateReviewController = new LeaveRateReviewController(agent_username, rating, review, reviewer_username, reviewer_type);
-                const isSuccess = await leaveRateReviewController.leaveRateReview(agent_username, rating, review, reviewer_username, reviewer_type);
+                const buyerLeaveRateReviewController = new BuyerLeaveRateReviewController(agent_username, rating, review, reviewer_username, reviewer_type);
+                const isSuccess = await buyerLeaveRateReviewController.leaveRateReview(agent_username, rating, review, reviewer_username, reviewer_type);
 
                 if (isSuccess) {
                     console.log(`Rating submitted for agent ${agent_username}:`, { rating, review });
@@ -220,14 +235,14 @@ function BuyerUsedCarUI() {
     };
 
     const openLoanCalculator = async (price) => {
-        let interestRateInput, loanTermInput;
+        let priceInput, interestRateInput, loanTermInput;
 
         Swal.fire({
             title: '<u>Loan Calculator</u>',
             html: `
                 <div>
-                    <label>Loan Amount:</label>
-                    <input type="text" class="swal2-input" value="$${price}" readonly>
+                    <label>Loan Amount: ($)</label>
+                    <input type="number" id="loanAmount" class="swal2-input" value="${price}">
                 </div>
                 <div>
                     <label>Loan Term (months):</label>
@@ -246,24 +261,24 @@ function BuyerUsedCarUI() {
             focusConfirm: false,
             didOpen: () => {
                 document.getElementById("clearButton").addEventListener("click", () => {
+                    document.getElementById("loanAmount").value = price;
                     document.getElementById("loanTerm").value = "";
                     document.getElementById("interestRate").value = "";
                 });
 
-                document.getElementById("calculateButton").addEventListener("click", () => {
+                document.getElementById("calculateButton").addEventListener("click", async () => {
+                    priceInput = document.getElementById('loanAmount').value;
                     interestRateInput = document.getElementById('interestRate').value;
                     loanTermInput = document.getElementById('loanTerm').value;
 
-                    if (!interestRateInput || !loanTermInput) {
+                    if ( !priceInput || !interestRateInput || !loanTermInput) {
                         Swal.showValidationMessage(`Please provide both an interest rate and a loan term`);
                         return;
                     }
 
-                    const interestRate = parseFloat(interestRateInput) / 100 / 12; // Monthly interest rate
-                    const loanTerm = parseFloat(loanTermInput); // Total payments (months)
-                    const monthlyPayment = (price * interestRate) / (1 - Math.pow(1 + interestRate, -loanTerm));
+                    const monthlyPayment = await BuyerLoanCalculatorController.loanCalculator(priceInput, loanTermInput, interestRateInput);
 
-                    Swal.fire('Monthly Payment', `Your estimated monthly payment is $${monthlyPayment.toFixed(2)}`, 'info');
+                    Swal.fire('Monthly Payment', `Your estimated monthly payment is $${monthlyPayment}`, 'info');
                 });
             }
         });
@@ -287,8 +302,8 @@ function BuyerUsedCarUI() {
             icon: 'success',
             confirmButtonText: 'OK'
         }).then(async () => {
-            const saveShortlistController = new SaveShortlistController();
-            const isSuccess = saveShortlistController.saveToShortlist(username, car);
+            const buyerSaveShortlistController = new BuyerSaveShortlistController();
+            const isSuccess = buyerSaveShortlistController.saveToShortlist(username, car);
 
             console.log("Check save Shortlist at Boundary", username, car.usedCarId, car.car_name, car.car_type, car.manufacture_year, car.price);
 
@@ -403,6 +418,9 @@ function BuyerUsedCarUI() {
 
                     <button onClick={searchUsedCar} className="bucSearch-button">
                         Search
+                    </button>
+                    <button onClick={clearUsedCar} className="bucSearch-button">
+                        Clear
                     </button>
                 </span>
                 <span>
