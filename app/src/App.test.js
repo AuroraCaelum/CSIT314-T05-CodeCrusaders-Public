@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 import LoginUI from './boundary/LoginUI';
-import UserManagementUI from './boundary/UserManagementUI';
-import UserAccountManagementUI from './boundary/UserAccountManagementUI';
-import UserProfileManagementUI from './boundary/UserProfileManagementUI';
-import UsedCarManagementUI from './boundary/UsedCarManagementUI';
+import UAUserManagementUI from './boundary/UAUserManagementUI';
+import UAUserAccountManagementUI from './boundary/UAUserAccountManagementUI';
+import UAUserProfileManagementUI from './boundary/UAUserProfileManagementUI';
+import UCAUsedCarManagementUI from './boundary/UCAUsedCarManagementUI';
 import UCAUsedCarListingUI from './boundary/UCAUsedCarListingUI';
 import UCARateReviewUI from './boundary/UCARateReviewUI';
 import BuyerUsedCarUI from './boundary/BuyerUsedCarUI';
@@ -19,25 +19,25 @@ describe('Login UI', () => {
 });
 
 describe('User Admin UI', () => {
-  test('UserManagementUI renders without crashing', async () => {
-    render(<UserManagementUI />);
+  test('UAUserManagementUI renders without crashing', async () => {
+    render(<UAUserManagementUI />);
     expect(screen.getByText('User Account Management')).toBeInTheDocument();
   });
 
-  test('UserAccountManagementUI renders without crashing', async () => {
-    render(<UserAccountManagementUI />);
+  test('UAUserAccountManagementUI renders without crashing', async () => {
+    render(<UAUserAccountManagementUI />);
     expect(screen.getByText('Create user account')).toBeInTheDocument();
   });
 
-  test('UserProfileManagementUI renders without crashing', async () => {
-    render(<UserProfileManagementUI />);
+  test('UAUserProfileManagementUI renders without crashing', async () => {
+    render(<UAUserProfileManagementUI />);
     expect(screen.getByText('Create user profile')).toBeInTheDocument();
   });
 });
 
 describe('Used Car Agent UI', () => {
-  test('UsedCarManagementUI renders without crashing', async () => {
-    render(<UsedCarManagementUI />);
+  test('UCAUsedCarManagementUI renders without crashing', async () => {
+    render(<UCAUsedCarManagementUI />);
     expect(screen.getByText('Used Car Listing')).toBeInTheDocument();
   });
 

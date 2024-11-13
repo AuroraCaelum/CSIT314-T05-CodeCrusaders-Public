@@ -9,9 +9,7 @@ import Swal from 'sweetalert2';
 
 function UCARateReviewUI() {
     const [username] = useState(Cookies.get("username"));
-    const [rateReviewList, setRateReviewList] = useState([
-        { rate: "Loading...", review: "Loading...", reviewer_username: "Loading..." }
-    ]);
+    const [rateReviewList, setRateReviewList] = useState([]);
 
     const fetchRateReview = async () => {
         const snapshot = await Util.getRateReviewList(username);
@@ -20,7 +18,7 @@ function UCARateReviewUI() {
             const rateReviewData = snapshot.map(doc => ({
                 rateReviewId: doc.documentId,
                 rate: doc.rate,
-                review: doc.review,
+                review: (review => review.length >= 150 ? review.substring(0, 150) + "..." : review)(doc.review),
                 reviewer_username: doc.reviewerUsername,
             }));
             setRateReviewList(rateReviewData);
@@ -42,9 +40,22 @@ function UCARateReviewUI() {
                     title: 'View Rate and Review',
                     html: `
                         <div style="text-align: left;">
-                            <strong>Rating</strong> ${rateReview.rate}<br>
-                            <strong>Review</strong> ${rateReview.review}<br>
-                            <strong>Review By</strong> ${rateReview.reviewerUsername} (${rateReview.reviewerType})<br>
+                            <div style="margin-bottom: 10px;">
+                                <strong>Rating</strong>
+                                <span>
+                                    <span class="star" style="font-size: 2em; color: ${1 <= rateReview.rate ? 'gold' : 'gray'}; cursor: pointer;">&#9733;</span>
+                                    <span class="star" style="font-size: 2em; color: ${2 <= rateReview.rate ? 'gold' : 'gray'}; cursor: pointer;">&#9733;</span>
+                                    <span class="star" style="font-size: 2em; color: ${3 <= rateReview.rate ? 'gold' : 'gray'}; cursor: pointer;">&#9733;</span>
+                                    <span class="star" style="font-size: 2em; color: ${4 <= rateReview.rate ? 'gold' : 'gray'}; cursor: pointer;">&#9733;</span>
+                                    <span class="star" style="font-size: 2em; color: ${5 <= rateReview.rate ? 'gold' : 'gray'}; cursor: pointer;">&#9733;</span>
+                                </span>
+                            </div>
+                            <div style="margin-bottom: 10px;">
+                                <strong>Review</strong> ${rateReview.review}
+                            </div>
+                            <div style="margin-bottom: 10px;">
+                                <strong>Review By</strong> ${rateReview.reviewerUsername} (${rateReview.reviewerType})
+                            </div>
                         </div>
                     `,
                     cancelButtonText: 'close',
@@ -120,7 +131,9 @@ function UCARateReviewUI() {
                 </div>
                 {rateReviewList.map((rateReview => (
                     <div key={rateReview.username} className="rarTable-row">
-                        <span>{rateReview.rate}</span>
+                        <span>{[1, 2, 3, 4, 5].map((value) => (
+                            <span key={value} className="star" style={{ fontSize: '2em', color: value <= rateReview.rate ? 'gold' : 'gray' }}>&#9733;</span>
+                        ))}</span>
                         <span>{rateReview.review}</span>
                         <span>{rateReview.reviewer_username}</span>
                         <button onClick={() => viewRateReview(rateReview.rateReviewId)} className="rarInspect-button">

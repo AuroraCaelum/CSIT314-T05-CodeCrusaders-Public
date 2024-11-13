@@ -40,10 +40,6 @@ class BuyerSearchShortlistController {
         try {
             // First, retrieve the list of shortlisted car IDs that match the criteria
             const shortlistResult = await Shortlist.searchShortlist(username, car_name, car_type, priceRange, manufactureYear);
-            if (!shortlistResult.success) {
-                return { success: false, message: "No cars found in shortlist matching the criteria." };
-            }
-
             return shortlistResult;
         } catch (error) {
             console.error('Error searching in shortlist:', error);

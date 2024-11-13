@@ -11,16 +11,14 @@ import Swal from 'sweetalert2';
 
 function BuyerShortlistUI() {
     const [username] = useState(Cookies.get("username"));
-    const [cars, setCars] = useState([
-        { car_name: "Loading...", description: "Loading...", manufacture_year: "Loading...", mileage: "Loading...", price: "Loading...", car_image: "https://placehold.co/100x100?text=Car+Image" }
-    ]);
+    const [shortlist, setShortlist] = useState([]);
 
     const fetchCars = async () => {
         const snapshot = await Util.getShortlistList(username);
         if (snapshot !== null) {
             if (snapshot === undefined || snapshot.length === 0) {
-                const carData = [{ car_name: "", description: "", manufacture_year: "", mileage: "", price: "", car_image: "https://placehold.co/100x100?text=NO+SHORTLISTED+CARS" }];
-                setCars(carData);
+                const carData = [];
+                setShortlist(carData);
             } else {
                 const carData = snapshot.map(doc => ({
                     shortlistId: doc.documentId,
@@ -32,7 +30,7 @@ function BuyerShortlistUI() {
                     price: doc.price,
                     car_image: doc.car_image
                 }));
-                setCars(carData);
+                setShortlist(carData);
             }
         }
     };
@@ -43,16 +41,16 @@ function BuyerShortlistUI() {
 
     const clearSearch = async () => {
         document.getElementById('car_name').value = '';
-        document.getElementById('vehicleType').value = '';
+        document.getElementById('carType').value = '';
         document.getElementById('priceRange').value = '';
         document.getElementById('manufactureYear').value = '';
 
         fetchCars();
-    }
+    };
 
-    const searchShortlist = async () => { //this is for saerch pop up
+    const searchShortlist = async () => {
         const carNameInput = document.getElementById('car_name');
-        const vehicleTypeInput = document.getElementById('vehicleType');
+        const carTypeInput = document.getElementById('carType');
         const priceRangeInput = document.getElementById('priceRange');
         const manufactureYearInput = document.getElementById('manufactureYear');
 
@@ -60,60 +58,52 @@ function BuyerShortlistUI() {
 
         const filterCriteria = {
             car_name: carNameInput ? carNameInput.value : '',
-            vehicleType: vehicleTypeInput.value,
+            car_type: carTypeInput.value,
             priceRange: priceRange,
             manufactureYear: manufactureYearInput.value
         };
+        
+        console.log(filterCriteria)
 
         const buyerSearchShortlistController = new BuyerSearchShortlistController();
         const searchResult = await buyerSearchShortlistController.searchShortlist(
             Cookies.get('username'),
             filterCriteria.car_name,
-            filterCriteria.vehicleType,
+            filterCriteria.car_type,
             filterCriteria.priceRange,
             filterCriteria.manufactureYear
         );
 
-        console.log(searchResult)
+        console.log(searchResult);
 
-        if (searchResult) {
-            console.log("Search results:", searchResult.data);
-            if (searchResult.data === undefined || searchResult.data.length === 0) {
-                Swal.fire({
-                    title: 'No Results',
-                    text: 'No used cars found matching the search criteria.',
-                    icon: 'info',
-                    confirmButtonText: 'OK'
-                });
-                return;
-            } else {
-                const carData = searchResult.data.map(doc => ({
-                    usedCarId: doc.id,
-                    car_name: doc.car_name,
-                    manufacture_year: doc.manufacture_year,
-                    description: doc.description,
-                    mileage: doc.mileage,
-                    price: doc.price,
-                    car_image: doc.car_image
-                }));
-                setCars(carData);
-            }
+        if (searchResult === null) {
+            console.log("Search results:", searchResult);
+            Swal.fire({
+                title: 'No Results',
+                text: 'No used cars found matching the search criteria.',
+                icon: 'info',
+                confirmButtonText: 'OK'
+            });
+            return;
         } else {
-            console.error("Search failed:", searchResult.message);
+            console.log(searchResult);
+            const carData = searchResult.map(doc => ({
+                usedCarId: doc.usedCarId,
+                car_name: doc.car_name,
+                car_type: doc.car_type,
+                manufacture_year: doc.manufacture_year,
+                description: (desc => desc.length >= 150 ? desc.substring(0, 150) + "..." : desc)(doc.description),
+                mileage: doc.mileage,
+                price: doc.price,
+                car_image: doc.car_image
+            }));
+            setShortlist(carData);
         }
-
     };
 
     const viewUsedCar = async (usedCarId) => { //not done
         console.log('Fetching used Car for:', usedCarId);
         const buyerViewShortlistController = new BuyerViewShortlistController();
-        const updatedCars = cars.map(car => {
-            if (car.usedCarId === usedCarId) {
-                car.view_count += 1;
-            }
-            return car;
-        });
-        setCars(updatedCars);
         Util.increaseCount(usedCarId, "view");
         const usedCar = await buyerViewShortlistController.viewUsedCarFromShortlist(usedCarId);
         console.log("Used Car data received:", usedCar);
@@ -121,20 +111,44 @@ function BuyerShortlistUI() {
         if (usedCar) {
             Swal.fire({
                 title: 'View Used Car',
+                width: 800,
                 html: `
-                    <div style="text-align: left;">
-                        <img src=${usedCar.body.car_image} alt="Car" class="uclCar-image" /><br>
-                        <strong>Car Name:</strong> ${usedCar.body.car_name}<br>
-                        <strong>Description:</strong> ${usedCar.body.description}<br>
-                        <strong>Type:</strong> ${usedCar.body.car_type}<br>
-                        <strong>Price:</strong> ${usedCar.body.price}<br>
-                        <strong>Manufacturer:</strong> ${usedCar.body.car_manufacturer}<br>
-                        <strong>Manufacture Year:</strong> ${usedCar.body.manufacture_year}<br>
-                        <strong>Engine cap:</strong> ${usedCar.body.engine_cap}<br>
-                        <strong>Mileage:</strong> ${usedCar.body.mileage}<br>
-                        <strong>Features:</strong> ${usedCar.body.features}<br>
-                        <strong>Description:</strong> ${usedCar.body.description}<br>
-                        <strong>Seller Username:</strong> ${usedCar.body.seller_username}<br>
+                    <div style="text-align: left; display: flex;">
+                        <span>
+                            <img src=${usedCar.body.car_image} alt="Car" class="uclCar-image" style="width: 250px; max-width: none; max-height: none; border-radius: 10px;"/><br>
+                        </span>
+                        <span style="margin-left: 20px;">
+                            <div class="uclCar-contents">
+                                <strong>Car Name:</strong> ${usedCar.body.car_name}
+                            </div>
+                            <div class="uclCar-contents">
+                                <strong>Type:</strong> ${usedCar.body.car_type}
+                            </div>
+                            <div class="uclCar-contents">
+                                <strong>Price:</strong> $${usedCar.body.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                            </div>
+                            <div class="uclCar-contents">
+                                <strong>Manufacturer:</strong> ${usedCar.body.car_manufacturer}
+                            </div>
+                            <div class="uclCar-contents">
+                                <strong>Manufacture Year:</strong> ${usedCar.body.manufacture_year}
+                            </div>
+                            <div class="uclCar-contents">
+                                <strong>Engine cap:</strong> ${usedCar.body.engine_cap.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                            </div>
+                            <div class="uclCar-contents">
+                                <strong>Mileage:</strong> ${usedCar.body.mileage.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}km
+                            </div>
+                            <div class="uclCar-contents">
+                                <strong>Features:</strong> ${usedCar.body.features}
+                            </div>
+                            <div class="uclCar-contents">
+                                <strong>Description:</strong> ${usedCar.body.description}
+                            </div>
+                            <div class="uclCar-contents">
+                                <strong>Seller Username:</strong> ${usedCar.body.seller_username}
+                            </div>
+                        </span>
                     </div>
                 `,
                 showCancelButton: true,
@@ -152,6 +166,9 @@ function BuyerShortlistUI() {
             });
             console.log(usedCar);
             console.log("display success in UI for: ", usedCarId);
+            console.log("image check", usedCar.car_image);
+            console.log("image check", usedCar.body.car_name);
+
         } else {
             console.error("Failed to load car information:", usedCar.body.price);
             Swal.fire({
@@ -182,7 +199,7 @@ function BuyerShortlistUI() {
                 </div>
                 <div>
                     <label>Review:</label>
-                    <textarea id="review" class="swal2-input" placeholder="Write your review"></textarea>
+                    <textarea id="review" placeholder="Write your review" rows="10" cols="50"></textarea>
                 </div>
             `,
             confirmButtonText: 'Submit',
@@ -232,20 +249,15 @@ function BuyerShortlistUI() {
 
         Swal.fire({
             title: '<u>Loan Calculator</u>',
+            width: 600,
             html: `
-                <div>
+                <div class="calc-wrapper">
                     <label>Loan Amount: ($)</label>
                     <input type="number" id="loanAmount" class="swal2-input" value="${price}">
-                </div>
-                <div>
                     <label>Loan Term (months):</label>
-                    <input type="number" id="loanTerm" class="swal2-input" placeholder="Enter loan term in months" min="0">
-                </div>
-                <div>
+                    <input type="number" id="loanTerm" class="swal2-input" placeholder="Enter loan term" min="0">
                     <label>Interest Rate (%):</label>
-                    <input type="number" id="interestRate" class="swal2-input" placeholder="Enter interest rate in whole numbers" min="0">
-                </div>
-                <div>
+                    <input type="number" id="interestRate" class="swal2-input" placeholder="Enter interest rate" min="0">
                     <button id="clearButton" class="swal2-confirm swal2-styled" style="margin-right: 10px;">Clear</button>
                     <button id="calculateButton" class="swal2-confirm swal2-styled">Calculate</button>
                 </div>
@@ -352,7 +364,7 @@ function BuyerShortlistUI() {
                 <span>
                     <input id="car_name" className="swal2-input custom-select" placeholder="Car Name(Hyundai)"></input>
 
-                    <select id="vehicleType" className="swal2-input custom-select">
+                    <select id="carType" className="swal2-input custom-select">
                         <option value="">Select Vehicle Type</option>
                         <option value="Sedan">Sedan</option>
                         <option value="SUV">SUV</option>
@@ -378,10 +390,29 @@ function BuyerShortlistUI() {
                         <option value="70001-80000">$70,001 - $80,000</option>
                         <option value="80001-90000">$80,001 - $90,000</option>
                         <option value="90001-100000">$90,001 - $100,000</option>
+                        <option value="100001-110000">$100,001 - $110,000</option>
+                        <option value="110001-120000">$110,001 - $120,000</option>
+                        <option value="120001-130000">$120,001 - $130,000</option>
+                        <option value="130001-140000">$130,001 - $140,000</option>
+                        <option value="140001-150000">$140,001 - $150,000</option>
+                        <option value="150001-160000">$150,001 - $160,000</option>
+                        <option value="160001-170000">$160,001 - $170,000</option>
+                        <option value="170001-180000">$170,001 - $180,000</option>
+                        <option value="180001-190000">$180,001 - $190,000</option>
+                        <option value="190001-200000">$190,001 - $200,000</option>
+                        <option value="210001-220000">$210,001 - $220,000</option>
+                        <option value="220001-230000">$220,001 - $230,000</option>
+                        <option value="230001-240000">$230,001 - $240,000</option>
+                        <option value="240001-250000">$240,001 - $250,000</option>
+                        <option value="250001-260000">$250,001 - $260,000</option>
+                        <option value="260001-270000">$260,001 - $270,000</option>
+                        <option value="270001-280000">$270,001 - $280,000</option>
+                        <option value="280001-290000">$280,001 - $290,000</option>
                     </select>
 
                     <select id="manufactureYear" className="swal2-input custom-select">
                         <option value="">Select manufacture year</option>
+                        <option value="2024">2024</option>
                         <option value="2023">2023</option>
                         <option value="2022">2022</option>
                         <option value="2021">2021</option>
@@ -416,13 +447,13 @@ function BuyerShortlistUI() {
                     <span>Price</span>
                     <span></span>
                 </div>
-                {cars.map((car) => (
-                    <div key={car.usedCarId} className="bsTable-row">
+                {shortlist.map((car) => (
+                    <div key={car.shortlistId} className="bsTable-row">
                         <img src={car.car_image} alt="Car" className="bsCar-image" />
                         <span>{car.car_name}</span>
                         <span>{car.description}</span>
                         <span>{car.manufacture_year}</span>
-                        <span>{car.mileage.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</span>
+                        <span>{car.mileage.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}km</span>
                         <span>${car.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</span>
                         <span>
                             <button onClick={() => viewUsedCar(car.usedCarId)} className="bsView-button">

@@ -54,47 +54,6 @@ class UserAccount {
         }
     }
 
-    async verifyUserAccount(username, password) {
-        try {
-            // Search for the user by username in Firestore
-            const userData = await this.firebaseService.getDocument('UserAccount', username);
-            console.log("User data:", userData);
-            //console.log("User data:", userData.username);
-            console.log("Params:", username, password);
-            // const userProfile = userData.userProfile;
-
-            if (userData && userData.username === username) {
-
-                // Check if password matches
-                if (userData.suspended === true) {
-                    console.log("User account is suspended");
-                    return null;
-                } else {
-                    if (userData.password === password) {
-                        // if (userData.userProfile === userProfile) {
-                        //     console.log("Login successful");
-                        //     return true;
-                        // } else {
-                        //     console.log("User profile does not match");
-                        //     return false;
-                        // }
-                        console.log("ID/PW Match", userData.userProfile);
-                        return userData.userProfile;
-                    } else {
-                        console.log("Incorrect password");
-                        return null;
-                    }
-                }
-            } else {
-                console.log("User not found");
-                return null;
-            }
-        } catch (error) {
-            console.error("Error logging in:", error);
-            return null;
-        }
-    }
-
     // View user account information by userId
     async viewUserAccount(username) {
         try {
@@ -169,13 +128,47 @@ class UserAccount {
             console.log(userAccount)
 
             if(userAccount.length > 0) {
-                return { success: true, data: userAccount };
+                return userAccount;
             } else {
-                return { success: false, data: null };
+                return null;
             }
         } catch (error) {
             console.error("Error searching for user:", error);
             throw error;
+        }
+    }
+
+    async verifyUserAccount(username, password) {
+        try {
+            // Search for the user by username in Firestore
+            const userData = await this.firebaseService.getDocument('UserAccount', username);
+            console.log("User data:", userData);
+            //console.log("User data:", userData.username);
+            console.log("Params:", username, password);
+            // const userProfile = userData.userProfile;
+
+            if (userData && userData.username === username) {
+
+                // Check if password matches
+                if (userData.suspended === true) {
+                    console.log("User account is suspended");
+                    return null;
+                } else {
+                    if (userData.password === password) {
+                        console.log("ID/PW Match", userData.userProfile);
+                        return userData.userProfile;
+                    } else {
+                        console.log("Incorrect password");
+                        return null;
+                    }
+                }
+            } else {
+                console.log("User not found");
+                return null;
+            }
+        } catch (error) {
+            console.error("Error logging in:", error);
+            return null;
         }
     }
 

@@ -1,0 +1,269 @@
+[Boundary]
+
+LoginUI.js
+    - LoginUI
+        - handleLogin()
+
+UserManagementUI.js
+    - UserManagementUI
+        - handleLogout()
+
+UserAccountManagementUI.js
+    - UserAccountManagementUI
+        - createUserAccount()
+        - viewUserAccount(username)
+        - updateUserAccount(userAccount)
+        - suspendUserAccount(username)
+        - searchUserAccount()
+        - handleLogout()
+
+UserProfileManagementUI.js
+    - UserProfileManagementUI
+        - createUserProfile()
+        - viewUserProfile(profileName)
+        - updateUserProfile(userProfile)
+        - suspendUserProfile(profileName)
+        - searchUserProfile()
+        - handleLogout()
+
+UCAUsedCarManagementUI.js
+    - UCAUsedCarManagementUI
+        - handleLogout()
+
+UCAUsedCarListingUI.js
+    - UCAUsedCarListingUI
+        - createUsedCar()
+        - viewUsedCar(usedCarId)
+        - updateUsedCar(usedCar)
+        - handleSearchUsedCar()
+        - trackViewCount(usedCarId)
+        - trackShortlistCount(usedCarId)
+        - handleLogout()
+        
+UCARateReviewUI.js
+    - UCARateReviewUI
+        - viewRateReview(rateReviewId)
+        - handleLogout()
+    
+BuyerUsedCarUI.js
+    - BuyerUsedCarUI
+        - searchUsedCar()
+        - viewUsedCar(usedCarId)
+        - leaveRateReview(agent_username)
+        - openLoanCalculator(price)
+        - saveToShortlist(car)
+        - trackViewCount(usedCarId)
+        - trackShortlistCount(usedCarId)
+        - handleLogout()
+
+BuyerShortlistUI.js
+    - BuyerShortlistUI
+        - searchShortlist()
+        - viewUsedCar(usedCarId)
+        - leaveRateReview(agent_username)
+        - openLoanCalculator(price)
+        - handleRemoveFromShortlist(shortlistId, usedCarId)
+        - handleLogout()
+        
+SellerUsedCarUI.js
+    - SellerUsedCarUI
+        - searchUsedCar()
+        - viewUsedCar(usedCarId)
+        - trackViewCount(usedCarId)
+        - trackShortlistCount(usedCarId)
+        - leaveRateReview(agent_username)
+        - handleLogout()
+
+[Controller]
+
+BuyerLoanCalculatorController.js
+-
+BuyerRateReviewController.js
+-
+BuyerShortlistController.js
+-
+BuyerUsedCarController.js
+-
+SellerRateReviewController.js
+-
+SellerUsedCarController.js
+-
+UAUserAccountController.js
+-
+UAUserProfileController.js
+-
+UCAUsedCarController.js
+-
+UCAViewRateReviewController.js
+-
+UserAuthController.js
+-
+
+[Entity]
+
+UserAccount.js
+    - UserAccount
+        - validateSeller(username)
+        - createUserAccount(username, fName, lName, password, phoneNum, email, userProfile)
+        - viewUserAccount(username)
+        - updateUserAccount(username, fName, lName, password, phoneNum, email, userProfile)
+        - suspendUserAccount(username)
+        - searchUserAccount(username)
+        - verifyUserAccount(username, password)
+        - getUserAccountList()
+
+UserProfile.js
+    - UserProfile
+        - createUserProfile(profileName, description, profileType)
+        - viewUserProfile(profileName)
+        - updateUserProfile(profileName, description, profileType)
+        - suspendUserProfile(profileName)
+        - searchUserProfile(profileName)
+        - getUserProfiles()
+        - verifyUserProfile(profileName, selectedType)
+
+UsedCar.js
+    - UsedCar
+        - createUsedCar(usedCarId, agent_username, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap)
+        - viewUsedCar(usedCarId)
+        - updateUsedCar(usedCarId, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap)
+        - deleteUsedCar(usedCarId)
+        - searchUsedCar(carName, carType, priceRange, manufactureYear, agent_username, seller_username)
+        - increaseCount(usedCarId, countType)
+        - decreaseCount(usedCarId, countType)
+        - trackViewCount(usedCarId)
+        - trackShortlistCount(usedCarId)
+        - getUsedCarListById(usedCarIds)
+        - getUsedCarList()
+        - getUsedCarListByUsername(usertype, username)
+
+Shortlist.js
+    - Shortlist
+        - saveToShortlist(username, car)
+        - searchShortlist(username, carName, carType, priceRange, manufactureYear)
+        - deleteShortlist(shortlistId)
+        - getShortlistList(username)
+
+RateReview.js
+    - RateReview
+        - leaveRateReview(agent_username, rate, review, reviewer_username, reviewer_type)
+        - viewRateReview(rateReviewId)
+        - getRateReviewList(agent_username)
+
+
+
+
+
+[Controller]
+
+UserLoginController
+    - authenticateLogin(username, password, profileType)
+
+UserLogoutController
+    - logout()
+
+
+UACreateUserAccountController
+    - createUserAccount(username, fName, lName, password, phoneNum, email, userProfile)
+    
+UAViewUserAccountController
+    - viewUserAccount(username)
+
+UAUpdateUserAccountController
+    - updateUserAccount(username, fName, lName, password, phoneNum, email, userProfile)
+
+UASuspendUserAccountController
+    - suspendUserAccount(username)
+
+UASearchUserAccountController
+    - searchUserAccount(username)
+
+UACreateUserProfileController
+    - createUserProfile(profileName, description, profileType)
+
+UAViewUserProfileController
+    - viewUserProfile(profileName)
+
+UAUpdateUserProfileController
+    - updateUserProfile(profileName, description, profileType)
+    
+UASuspendUserProfileController
+    - suspendUserProfile(profileName)
+    
+UASearchUserProfileController
+    - searchUserProfile(profileName)
+
+
+UCACreateUsedCarController
+    - createUsedCar(usedCarId, agent_username, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap )
+    
+UCAViewUsedCarController
+    - viewUsedCar(usedCarId)
+
+UCAUpdateUsedCarController
+    - updateUsedCar(usedCarId, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap)
+    
+UCADeleteUsedCarController
+    - deleteUsedCar(usedCarId)
+    
+UCASearchUsedCarController
+    - searchUsedCar(carName, carType, priceRange, manufactureYear, agent_username)
+    
+UCATrackViewCountController
+    - trackViewCount(usedCarId)
+
+UCATrackShortlistCountController
+    - trackShortlistCount(usedCarId)
+        
+UCAViewRateReviewController
+    - viewRateReview(rateReviewId)
+
+
+BuyerLoanCalculatolrController
+    - loanCalculator(price, loanTerm, interestRate)
+
+BuyerLeaveRateReviewController
+    - leaveRateReview(agent_username, rate, review, reviewer_username, reviewer_type)
+
+BuyerViewShortlistController
+    - viewUsedCarFromShortlist(usedCarId)
+    
+BuyerSaveShortlistController
+    - saveToShortlist(username, car)
+    
+BuyerSearchShortlistController
+    - searchShortlist(username, car_name, car_type, priceRange, manufactureYear)
+    
+BuyerDeleteShortlistController
+    - deleteShortlist(shortlistId)
+    
+BuyerSearchUsedCarController
+    - searchUsedCar(carName, carType, priceRange, manufactureYear)
+    
+BuyerViewUsedCarController
+    - viewUsedCar(usedCarId)
+    
+BuyerTrackViewCountController
+    - trackViewCount(usedCarId)
+
+BuyerTrackShortlistCountController
+    - trackShortlistCount(usedCarId)
+
+
+SellerLeaveRateReviewController
+    - leaveRateReview(agent_username, rate, review, reviewer_username, reviewer_type)
+    
+SellerViewUsedCarController
+    - viewUsedCar(usedCarId)
+    
+SellerSearchUsedCarController
+    - searchUsedCar(carName, carType, priceRange, manufactureYear, seller_username)
+    
+SellerTrackViewCountController
+    - trackViewCount(usedCarId)
+    
+SellerTrackShortlistCountController
+    - trackShortlistCount(usedCarId)
+
+
+

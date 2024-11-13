@@ -3,10 +3,10 @@ import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import LoginUI from './boundary/LoginUI';
-import UserManagementUI from './boundary/UserManagementUI';
-import UserAccountManagementUI from './boundary/UserAccountManagementUI';
-import UserProfileManagementUI from './boundary/UserProfileManagementUI';
-import UsedCarManagementUI from './boundary/UsedCarManagementUI';
+import UAUserManagementUI from './boundary/UAUserManagementUI';
+import UAUserAccountManagementUI from './boundary/UAUserAccountManagementUI';
+import UAUserProfileManagementUI from './boundary/UAUserProfileManagementUI';
+import UCAUsedCarManagementUI from './boundary/UCAUsedCarManagementUI';
 import UCAUsedCarListingUI from './boundary/UCAUsedCarListingUI';
 import UCARateReviewUI from './boundary/UCARateReviewUI';
 import BuyerUsedCarUI from './boundary/BuyerUsedCarUI';
@@ -19,10 +19,10 @@ function App() {
         <Router basename='/CSIT314-T05-CodeCrusaders'>
             <Routes>
                 <Route path="/" element={<LoginUI />} />
-                <Route path="/usermanagement" element={<UserManagementUI />} />
-                <Route path="/useraccountmanagement" element={<UserAccountManagementUI />} />
-                <Route path="/userprofilemanagement" element={<UserProfileManagementUI />} />
-                <Route path="/usedcarmanagement" element={<UsedCarManagementUI />} />
+                <Route path="/usermanagement" element={<UAUserManagementUI />} />
+                <Route path="/useraccountmanagement" element={<UAUserAccountManagementUI />} />
+                <Route path="/userprofilemanagement" element={<UAUserProfileManagementUI />} />
+                <Route path="/usedcarmanagement" element={<UCAUsedCarManagementUI />} />
                 <Route path="/ucausedcarlisting" element={<UCAUsedCarListingUI />} />
                 <Route path="/ucarateandreview" element={<UCARateReviewUI />} />
                 <Route path="/buyerusedcar" element={<BuyerUsedCarUI />} />
@@ -34,17 +34,3 @@ function App() {
 }
 
 export default App;
-// const express = require('express');
-// const app = express();
-// const userAccountController = require('./controller/UserAccountController');
-
-// app.use(express.json());
-
-// // User authentication routes
-// app.post('/register', userAccountController.register);
-// app.post('/login', userAccountController.login);
-// app.post('/logout', userAccountController.logout);
-
-// app.listen(5000, () => {
-//     console.log('Server is running on port 5000');
-// });
