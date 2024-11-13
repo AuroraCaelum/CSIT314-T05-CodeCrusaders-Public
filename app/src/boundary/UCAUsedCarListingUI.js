@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { Util } from "../Util";
+import Chart from 'chart.js/auto';
 import "./UCAUsedCarListingUI.css";
 import { UserLogoutController } from "../controller/UserAuthController";
-import { UCACreateUsedCarController, UCAViewUsedCarController, UCAUpdateUsedCarController, UCADeleteUsedCarController, UCASearchUsedCarController } from "../controller/UCAUsedCarController";
+import { UCACreateUsedCarController, UCAViewUsedCarController, UCAUpdateUsedCarController, UCADeleteUsedCarController, UCASearchUsedCarController, 
+    UCATrackViewCountController, UCATrackShortlistCountController } from "../controller/UCAUsedCarController";
 
 import Swal from 'sweetalert2';
 
 function UCAUsedCarListingUI() {
     const [username] = useState(Cookies.get("username"));
-    const [cars, setCars] = useState([
-        { car_name: "Loading...", description: "Loading...", manufacture_year: "Loading...", mileage: "Loading...", price: "Loading...", car_image: "https://placehold.co/100x100?text=Car+Image", view_count: 0, shortlist_count: 0 }
-    ]);
+    const [cars, setCars] = useState([]);
 
 
     const fetchCars = async () => {
@@ -40,6 +40,14 @@ function UCAUsedCarListingUI() {
         window.open("/CSIT314-T05-CodeCrusaders/", "_self")
     }
 
+    const clearUsedCar = async () => {
+        document.getElementById('car_name').value = '';
+        document.getElementById('vehicleType').value = '';
+        document.getElementById('priceRange').value = '';
+        document.getElementById('manufactureYear').value = '';
+
+        fetchCars();
+    }
 
     const createUsedCar = () => {
         let seller_username_input, car_name_input, car_type_input, car_manufacturer_input, car_image_input, description_input, features_input, price_input, mileage_input, manufacture_year_input, engine_cap_input;
@@ -47,7 +55,7 @@ function UCAUsedCarListingUI() {
         Swal.fire({
             title: 'Create Used Car',
             width: 1200,
-            html: `
+            html: ` 
                 <div class="wrapper">
                     <div class="item">
                         <label>Car Image</label>
@@ -68,7 +76,7 @@ function UCAUsedCarListingUI() {
                     <div class="item">
                         <label>Car Type</label>
                         <select id="car_type" class="swal2-select">
-                            <option value="">Select Car Type</option>
+                            <option value="" disabled selected>Select Car Type</option>
                             <option value="Sedan">Sedan</option>
                             <option value="SUV">SUV</option>
                             <option value="Hatchback">Hatchback</option>
@@ -126,9 +134,9 @@ function UCAUsedCarListingUI() {
 
                 console.log({ seller_username_input, car_name_input, car_type_input, car_manufacturer_input, car_image_input, description_input, features_input, price_input, mileage_input, manufacture_year_input, engine_cap_input });
 
-                if (!seller_username_input || !car_name_input || !car_type_input || !car_manufacturer_input) {
-                    console.error("One or more inputs are not found.");
-                }
+                // if (!seller_username_input || !car_name_input || !car_type_input || !car_manufacturer_input) {
+                //     console.error("One or more inputs are not found.");
+                // }
 
                 const handleEnterKey = (event) => {
                     if (event.key === 'Enter') {
@@ -165,7 +173,6 @@ function UCAUsedCarListingUI() {
 
 
                 if (!seller_username || !car_name || !car_type || !car_manufacturer || !car_image || !description || !features || !price || !mileage || !manufacture_year || !engine_cap) {
-
                     Swal.showValidationMessage(`Please fill in all fields`);
                     return false;
                 }
@@ -198,11 +205,16 @@ function UCAUsedCarListingUI() {
                 const isSuccess = await ucaCreateUsedCarController.createUsedCar(usedCarId, Cookies.get("username"), seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap);
 
                 if (isSuccess) {
-                    console.log(usedCarId);
-                    console.log("Used Car successfully created.");
+                    Swal.fire('Created!', 'Used car has successfully registered.', 'success');
                     fetchCars();
                 } else {
-                    console.error("Failed to create used car.");
+                    Swal.fire({
+                        position: "center",
+                        title: 'Failed!',
+                        icon: 'error',
+                        html: 'Failed to create a used car.<br><br><small>Please check that you have entered a correct seller username. Else, it might be a server error. Please try a while later!</small>',
+                        confirmButtonText: 'OK',
+                    });
                 }
             }
         });
@@ -211,12 +223,6 @@ function UCAUsedCarListingUI() {
     const viewUsedCar = async (usedCarId) => {
         console.log('Fetching used Car for:', usedCarId);
         const ucaViewUsedCarController = new UCAViewUsedCarController();
-        // const updatedCars = cars.map(car => {
-        //     if (car.usedCarId === usedCarId) {
-        //         car.view_count += 1;
-        //     }
-        //     return car;
-        // });
         const usedCar = await ucaViewUsedCarController.viewUsedCar(usedCarId);
         console.log("Used Car data received:", usedCar);
         console.log(usedCarId);
@@ -224,20 +230,44 @@ function UCAUsedCarListingUI() {
         if (usedCar) {
             Swal.fire({
                 title: 'View Used Car',
+                width: 800,
                 html: `
-                    <div style="text-align: left;">
-                        <img src=${usedCar.body.car_image} alt="Car" class="uclCar-image" /><br>
-                        <strong>Car Name:</strong> ${usedCar.body.car_name}<br>
-                        <strong>Description:</strong> ${usedCar.body.description}<br>
-                        <strong>Type:</strong> ${usedCar.body.car_type}<br>
-                        <strong>Price:</strong> ${usedCar.body.price}<br>
-                        <strong>Manufacturer:</strong> ${usedCar.body.car_manufacturer}<br>
-                        <strong>Manufacture Year:</strong> ${usedCar.body.manufacture_year}<br>
-                        <strong>Engine cap:</strong> ${usedCar.body.engine_cap}<br>
-                        <strong>Mileage:</strong> ${usedCar.body.mileage}<br>
-                        <strong>Features:</strong> ${usedCar.body.features}<br>
-                        <strong>Description:</strong> ${usedCar.body.description}<br>
-                        <strong>Seller Username:</strong> ${usedCar.body.seller_username}<br>
+                    <div style="text-align: left; display: flex;">
+                        <span>
+                            <img src=${usedCar.body.car_image} alt="Car" class="uclCar-image" style="width: 250px; max-width: none; max-height: none; border-radius: 10px;"/><br>
+                        </span>
+                        <span style="margin-left: 20px;">
+                            <div class="uclCar-contents">
+                                <strong>Car Name:</strong> ${usedCar.body.car_name}
+                            </div>
+                            <div class="uclCar-contents">
+                                <strong>Type:</strong> ${usedCar.body.car_type}
+                            </div>
+                            <div class="uclCar-contents">
+                                <strong>Price:</strong> $${usedCar.body.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                            </div>
+                            <div class="uclCar-contents">
+                                <strong>Manufacturer:</strong> ${usedCar.body.car_manufacturer}
+                            </div>
+                            <div class="uclCar-contents">
+                                <strong>Manufacture Year:</strong> ${usedCar.body.manufacture_year}
+                            </div>
+                            <div class="uclCar-contents">
+                                <strong>Engine cap:</strong> ${usedCar.body.engine_cap.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                            </div>
+                            <div class="uclCar-contents">
+                                <strong>Mileage:</strong> ${usedCar.body.mileage.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}km
+                            </div>
+                            <div class="uclCar-contents">
+                                <strong>Features:</strong> ${usedCar.body.features}
+                            </div>
+                            <div class="uclCar-contents">
+                                <strong>Description:</strong> ${usedCar.body.description}
+                            </div>
+                            <div class="uclCar-contents">
+                                <strong>Seller Username:</strong> ${usedCar.body.seller_username}
+                            </div>
+                        </span>
                     </div>
                 `,
                 showCancelButton: true,
@@ -248,32 +278,9 @@ function UCAUsedCarListingUI() {
                 focusConfirm: false
             }).then((result) => {
                 if (result.isConfirmed) {
-
                     updateUsedCar(usedCar);
-
                 } else if (result.isDenied) {
-                    Swal.fire({
-                        title: 'Are you sure?',
-                        text: "You are about to Delete this product.",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'Yes, Delete it!',
-                        cancelButtonText: 'No, cancel'
-                    }).then(async (DeleteResult) => {
-                        if (DeleteResult.isConfirmed) {
-                            const ucaDeleteUsedCarController = new UCADeleteUsedCarController();
-                            const isDeleted = await ucaDeleteUsedCarController.deleteUsedCar(usedCarId);
-
-                            if (isDeleted) {
-                                Swal.fire('Deleted!', 'This car has been deleted.', 'success');
-                            } else {
-                                Swal.fire('Failed!', 'Failed to delete this car.', 'error');
-                            }
-                            console.log('Car Deleted:', usedCar.body.car_name);
-                            Swal.fire('Deleted!', 'The product has been Deleted.', 'success');
-                            fetchCars();
-                        }
-                    });
+                    deleteUsedCar(usedCarId, usedCar.body.car_name);
                 }
             });
             console.log(usedCar);
@@ -288,7 +295,6 @@ function UCAUsedCarListingUI() {
             });
         }
     };
-
 
     const updateUsedCar = (usedCar) => {
         console.log(usedCar.body.description)
@@ -323,7 +329,6 @@ function UCAUsedCarListingUI() {
                     <div class="item">
                         <label>Car Type</label>
                         <select id="car_type" class="swal2-select">
-                            <option value="">Select Car Type</option>
                             <option value="Sedan" ${(usedCar.body.car_type) === "Sedan" ? 'selected' : ''}>Sedan</option>
                             <option value="SUV" ${(usedCar.body.car_type) === "SUV" ? 'selected' : ''}>SUV</option>
                             <option value="Hatchback" ${(usedCar.body.car_type) === "Hatchback" ? 'selected' : ''}>Hatchback</option>
@@ -393,18 +398,49 @@ function UCAUsedCarListingUI() {
                     console.log('Updated Used Car Details:', {
                         seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap
                     });
-                    Swal.fire('Updated!', 'The used car details have been updated.', 'success');
+                    Swal.fire('Updated!', 'Used car detail has successfully updated.', 'success');
                     fetchCars();
                 } else {
-                    Swal.fire('Error!', 'Failed to update car details.', 'error');
+                    Swal.fire({
+                        position: "center",
+                        title: 'Failed!',
+                        icon: 'error',
+                        html: 'Failed to update used car details.<br><br><small>Please check that you have entered a correct seller username. Else, it might be a server error. Please try a while later!</small>',
+                        confirmButtonText: 'OK',
+                    });
                 }
             }
         });
     };
 
-    const handleSearchUsedCar = async () => {
+    const deleteUsedCar = async (usedCarId, car_name) => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You are about to Delete this used car.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, Delete it!',
+            cancelButtonText: 'No, cancel'
+        }).then(async (DeleteResult) => {
+            if (DeleteResult.isConfirmed) {
+                const ucaDeleteUsedCarController = new UCADeleteUsedCarController();
+                const isDeleted = await ucaDeleteUsedCarController.deleteUsedCar(usedCarId);
+
+                if (isDeleted) {
+                    Swal.fire('Deleted!', 'Used car has been successfully deleted.', 'success');
+                } else {
+                    Swal.fire('Failed!', 'Error occurred while deleting used car from the database. Please try again.', 'error');
+                }
+                console.log('Car Deleted:', car_name);
+                Swal.fire('Deleted!', 'The product has been Deleted.', 'success');
+                fetchCars();
+            }
+        });
+    }
+
+    const searchUsedCar = async () => {
         const carNameInput = document.getElementById('car_name');
-        const vehicleTypeInput = document.getElementById('vehicleType');
+        const carTypeInput = document.getElementById('vehicleType');
         const priceRangeInput = document.getElementById('priceRange');
         const manufactureYearInput = document.getElementById('manufactureYear');
 
@@ -412,7 +448,7 @@ function UCAUsedCarListingUI() {
 
         const filterCriteria = {
             car_name: carNameInput ? carNameInput.value : '',
-            vehicleType: vehicleTypeInput.value,
+            car_type: carTypeInput.value,
             priceRange: priceRange,
             manufactureYear: manufactureYearInput.value
         };
@@ -420,41 +456,162 @@ function UCAUsedCarListingUI() {
         const ucaSearchUsedCarController = new UCASearchUsedCarController();
         const searchResult = await ucaSearchUsedCarController.searchUsedCar(
             filterCriteria.car_name,
-            filterCriteria.vehicleType,
+            filterCriteria.car_type,
             filterCriteria.priceRange,
             filterCriteria.manufactureYear,
             Cookies.get('username'),
         );
 
 
-        if (searchResult) {
-            console.log("Search results:", searchResult.data);
-            if (searchResult.data === undefined || searchResult.data.length === 0) {
-                Swal.fire({
-                    title: 'No Results',
-                    text: 'No used cars found matching the search criteria.',
-                    icon: 'info',
-                    confirmButtonText: 'OK'
-                });
-                return;
-            } else {
-                const carData = searchResult.data.map(doc => ({
-                    usedCarId: doc.id,
-                    car_name: doc.car_name,
-                    manufacture_year: doc.manufacture_year,
-                    mileage: doc.mileage,
-                    price: doc.price,
-                    car_image: doc.car_image,
-                    view_count: doc.view_count || 0,
-                    shortlist_count: doc.shortlist_count || 0
-                }));
-
-                setCars(carData);
-            }
+        if (searchResult === null) {
+            Swal.fire({
+                title: 'No Results',
+                text: 'No used cars found matching the search criteria.',
+                icon: 'info',
+                confirmButtonText: 'OK'
+            });
+            return;
         } else {
-            console.error("Search failed:", searchResult.message);
-        }
+            const carData = searchResult.map(doc => ({
+                usedCarId: doc.id,
+                car_name: doc.car_name,
+                manufacture_year: doc.manufacture_year,
+                description: doc.description,
+                mileage: doc.mileage,
+                price: doc.price,
+                car_image: doc.car_image,
+                view_count: doc.view_count || 0,
+                shortlist_count: doc.shortlist_count || 0
+            }));
 
+            setCars(carData);
+        }
+    };
+
+    const trackViewCount = async (usedCarId) => {
+        Swal.fire({
+            title: 'View Count History',
+            width: 800,
+            html: `
+                <canvas id="viewCountChart" width="400" height="200"></canvas>
+                <h3 id="viewCountChartLoading">Loading Chart...</h3>
+                <h3 id="viewCountErrorText" style="display: none;">View Count History Data Not Found!</h3>
+            `,
+            confirmButtonText: 'Close',
+            focusConfirm: false,
+            didOpen: async () => {
+                const UcaTrackViewCountController = new UCATrackViewCountController();
+                const viewCountHistory = await UcaTrackViewCountController.trackViewCount(usedCarId);
+
+                if (viewCountHistory === undefined || viewCountHistory === null) {
+                    document.getElementById("viewCountChart").style.display = "none";
+                    document.getElementById("viewCountChartLoading").style.display = "none";
+                    document.getElementById("viewCountErrorText").style.display = "block";
+                } else {
+                    const orderedViewCountHistory = {};
+                    Object.keys(viewCountHistory).sort().forEach(key => {
+                        orderedViewCountHistory[key] = viewCountHistory[key];
+                    });
+
+                    const accumulatedViewCountHistory = {};
+                    Object.keys(orderedViewCountHistory).forEach((key, index) => {
+                        if (index === 0) {
+                            accumulatedViewCountHistory[key] = orderedViewCountHistory[key];
+                        } else {
+                            accumulatedViewCountHistory[key] = orderedViewCountHistory[key] + accumulatedViewCountHistory[Object.keys(accumulatedViewCountHistory)[index - 1]];
+                        }
+                    });
+
+                    const ctx = document.getElementById('viewCountChart');
+                    new Chart(ctx, {
+                        data: {
+                            labels: Object.keys(orderedViewCountHistory),
+                            datasets: [{
+                                type: 'line',
+                                label: 'Monthly View Count',
+                                data: Object.values(orderedViewCountHistory),
+                                fill: false,
+                                borderColor: 'rgb(230, 212, 110)',
+                                tension: 0.1
+                            }, {
+                                type: 'line',
+                                label: 'Cumulative View Count',
+                                data: Object.values(accumulatedViewCountHistory),
+                                fill: true,
+                                showLine: false,
+                                backgroundColor: 'rgba(110, 136, 229, 0.6)',
+                                tension: 0.1
+                            }]
+                        }
+                    });
+
+                    document.getElementById("viewCountChartLoading").style.display = "none";
+                }
+            }
+        });
+    };
+
+    const trackShortlistCount = async (usedCarId) => {
+        Swal.fire({
+            title: 'Shortlist Count History',
+            width: 800,
+            html: `
+                <canvas id="shortlistCountChart" width="400" height="200"></canvas>
+                <h3 id="shortlistCountChartLoading">Loading Chart...</h3>
+                <h3 id="shortlistCountErrorText" style="display: none;">Shortlist Count History Data Not Found!</h3>
+            `,
+            confirmButtonText: 'Close',
+            focusConfirm: false,
+            didOpen: async () => {
+                const UcaTrackShortlistCountController = new UCATrackShortlistCountController();
+                const shortlistCountHistory = await UcaTrackShortlistCountController.trackShortlistCount(usedCarId);
+
+                if (shortlistCountHistory === undefined || shortlistCountHistory === null) {
+                    document.getElementById("shortlistCountChart").style.display = "none";
+                    document.getElementById("shortlistCountChartLoading").style.display = "none";
+                    document.getElementById("shortlistCountErrorText").style.display = "block";
+                } else {
+                    const orderedShortlistCountHistory = {};
+                    Object.keys(shortlistCountHistory).sort().forEach(key => {
+                        orderedShortlistCountHistory[key] = shortlistCountHistory[key];
+                    });
+
+                    const accumulatedShortlistCountHistory = {};
+                    Object.keys(orderedShortlistCountHistory).forEach((key, index) => {
+                        if (index === 0) {
+                            accumulatedShortlistCountHistory[key] = orderedShortlistCountHistory[key];
+                        } else {
+                            accumulatedShortlistCountHistory[key] = orderedShortlistCountHistory[key] + accumulatedShortlistCountHistory[Object.keys(accumulatedShortlistCountHistory)[index - 1]];
+                        }
+                    });
+
+                    const ctx = document.getElementById('shortlistCountChart');
+                    new Chart(ctx, {
+                        data: {
+                            labels: Object.keys(orderedShortlistCountHistory),
+                            datasets: [{
+                                type: 'line',
+                                label: 'Monthly View Count',
+                                data: Object.values(orderedShortlistCountHistory),
+                                fill: false,
+                                borderColor: 'rgb(230, 212, 110)',
+                                tension: 0.1
+                            }, {
+                                type: 'line',
+                                label: 'Cumulative View Count',
+                                data: Object.values(accumulatedShortlistCountHistory),
+                                fill: true,
+                                showLine: false,
+                                backgroundColor: 'rgba(110, 136, 229, 0.6)',
+                                tension: 0.1
+                            }]
+                        }
+                    });
+
+                    document.getElementById("shortlistCountChartLoading").style.display = "none";
+                }
+            }
+        });
     };
 
     const handleLogout = async () => {
@@ -480,11 +637,6 @@ function UCAUsedCarListingUI() {
             });
         }
     };
-
-    // const handleSearch = (e) => {
-    //     e.preventDefault();
-    //     console.log("Searched Username:", searchUsername);
-    // };
 
     const handleBack = () => {
         window.history.back();
@@ -538,10 +690,29 @@ function UCAUsedCarListingUI() {
                         <option value="70001-80000">$70,001 - $80,000</option>
                         <option value="80001-90000">$80,001 - $90,000</option>
                         <option value="90001-100000">$90,001 - $100,000</option>
+                        <option value="100001-110000">$100,001 - $110,000</option>
+                        <option value="110001-120000">$110,001 - $120,000</option>
+                        <option value="120001-130000">$120,001 - $130,000</option>
+                        <option value="130001-140000">$130,001 - $140,000</option>
+                        <option value="140001-150000">$140,001 - $150,000</option>
+                        <option value="150001-160000">$150,001 - $160,000</option>
+                        <option value="160001-170000">$160,001 - $170,000</option>
+                        <option value="170001-180000">$170,001 - $180,000</option>
+                        <option value="180001-190000">$180,001 - $190,000</option>
+                        <option value="190001-200000">$190,001 - $200,000</option>
+                        <option value="210001-220000">$210,001 - $220,000</option>
+                        <option value="220001-230000">$220,001 - $230,000</option>
+                        <option value="230001-240000">$230,001 - $240,000</option>
+                        <option value="240001-250000">$240,001 - $250,000</option>
+                        <option value="250001-260000">$250,001 - $260,000</option>
+                        <option value="260001-270000">$260,001 - $270,000</option>
+                        <option value="270001-280000">$270,001 - $280,000</option>
+                        <option value="280001-290000">$280,001 - $290,000</option>
                     </select>
 
                     <select id="manufactureYear" className="swal2-input custom-select">
                         <option value="">Select manufacture year</option>
+                        <option value="2024">2024</option>
                         <option value="2023">2023</option>
                         <option value="2022">2022</option>
                         <option value="2021">2021</option>
@@ -558,8 +729,11 @@ function UCAUsedCarListingUI() {
                         <option value="2010">2010</option>
                     </select>
 
-                    <button onClick={handleSearchUsedCar} className="bucSearch-button">
+                    <button onClick={searchUsedCar} className="bucSearch-button">
                         Search
+                    </button>
+                    <button onClick={clearUsedCar} className="bucSearch-button">
+                        Clear
                     </button>
                 </span>
                 <span>
@@ -587,12 +761,12 @@ function UCAUsedCarListingUI() {
                         <span>{car.mileage.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</span>
                         <span>${car.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</span>
                         <button onClick={() => viewUsedCar(car.usedCarId)} className="uclInspect-button">
-                            Inspects
+                            View
                         </button>
                         <span>
                             <div className="counter-display">
-                                <span><img src={"viewIcon.png"} alt="Inspect" className="uclInspect-png-image" />{car.view_count}</span>  {/* Display inspect count with an icon */}
-                                <span><img src={"saveShortlistIcon.png"} alt="Shortlist" className="uclShortlist-png-image" />{car.shortlist_count}</span>  {/* Display shortlist count with an icon */}
+                                <span onClick={() => trackViewCount(car.usedCarId)} title="Click to track view count"><img src={"viewIcon.png"} alt="Inspect" className="uclInspect-png-image" />{car.view_count}</span>  {/* Display inspect count with an icon */}
+                                <span onClick={() => trackShortlistCount(car.usedCarId)} title="Click to track shortlist count"><img src={"saveShortlistIcon.png"} alt="Shortlist" className="uclShortlist-png-image" />{car.shortlist_count}</span>  {/* Display shortlist count with an icon */}
                             </div>
                         </span>
 

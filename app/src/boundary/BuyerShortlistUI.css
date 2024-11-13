@@ -122,10 +122,8 @@
 }
 
 .bsCar-image {
-    width: 100%;
     height: auto;
-    max-width: 100px;
-    max-height: 100px;
+    width: 200px;
     object-fit: cover;
     border-radius: 5px;
     grid-column: 1;
@@ -167,30 +165,24 @@
     margin-bottom: 10px;
 }
 
-.wrapper {
+.uclCar-contents {
+    margin-bottom: 10px;
+}
+
+.calc-wrapper {
     display: grid;
     grid-template-columns: 1fr 1fr;
 
-    .item {
-        display: grid;
-        gap: 10px;
-        padding: 5px;
 
         label {
             font-weight: bold;
+            align-content: center;
             text-align: left;
-            margin-left: 2em;
+            margin-left: 1em;
+            margin-bottom: 10px;
         }
 
         input {
-            margin: 0em 2em 3px;
+            margin: 0em 2.2em 10px;
         }
-
-        select {
-            margin: 0em 2em 3px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            color: #ccc;
-        }
-    }
 }

@@ -1,25 +1,25 @@
 import React, { useState } from "react";
 import Cookies from "js-cookie";
-import './UserManagementUI.css';
+import './UCAUsedCarManagementUI.css';
 import { UserLogoutController } from "../controller/UserAuthController";
 
 import Swal from 'sweetalert2';
 
-function UserManagementUI() {
+function UCAUsedCarManagementUI() {
     const [username] = useState(Cookies.get("username"))
 
-    if (Cookies.get("userProfile") !== "UserAdmin") {
+    if (Cookies.get("userProfile") !== "UsedCarAgent") {
         window.open("/CSIT314-T05-CodeCrusaders/", "_self")
     }
 
-    const handleAccountManagement = () => {
-        console.log("User Account Management");
-        window.open("/CSIT314-T05-CodeCrusaders/useraccountmanagement", "_self");
+    const handleUsedCarListing = () => {
+        console.log("Used Car Management");
+        window.open("/CSIT314-T05-CodeCrusaders/ucausedcarlisting", "_self");
     };
 
-    const handleAccountProfile = () => {
-        console.log("User Profile Management");
-        window.open("/CSIT314-T05-CodeCrusaders/userprofilemanagement", "_self");
+    const handleFeedback = () => {
+        console.log("Feedback");
+        window.open("/CSIT314-T05-CodeCrusaders/ucarateandreview", "_self");
     };
 
     const handleLogout = async () => {
@@ -47,31 +47,31 @@ function UserManagementUI() {
     }
 
     return (
-        <div className="umContainer">
-            <div className="umHeader">
-                <div className="umUserInfo">
+        <div className="ucamContainer">
+            <div className="ucamHeader">
+                <div className="ucamUserInfo">
                     <img
                         src={"https://placehold.co/40x40?text=" + Cookies.get("username")}
                         alt="Profile"
-                        className="umProfilePicture"
+                        className="ucamProfilePicture"
                     />
-                    <span className="umUsername">{username}</span>
+                    <span className="ucamUsername">{username}</span>
                 </div>
-                <button onClick={handleLogout} className="umLogoutButton">
+                <button onClick={handleLogout} className="ucamLogoutButton">
                     Logout
                 </button>
             </div>
-            <div className="umButtonContainer">
-                <button onClick={handleAccountManagement} className="umActionButton">
-                    User Account Management
+            <div className="ucamButtonContainer">
+                <button onClick={handleUsedCarListing} className="ucamActionButton">
+                    Used Car Listing
                 </button>
 
-                <button onClick={handleAccountProfile} className="umActionButton">
-                    User Profile Management
+                <button onClick={handleFeedback} className="ucamActionButton">
+                    View my Rate and Review
                 </button>
             </div>
         </div>
     );
 };
 
-export default UserManagementUI;
+export default UCAUsedCarManagementUI;

@@ -19,11 +19,11 @@ class SellerViewUsedCarController {
 class SellerSearchUsedCarController {
 
     // Search for a used car by multiple filters
-    async searchUsedCar(carName, cartype, priceRange, manufactureYear, seller_username) {
+    async searchUsedCar(carName, carType, priceRange, manufactureYear, seller_username) {
         try {
             // Pass each filter parameter directly to the entity's search method
             const usedCar = new UsedCar();
-            const result = await usedCar.searchUsedCar(carName, cartype, priceRange, manufactureYear, null, seller_username);
+            const result = await usedCar.searchUsedCar(carName, carType, priceRange, manufactureYear, null, seller_username);
 
             // Return the result (success or failure with message)
             return result;

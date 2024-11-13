@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import "./UserAccountManagementUI.css";
+import "./UAUserAccountManagementUI.css";
 import { Util } from "../Util";
 import { UserLogoutController } from "../controller/UserAuthController";
 import { UACreateUserAccountController, UAViewUserAccountController, UAUpdateUserAccountController, UASuspendUserAccountController, UASearchUserAccountController } from "../controller/UAUserAccountController";
 
 import Swal from 'sweetalert2';
 
-function UserAccountManagementUI() {
+function UAUserAccountManagementUI() {
     const [username] = useState(Cookies.get("username"));
     const [searchUsername, setSearchUsername] = useState("");
-    const [users, setUsers] = useState([
-        { name: "Loading...", username: "Loading...", profile: "Loading..." }
-    ]);
-    const [profiles, setUserProfiles] = useState([{ profileName: "Loading", profileType: "Loading" }]);
+    const [users, setUsers] = useState([]);
+    const [profiles, setUserProfiles] = useState([]);
 
 
     const fetchUsers = async () => {
@@ -115,42 +113,23 @@ function UserAccountManagementUI() {
                 const userProfile = userProfileInput.value;
 
                 if (!username || !fName || !lName || !password || !phoneNum || !email || !userProfile) {
-                    Swal.showValidationMessage(`Please fill in all the fields`);
+                    Swal.showValidationMessage('Invalid input. Please try again.');
+                    return false;
                 }
-                else {
-                    Swal.fire("Account Created!");
-                }
-
                 return { username, fName, lName, password, phoneNum, email, userProfile };
             },
         }).then(async (result) => {
             if (result.isConfirmed) {
                 const { username, fName, lName, password, phoneNum, email, userProfile } = result.value;
-                console.log('New Account Details:', {
-                    fName,
-                    lName,
-                    username,
-                    password,
-                    phoneNum,
-                    email,
-                    userProfile
-                });
+                console.log('New Account Details:', {fName,lName,username,password,phoneNum,email,userProfile});
                 // logic for handle account creation (call Controller)
                 const uaCreateUserAccountController = new UACreateUserAccountController();
-                const isSuccess = await uaCreateUserAccountController.createUserAccount(
-                    fName,
-                    lName,
-                    username,
-                    password,
-                    phoneNum,
-                    email,
-                    userProfile
-                );
+                const isSuccess = await uaCreateUserAccountController.createUserAccount(username, fName, lName, password, phoneNum, email, userProfile);
 
                 if (isSuccess) {
-                    console.log("User account successfully created.");
+                    Swal.fire("Account created!")
                 } else {
-                    console.error("Failed to create user account.");
+                    Swal.fire("Account creation failed. Please try again.");
                 }
             }
         });
@@ -176,7 +155,7 @@ function UserAccountManagementUI() {
                     </div>
                 `,
                 showCancelButton: true,
-                cancelButtonText: 'close',
+                cancelButtonText: 'Close',
                 confirmButtonText: 'Update Details',
                 showDenyButton: true,
                 denyButtonText: 'Suspend',
@@ -185,25 +164,7 @@ function UserAccountManagementUI() {
                 if (result.isConfirmed) {
                     updateUserAccount(userAccount);
                 } else if (result.isDenied) {
-                    Swal.fire({
-                        title: 'Are you sure?',
-                        text: "You are about to suspend this user.",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'Yes, suspend it!',
-                        cancelButtonText: 'No, cancel'
-                    }).then(async (suspendResult) => {
-                        if (suspendResult.isConfirmed) {
-                            const uaSuspendUserAccountController = new UASuspendUserAccountController();
-                            const isSuspended = await uaSuspendUserAccountController.suspendUserAccount(username);
-
-                            if (isSuspended) {
-                                Swal.fire('Suspended!', 'The user has been suspended.', 'success');
-                            } else {
-                                Swal.fire('Failed!', 'Failed to suspend the user.', 'error');
-                            }
-                        }
-                    });
+                    suspendUserAccount(username);
                 }
             });
             console.log(userAccount);
@@ -218,8 +179,6 @@ function UserAccountManagementUI() {
             });
         }
     };
-
-
 
     const updateUserAccount = (userAccount) => {
 
@@ -263,7 +222,7 @@ function UserAccountManagementUI() {
                 const userProfile = document.getElementById('userProfile').value;
 
                 if (!username || !fName || !lName || !phoneNum || !email || !userProfile) {
-                    Swal.showValidationMessage(`Please fill in all fields`);
+                    Swal.showValidationMessage('Input must be filled. Please try again.');
                     return false;
                 }
                 return { username, fName, lName, password, phoneNum, email, userProfile };
@@ -275,12 +234,70 @@ function UserAccountManagementUI() {
                 const isSuccess = await uaUpdateUserAccountController.updateUserAccount(username, fName, lName, password, phoneNum, email, userProfile);
 
                 if (isSuccess) {
-                    Swal.fire('Updated!', 'The user details have been updated.', 'success');
+                    Swal.fire('Updated!', 'Account details updated!.', 'success');
                 } else {
-                    Swal.fire('Error!', 'Failed to update user details.', 'error');
+                    Swal.fire('Error!', 'Account detail update failed. Please try again.', 'error');
                 }
             }
         });
+    };
+
+    const suspendUserAccount = async (username) => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You are about to suspend this user account.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, suspend it!',
+            cancelButtonText: 'No, cancel.'
+        }).then(async (suspendResult) => {
+            if (suspendResult.isConfirmed) {
+                const uaSuspendUserAccountController = new UASuspendUserAccountController();
+                const isSuspended = await uaSuspendUserAccountController.suspendUserAccount(username);
+
+                if (isSuspended) {
+                    Swal.fire('Suspended!', 'The user account has been suspended.', 'success');
+                } else {
+                    Swal.fire('Failed!', 'Error occurred while suspending the user account! Please try again.', 'error');
+                }
+            }
+        });
+    }
+    
+    const searchUserAccount = async () => {
+        const usernameInput = document.getElementById('searchUsername');
+
+        const filterCriteria = {
+            username: usernameInput ? usernameInput.value : ''
+        };
+
+        const uaSearchUserAccountController = new UASearchUserAccountController();
+        const searchResult = await uaSearchUserAccountController.searchUserAccount(filterCriteria.username);
+
+        console.log(searchResult)
+
+
+        if (searchResult === null) {
+            console.log("Search results:", searchResult);
+            Swal.fire({
+                title: 'No Results',
+                text: 'No user account found matching the search criteria.',
+                icon: 'info',
+                confirmButtonText: 'OK'
+            });
+            return;
+        } else {
+            const accountData = searchResult.map(doc => ({
+                fName: doc.fName,
+                lName: doc.lName,
+                username: doc.username,
+                password: doc.password,
+                phone: doc.phoneNum,
+                email: doc.email,
+                profile: doc.userProfile
+            }));
+            setUsers(accountData);
+        }
     };
 
     const handleLogout = async () => {
@@ -304,48 +321,6 @@ function UserAccountManagementUI() {
                 confirmButtonText: 'OK',
                 timer: 1500
             });
-        }
-    };
-
-    const searchUserAccount = async () => {
-        const usernameInput = document.getElementById('searchUsername');
-
-        const filterCriteria = {
-            username: usernameInput ? usernameInput.value : ''
-        };
-
-        const uaSearchUserAccountController = new UASearchUserAccountController();
-        const searchResult = await uaSearchUserAccountController.searchUserAccount(
-            filterCriteria.username
-        );
-
-        console.log(searchResult)
-
-
-        if (searchResult) {
-            console.log("Search results:", searchResult.data);
-            if (searchResult.success === false || searchResult.data.length === 0) {
-                Swal.fire({
-                    title: 'No Results',
-                    text: 'No user account found matching the search criteria.',
-                    icon: 'info',
-                    confirmButtonText: 'OK'
-                });
-                return;
-            } else {
-                const accountData = searchResult.data.map(doc => ({
-                    fName: doc.fName,
-                    lName: doc.lName,
-                    username: doc.username,
-                    password: doc.password,
-                    phone: doc.phoneNum,
-                    email: doc.email,
-                    profile: doc.userProfile
-                }));
-                setUsers(accountData);
-            }
-        } else {
-            console.error("Search failed:", searchResult.message);
         }
     };
 
@@ -410,4 +385,4 @@ function UserAccountManagementUI() {
     );
 }
 
-export default UserAccountManagementUI;
+export default UAUserAccountManagementUI;

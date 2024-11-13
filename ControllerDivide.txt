@@ -43,7 +43,7 @@
 4. As a Buyer, I want to view a used car so that I can see the used car’s details.
 5. As a Buyer, I want to save a used car to shortlist so that I can come back to the particular used car at any time.
 
-==== BuyerShortlistController.js ==== (Done)
+==== BuyerShortlistController.js ====
 6. As a Buyer, I want to search for a used car from a shortlist so that I can see a particular used car that I saved there.
 7. As a Buyer, I want to view a used car in a shortlist so that I can see the details of used cars that I saved there.
 

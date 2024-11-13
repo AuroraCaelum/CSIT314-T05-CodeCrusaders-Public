@@ -90,25 +90,13 @@ class Shortlist {
             const cars = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
             if (cars.length > 0) {
-                return { success: true, data: cars };
+                return cars;
             } else {
-                return { success: false, message: "No cars found matching the criteria" };
+                return null;
             }
         } catch (error) {
             console.error("Error searching in shortlist:", error);
             return { success: false, message: error.message };
-        }
-    }
-
-    static async getShortlistList(username) {
-        try {
-            const firebaseService = new FirebaseService();
-            const shortlist = await firebaseService.searchByFields('Shortlist', { username: username });
-            console.log("Fetched shortlist:", shortlist);
-            return shortlist;
-        } catch (error) {
-            console.error("Error:", error);
-            throw error;
         }
     }
 
@@ -122,6 +110,18 @@ class Shortlist {
         } catch (error) {
             console.error("Error delete shortlist entry:", error);
             return { success: false, message: error.message };
+        }
+    }
+
+    static async getShortlistList(username) {
+        try {
+            const firebaseService = new FirebaseService();
+            const shortlist = await firebaseService.searchByFields('Shortlist', { username: username });
+            console.log("Fetched shortlist:", shortlist);
+            return shortlist;
+        } catch (error) {
+            console.error("Error:", error);
+            throw error;
         }
     }
 }

@@ -3,17 +3,17 @@ import UsedCar from '../entity/UsedCar';
 class BuyerSearchUsedCarController {
 
     // Search for a used car by multiple filters
-    async BuyerSearchUsedCar(carName, cartype, priceRange, manufactureYear) {
+    async searchUsedCar(carName, carType, priceRange, manufactureYear) {
         try {
             // Pass each filter parameter directly to the entity's search method
             const usedCar = new UsedCar();
-            const result = await usedCar.searchUsedCar(carName, cartype, priceRange, manufactureYear, null, null);
+            const result = await usedCar.searchUsedCar(carName, carType, priceRange, manufactureYear, null, null);
 
             // Return the result (success or failure with message)
             return result;
         } catch (error) {
             console.error('Error searching for used cars:', error);
-            return { success: false, message: error.message };
+            return null;
         }
     }
 }
@@ -29,9 +29,33 @@ class BuyerViewUsedCarController {
             return carData;
         } catch (error) {
             console.error('Error viewing used car:', error);
-            return error;
+            return null;
         }
     }
 }
 
-export { BuyerSearchUsedCarController, BuyerViewUsedCarController }
+class BuyerTrackViewCountController {
+    async trackViewCount(usedCarId) {
+        try {
+            const viewCountHistory = await UsedCar.trackViewCount(usedCarId);
+            return viewCountHistory; // Returns true if successful, false otherwise
+        } catch (error) {
+            console.error("Controller Error tracking view count:", error);
+            return false; // Or handle as needed
+        }
+    }
+}
+
+class BuyerTrackShortlistCountController {
+    async trackShortlistCount(usedCarId) {
+        try {
+            const shortlistCountHistory = await UsedCar.trackShortlistCount(usedCarId);
+            return shortlistCountHistory; // Returns true if successful, false otherwise
+        } catch (error) {
+            console.error("Controller Error tracking shortlist count:", error);
+            return false; // Or handle as needed
+        }
+    }
+}
+
+export { BuyerSearchUsedCarController, BuyerViewUsedCarController, BuyerTrackViewCountController, BuyerTrackShortlistCountController }

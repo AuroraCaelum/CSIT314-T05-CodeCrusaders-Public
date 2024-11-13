@@ -4,19 +4,11 @@ import FirebaseService from '../FirebaseService';
 class RateReview {
     static firebaseService = new FirebaseService(); // Singleton FirebaseService
 
-    // constructor(rate, reviewBody, reviewBy, reviewByType, reviewTo) {
-    //     this.rate = rate;
-    //     this.reviewBody = reviewBody;
-    //     this.reviewBy = reviewBy;
-    //     this.reviewByType = reviewByType;
-    //     this.reviewTo = reviewTo;
-    // }
-
     // Add a new rate and review
     async leaveRateReview(agent_username, rate, review, reviewer_username, reviewer_type) {
         try {
             const reviewData = {
-                rate: rate,
+                rate: Number(rate),
                 review: review,
                 reviewerUsername: reviewer_username,
                 reviewerType: reviewer_type,

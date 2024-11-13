@@ -25,8 +25,6 @@ class UserProfile {
             console.log("UserProfile saved successfully", profileName, profileData);
             return true;
         } catch (error) {
-            console.log("success to create Profile(E): ", profileName, description, profileType );
-
             console.error("Error saving user profile:", error);
             return false;
         }
@@ -35,21 +33,10 @@ class UserProfile {
     // Fetch profile by profileId from Firestore
     async viewUserProfile(profileName) {
         try {
-            // Use this.type as the document ID
-            const profileData = await this.firebaseService.getDocument("UserProfile", profileName);
-            //  if (profileData) {
-                // this.description = profileData.description;
-                // this.profileName = profileData.profileName;
-                // this.profileType = profileData.profileType;
-                console.log("Success to display Profile: ", profileName);
-                console.log("connected with data base at(E)s(profileData):", profileData);
-                return profileData;
-                
-            // } else {
-            //     throw new Error("Profile not found");
-            // }
+            const userProfile = await this.firebaseService.getDocument("UserProfile", profileName);
+            console.log("Success to display Profile: ", profileName);
+            return userProfile;
         } catch (error) {
-            console.log("connected with data base at(E)s(profileName):", profileName);
             console.error("Error getting user profile:", error);
             throw error;
         }
@@ -58,7 +45,6 @@ class UserProfile {
     // Update profile by profileId
     async updateUserProfile(profileName, description, profileType) {
         try {
-
             var newProfileData = {
                 profileName,
                 description,
@@ -111,9 +97,9 @@ class UserProfile {
             console.log(userProfile)
 
             if(userProfile.length > 0) {
-                return { success: true, data: userProfile };
+                return userProfile;
             } else {
-                return { success: false, data: null };
+                return null;
             }
         } catch (error) {
             console.error("Error searching for user:", error);

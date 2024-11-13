@@ -9,7 +9,6 @@ class UserLoginController {
 
     // Login 
     async authenticateLogin(username, password, profileType) {
-        // const { username, password, userProfile } = req.body;
         try {
             const user = new UserAccount(null, null, null, password, null, null, username);
 

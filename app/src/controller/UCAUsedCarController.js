@@ -14,7 +14,7 @@ class UCACreateUsedCarController {
             // Validate if the seller exists
             const isValidSeller = await UserAccount.validateSeller(seller_username);
             if (!isValidSeller) {
-                return { success: false, message: 'Seller is not authorized to create used car listings.' };
+                return false;
             }
             console.log("New Car Details(C):", usedCarId, agent_username, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap)
 
@@ -55,7 +55,7 @@ class UCAUpdateUsedCarController {
             // Validate if the seller exists
             const isValidSeller = await UserAccount.validateSeller(seller_username);
             if (!isValidSeller) {
-                console.log("Invalid Seller username");
+                return false;
             }
 
             const usedCar = new UsedCar(usedCarId, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap);
@@ -80,9 +80,9 @@ class UCADeleteUsedCarController {
             const success = await usedCar.deleteUsedCar(usedCarId);
             if (success) {
                 console.log(usedCarId);
-                return { success: true, message: 'Used car deleted successfully' };
+                return true;
             } else {
-                return { success: false, message: 'Failed to delete used car' };
+                return false;
             }
         } catch (error) {
             console.error('Error suspending used car:', error);
@@ -94,11 +94,11 @@ class UCADeleteUsedCarController {
 class UCASearchUsedCarController {
 
     // Search for a used car by multiple filters
-    async searchUsedCar(carName, cartype, priceRange, manufactureYear, agent_username) {
+    async searchUsedCar(carName, carType, priceRange, manufactureYear, agent_username) {
         try {
             // Pass each filter parameter directly to the entity's search method
             const usedCar = new UsedCar();
-            const result = await usedCar.searchUsedCar(carName, cartype, priceRange, manufactureYear, agent_username, null);
+            const result = await usedCar.searchUsedCar(carName, carType, priceRange, manufactureYear, agent_username, null);
 
             // Return the result (success or failure with message)
             return result;
@@ -109,4 +109,28 @@ class UCASearchUsedCarController {
     }
 }
 
-export { UCACreateUsedCarController, UCAViewUsedCarController, UCAUpdateUsedCarController, UCADeleteUsedCarController, UCASearchUsedCarController }
+class UCATrackViewCountController {
+    async trackViewCount(usedCarId) {
+        try {
+            const viewCountHistory = await UsedCar.trackViewCount(usedCarId);
+            return viewCountHistory; // Returns true if successful, false otherwise
+        } catch (error) {
+            console.error("Controller Error tracking view count:", error);
+            return false; // Or handle as needed
+        }
+    }
+}
+
+class UCATrackShortlistCountController {
+    async trackShortlistCount(usedCarId) {
+        try {
+            const shortlistCountHistory = await UsedCar.trackShortlistCount(usedCarId);
+            return shortlistCountHistory; // Returns true if successful, false otherwise
+        } catch (error) {
+            console.error("Controller Error tracking shortlist count:", error);
+            return false; // Or handle as needed
+        }
+    }
+}
+
+export { UCACreateUsedCarController, UCAViewUsedCarController, UCAUpdateUsedCarController, UCADeleteUsedCarController, UCASearchUsedCarController, UCATrackViewCountController, UCATrackShortlistCountController }

@@ -97,7 +97,7 @@
 
 .uclUser-table {
     display: grid;
-    grid-template-columns: 1fr 2fr 2fr 1fr 1fr 1fr auto;
+    grid-template-columns: 2fr 2fr 2fr 1fr 1fr 1fr auto;
     gap: 10px;
     background-color: #f1f1f1;
     border-radius: 5px;
@@ -119,10 +119,8 @@
 }
 
 .uclCar-image {
-    width: 100%;
     height: auto;
-    max-width: 100px;
-    max-height: 100px;
+    width: 200px;
     object-fit: cover;
     border-radius: 5px;
     grid-column: 1;
@@ -193,7 +191,7 @@
             margin: 0em 2em 3px;
             border: 1px solid #ccc;
             border-radius: 5px;
-            color: #ccc;
+            color: #000;
         }
 
         img {
@@ -206,8 +204,13 @@
 .uclShortlist-png-image {
     width: 25px;
     height: auto; 
-  }
+}
+
 .uclInspect-png-image {
     width: 30px;
     height: auto; 
-  }
+}
+
+.uclCar-contents {
+    margin-bottom: 10px;
+}

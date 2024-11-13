@@ -4,9 +4,6 @@ import Chart from 'chart.js/auto';
 import "./SellerUsedCarUI.css";
 import { Util } from "../Util";
 import { UserLogoutController } from "../controller/UserAuthController";
-//import { ViewUsedCarController, SearchUsedCarController, TrackViewCountController, TrackShortlistCountController } from "../controller/UsedCarController";
-//import { LeaveRateReviewController } from "../controller/RateReviewController";
-//import { SaveShortlistController } from "../controller/ShortlistController";
 import { SellerSearchUsedCarController, SellerTrackViewCountController, SellerViewUsedCarController, SellerTrackShortlistCountController } from "../controller/SellerUsedCarController";
 import { SellerLeaveRateReviewController } from "../controller/SellerRateReviewController";
 
@@ -14,36 +11,43 @@ import Swal from 'sweetalert2';
 
 function SellerUsedCarUI() {
     const [username] = useState(Cookies.get("username"));
-    const [cars, setCars] = useState([
-        { car_name: "Loading...", description: "Loading...", manufacture_year: "Loading...", mileage: "Loading...", price: "Loading...", car_image: "https://placehold.co/100x100?text=Car+Image", view_count: 0, shortlist_count: 0 }
-    ]);
+    const [cars, setCars] = useState([]);
+
+    const fetchCars = async () => {
+        const snapshot = await Util.getUsedCarListByUsername('seller', username);
+        if (snapshot !== null) {
+            if (snapshot === undefined || snapshot.length === 0) {
+                const carData = [{ car_name: "", description: "", manufacture_year: "", mileage: "", price: "", car_image: "https://placehold.co/100x100?text=NO+CARS+FOR+THIS+SELLER" }];
+                setCars(carData);
+            } else {
+                const carData = snapshot.map(doc => ({
+                    usedCarId: doc.documentId,
+                    car_name: doc.car_name,
+                    description: (desc => desc.length >= 150 ? desc.substring(0, 150) + "..." : desc)(doc.description),
+                    manufacture_year: doc.manufacture_year,
+                    mileage: doc.mileage,
+                    price: doc.price,
+                    car_image: doc.car_image || "https://placehold.co/100x100?text=Car+Image",
+                    view_count: doc.view_count || 0,
+                    shortlist_count: doc.shortlist_count || 0
+                }));
+                setCars(carData);
+            }
+        }
+    };
 
     useEffect(() => {
-        const fetchCars = async () => {
-            const snapshot = await Util.getUsedCarListByUsername('seller', username);
-            if (snapshot !== null) {
-                if (snapshot === undefined || snapshot.length === 0) {
-                    const carData = [{ car_name: "", description: "", manufacture_year: "", mileage: "", price: "", car_image: "https://placehold.co/100x100?text=NO+CARS+FOR+THIS+SELLER" }];
-                    setCars(carData);
-                } else {
-                    const carData = snapshot.map(doc => ({
-                        usedCarId: doc.documentId,
-                        car_name: doc.car_name,
-                        description: (desc => desc.length >= 150 ? desc.substring(0, 150) + "..." : desc)(doc.description),
-                        manufacture_year: doc.manufacture_year,
-                        mileage: doc.mileage,
-                        price: doc.price,
-                        car_image: doc.car_image || "https://placehold.co/100x100?text=Car+Image",
-                        view_count: doc.view_count || 0,
-                        shortlist_count: doc.shortlist_count || 0
-                    }));
-                    setCars(carData);
-                }
-            }
-        };
-
         fetchCars();
     }, []);
+
+    const clearUsedCar = async () => {
+        document.getElementById('car_name').value = '';
+        document.getElementById('vehicleType').value = '';
+        document.getElementById('priceRange').value = '';
+        document.getElementById('manufactureYear').value = '';
+
+        fetchCars();
+    }
 
     const searchUsedCar = async () => {
         const carNameInput = document.getElementById('car_name');
@@ -69,32 +73,28 @@ function SellerUsedCarUI() {
             Cookies.get('username')
         );
 
-        if (searchResult) {
-            console.log("Search results:", searchResult.data);
-            if (searchResult.data === undefined || searchResult.data.length === 0) {
-                Swal.fire({
-                    title: 'No Results',
-                    text: 'No used cars found matching the search criteria.',
-                    icon: 'info',
-                    confirmButtonText: 'OK'
-                });
-                return;
-            } else {
-                const carData = searchResult.data.map(doc => ({
-                    usedCarId: doc.id,
-                    car_name: doc.car_name,
-                    manufacture_year: doc.manufacture_year,
-                    mileage: doc.mileage,
-                    price: doc.price,
-                    car_image: doc.car_image
-                }));
-                setCars(carData);
-            }
-
+        if (searchResult === null) {
+            Swal.fire({
+                title: 'No Results',
+                text: 'No used cars found matching the search criteria.',
+                icon: 'info',
+                confirmButtonText: 'OK'
+            });
+            return;
         } else {
-            console.error("Search failed:", searchResult.message);
+            const carData = searchResult.map(doc => ({
+                usedCarId: doc.id,
+                car_name: doc.car_name,
+                description: doc.description,
+                manufacture_year: doc.manufacture_year,
+                mileage: doc.mileage,
+                price: doc.price,
+                car_image: doc.car_image || "https://placehold.co/100x100?text=Car+Image",
+                view_count: doc.view_count || 0,
+                shortlist_count: doc.shortlist_count || 0
+            }));
+            setCars(carData);
         }
-
     };
 
     const viewUsedCar = async (usedCarId) => { //not done
@@ -114,20 +114,44 @@ function SellerUsedCarUI() {
         if (usedCar) {
             Swal.fire({
                 title: 'View Used Car',
+                width: 800,
                 html: `
-                    <div style="text-align: left;">
-                        <img src=${usedCar.body.car_image} alt="Car" class="uclCar-image" /><br>
-                        <strong>Car Name:</strong> ${usedCar.body.car_name}<br>
-                        <strong>Description:</strong> ${usedCar.body.description}<br>
-                        <strong>Type:</strong> ${usedCar.body.car_type}<br>
-                        <strong>Price:</strong> ${usedCar.body.price}<br>
-                        <strong>Manufacturer:</strong> ${usedCar.body.car_manufacturer}<br>
-                        <strong>Manufacture Year:</strong> ${usedCar.body.manufacture_year}<br>
-                        <strong>Engine cap:</strong> ${usedCar.body.engine_cap}<br>
-                        <strong>Mileage:</strong> ${usedCar.body.mileage}<br>
-                        <strong>Features:</strong> ${usedCar.body.features}<br>
-                        <strong>Description:</strong> ${usedCar.body.description}<br>
-                        <strong>Seller Username:</strong> ${usedCar.body.seller_username}<br>
+                    <div style="text-align: left; display: flex;">
+                        <span>
+                            <img src=${usedCar.body.car_image} alt="Car" class="uclCar-image" style="width: 250px; max-width: none; max-height: none; border-radius: 10px;"/><br>
+                        </span>
+                        <span style="margin-left: 20px;">
+                            <div class="uclCar-contents">
+                                <strong>Car Name:</strong> ${usedCar.body.car_name}
+                            </div>
+                            <div class="uclCar-contents">
+                                <strong>Type:</strong> ${usedCar.body.car_type}
+                            </div>
+                            <div class="uclCar-contents">
+                                <strong>Price:</strong> $${usedCar.body.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                            </div>
+                            <div class="uclCar-contents">
+                                <strong>Manufacturer:</strong> ${usedCar.body.car_manufacturer}
+                            </div>
+                            <div class="uclCar-contents">
+                                <strong>Manufacture Year:</strong> ${usedCar.body.manufacture_year}
+                            </div>
+                            <div class="uclCar-contents">
+                                <strong>Engine cap:</strong> ${usedCar.body.engine_cap.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                            </div>
+                            <div class="uclCar-contents">
+                                <strong>Mileage:</strong> ${usedCar.body.mileage.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}km
+                            </div>
+                            <div class="uclCar-contents">
+                                <strong>Features:</strong> ${usedCar.body.features}
+                            </div>
+                            <div class="uclCar-contents">
+                                <strong>Description:</strong> ${usedCar.body.description}
+                            </div>
+                            <div class="uclCar-contents">
+                                <strong>Seller Username:</strong> ${usedCar.body.seller_username}
+                            </div>
+                        </span>
                     </div>
                 `,
                 showCancelButton: true,
@@ -299,7 +323,7 @@ function SellerUsedCarUI() {
                 </div>
                 <div>
                     <label>Review:</label>
-                    <textarea id="review" class="swal2-input" placeholder="Write your review"></textarea>
+                    <textarea id="review" placeholder="Write your review" rows="10" cols="50"></textarea>
                 </div>
             `,
             confirmButtonText: 'Submit',
@@ -408,7 +432,7 @@ function SellerUsedCarUI() {
                         <option value="Sports Car">Sports Car</option>
                     </select>
 
-                    <select id="priceRange" class="swal2-input custom-select">
+                    <select id="priceRange" className="swal2-input custom-select">
                         <option value="">Select price range</option>
                         <option value="0-10000">$0 - $10,000</option>
                         <option value="10001-20000">$10,001 - $20,000</option>
@@ -420,10 +444,29 @@ function SellerUsedCarUI() {
                         <option value="70001-80000">$70,001 - $80,000</option>
                         <option value="80001-90000">$80,001 - $90,000</option>
                         <option value="90001-100000">$90,001 - $100,000</option>
+                        <option value="100001-110000">$100,001 - $110,000</option>
+                        <option value="110001-120000">$110,001 - $120,000</option>
+                        <option value="120001-130000">$120,001 - $130,000</option>
+                        <option value="130001-140000">$130,001 - $140,000</option>
+                        <option value="140001-150000">$140,001 - $150,000</option>
+                        <option value="150001-160000">$150,001 - $160,000</option>
+                        <option value="160001-170000">$160,001 - $170,000</option>
+                        <option value="170001-180000">$170,001 - $180,000</option>
+                        <option value="180001-190000">$180,001 - $190,000</option>
+                        <option value="190001-200000">$190,001 - $200,000</option>
+                        <option value="210001-220000">$210,001 - $220,000</option>
+                        <option value="220001-230000">$220,001 - $230,000</option>
+                        <option value="230001-240000">$230,001 - $240,000</option>
+                        <option value="240001-250000">$240,001 - $250,000</option>
+                        <option value="250001-260000">$250,001 - $260,000</option>
+                        <option value="260001-270000">$260,001 - $270,000</option>
+                        <option value="270001-280000">$270,001 - $280,000</option>
+                        <option value="280001-290000">$280,001 - $290,000</option>
                     </select>
 
                     <select id="manufactureYear" class="swal2-input custom-select">
                         <option value="">Select manufacture year</option>
+                        <option value="2024">2024</option>
                         <option value="2023">2023</option>
                         <option value="2022">2022</option>
                         <option value="2021">2021</option>
@@ -442,6 +485,9 @@ function SellerUsedCarUI() {
 
                     <button onClick={searchUsedCar} className="sucSearch-button">
                         Search
+                    </button>
+                    <button onClick={clearUsedCar} className="bucSearch-button">
+                        Clear
                     </button>
                 </span>
             </div>

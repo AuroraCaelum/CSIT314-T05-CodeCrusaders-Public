@@ -4,21 +4,7 @@ import { db } from './../firebase';  // Only import db for Firestore operations
 import { doc, updateDoc, increment, collection, query, where, getDocs } from 'firebase/firestore';
 
 class UsedCar {
-    constructor(
-        usedCarId,
-        agent_username,
-        seller_username,
-        car_name,
-        car_type,
-        car_manufacturer,
-        car_image,
-        description,
-        features,
-        price,
-        mileage,
-        manufacture_year,
-        engine_cap,
-    ) {
+    constructor(usedCarId, agent_username, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap) {
         this.agent_username = agent_username;
         this.usedCarId = usedCarId;
         this.seller_username = seller_username;
@@ -80,7 +66,7 @@ class UsedCar {
             return { "usedCarId": usedCarId, "body": carData };
         } catch (error) {
             console.error("Error fetching car data:", error);
-            throw error;
+            return null;
         }
     }
 
@@ -142,7 +128,6 @@ class UsedCar {
             await this.firebaseService.deleteDocument('UsedCar', usedCarId);
             console.log("Used car entry deleted successfully");
             return true;
-            //return { success: true, message: "Used car entry deleted successfully" };
         } catch (error) {
             console.error("Error suspending car entry:", error);
             return { success: false, message: error.message };
@@ -198,102 +183,13 @@ class UsedCar {
             const cars = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
             if (cars.length > 0) {
-                return { success: true, data: cars };
+                return cars;
             } else {
-                return { success: false, message: "No cars found matching the criteria" };
+                return null;
             }
         } catch (error) {
             console.error("Error searching for cars:", error);
             return { success: false, message: error.message };
-        }
-    }
-
-    // Retrieve a list of used cars by their IDs
-    static async getUsedCarListById(usedCarIds) {
-        try {
-            const usedCars = [];
-
-            // Loop through each ID and retrieve the document from Firestore
-            for (const usedCarId of usedCarIds) {
-                const carData = await UsedCar.firebaseService.getDocument('UsedCar', usedCarId);
-                if (carData) {
-                    usedCars.push({ id: usedCarId, ...carData });
-                }
-            }
-
-            if (usedCars.length > 0) {
-                return { success: true, data: usedCars };
-            } else {
-                return { success: false, message: "No used cars found for the provided IDs" };
-            }
-        } catch (error) {
-            console.error("Error retrieving used cars by ID list:", error);
-            return { success: false, message: error.message };
-        }
-    }
-
-    static async getUsedCarList() {
-        try {
-            const firebaseService = new FirebaseService();
-            const usedCar = await firebaseService.getDocuments('UsedCar');
-            console.log(usedCar);
-            return usedCar;
-        } catch (error) {
-            console.error("Error:", error);
-            throw error;
-        }
-    }
-
-    static async getUsedCarListByUsername(usertype, username) {
-        try {
-            const firebaseService = new FirebaseService();
-            // const searchQuery = {
-            //     usertype: username
-            // }
-            if (usertype === 'seller') {
-                const usedCar = await firebaseService.searchByFields('UsedCar', { seller_username: username });
-                console.log(usedCar);
-                return usedCar;
-            } else {
-                const usedCar = await firebaseService.searchByFields('UsedCar', { agent_username: username });
-                console.log(usedCar);
-                return usedCar;
-            }
-        } catch (error) {
-            console.error("Error:", error);
-            throw error;
-        }
-    }
-
-    static async getUsedCarViewCount(usedCarId) {
-        try {
-            const firebaseService = new FirebaseService();
-            const carData = await firebaseService.getDocument('UsedCar', usedCarId);
-
-            if (carData && carData.view_count !== undefined) {
-                return carData.view_count; // Return only the count as an integer
-            } else {
-                throw new Error("View count not found for the provided used car ID");
-            }
-        } catch (error) {
-            console.error("Error retrieving used car view count:", error);
-            throw error; // Throw error to be handled by controller
-        }
-    }
-
-    static async getUsedCarshortlist_count(usedCarId) {
-        try {
-            const firebaseService = new FirebaseService();
-            const carData = await firebaseService.getDocument('UsedCar', usedCarId);
-
-            if (carData && carData.shortlist_count !== undefined) {
-                return carData.shortlist_count; // Return only the count as an integer
-            } else {
-                throw new Error("Shortlist count not found for the provided used car ID");
-            }
-        } catch (error) {
-            console.error("Error retrieving used car shortlist count:", error);
-            throw error; // Throw error to be handled by controller
         }
     }
 
@@ -381,6 +277,63 @@ class UsedCar {
         } catch (error) {
             console.error("Error tracking view count:", error);
             return null; // Or handle as needed, e.g., return -1 to indicate error
+        }
+    }
+
+    // Retrieve a list of used cars by their IDs
+    static async getUsedCarListById(usedCarIds) {
+        try {
+            const usedCars = [];
+
+            // Loop through each ID and retrieve the document from Firestore
+            for (const usedCarId of usedCarIds) {
+                const carData = await UsedCar.firebaseService.getDocument('UsedCar', usedCarId);
+                if (carData) {
+                    usedCars.push({ id: usedCarId, ...carData });
+                }
+            }
+
+            if (usedCars.length > 0) {
+                return { success: true, data: usedCars };
+            } else {
+                return { success: false, message: "No used cars found for the provided IDs" };
+            }
+        } catch (error) {
+            console.error("Error retrieving used cars by ID list:", error);
+            return { success: false, message: error.message };
+        }
+    }
+
+    static async getUsedCarList() {
+        try {
+            const firebaseService = new FirebaseService();
+            const usedCar = await firebaseService.getDocuments('UsedCar');
+            console.log(usedCar);
+            return usedCar;
+        } catch (error) {
+            console.error("Error:", error);
+            throw error;
+        }
+    }
+
+    static async getUsedCarListByUsername(usertype, username) {
+        try {
+            const firebaseService = new FirebaseService();
+            // const searchQuery = {
+            //     usertype: username
+            // }
+            if (usertype === 'seller') {
+                const usedCar = await firebaseService.searchByFields('UsedCar', { seller_username: username });
+                console.log(usedCar);
+                return usedCar;
+            } else {
+                const usedCar = await firebaseService.searchByFields('UsedCar', { agent_username: username });
+                console.log(usedCar);
+                return usedCar;
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            throw error;
         }
     }
 }

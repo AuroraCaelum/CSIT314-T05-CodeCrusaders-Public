@@ -1,20 +1,25 @@
 import React, { useState } from "react";
 import Cookies from "js-cookie";
-import './BuyerMainUI.css';
+import './UAUserManagementUI.css';
 import { UserLogoutController } from "../controller/UserAuthController";
 
 import Swal from 'sweetalert2';
 
-function BuyerManagementUI() {
+function UAUserManagementUI() {
     const [username] = useState(Cookies.get("username"))
 
-    if (Cookies.get("userProfile") !== "Buyer") {
+    if (Cookies.get("userProfile") !== "UserAdmin") {
         window.open("/CSIT314-T05-CodeCrusaders/", "_self")
     }
 
-    const handleBuyerUsedCar = () => {
-        console.log("Buyer Used Car");
-        window.open("/CSIT314-T05-CodeCrusaders/buyerusedcar", "_self");
+    const handleAccountManagement = () => {
+        console.log("User Account Management");
+        window.open("/CSIT314-T05-CodeCrusaders/useraccountmanagement", "_self");
+    };
+
+    const handleAccountProfile = () => {
+        console.log("User Profile Management");
+        window.open("/CSIT314-T05-CodeCrusaders/userprofilemanagement", "_self");
     };
 
     const handleLogout = async () => {
@@ -42,27 +47,31 @@ function BuyerManagementUI() {
     }
 
     return (
-        <div className="bmContainer">
-            <div className="bmHeader">
-                <div className="bmUserInfo">
+        <div className="umContainer">
+            <div className="umHeader">
+                <div className="umUserInfo">
                     <img
                         src={"https://placehold.co/40x40?text=" + Cookies.get("username")}
                         alt="Profile"
-                        className="bmProfilePicture"
+                        className="umProfilePicture"
                     />
-                    <span className="bmUsername">{username}</span>
+                    <span className="umUsername">{username}</span>
                 </div>
-                <button onClick={handleLogout} className="bmLogoutButton">
+                <button onClick={handleLogout} className="umLogoutButton">
                     Logout
                 </button>
             </div>
-            <div className="bmButtonContainer">
-                <button onClick={handleBuyerUsedCar} className="bmActionButton">
-                    Used Car Management
+            <div className="umButtonContainer">
+                <button onClick={handleAccountManagement} className="umActionButton">
+                    User Account Management
+                </button>
+
+                <button onClick={handleAccountProfile} className="umActionButton">
+                    User Profile Management
                 </button>
             </div>
         </div>
     );
 };
 
-export default BuyerManagementUI;
+export default UAUserManagementUI;

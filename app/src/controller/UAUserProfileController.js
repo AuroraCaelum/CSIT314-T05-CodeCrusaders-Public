@@ -8,14 +8,12 @@ class UACreateUserProfileController {
             const profile = new UserProfile();
             const success = await profile.createUserProfile(profileName, description, profileType); // Changed method call to reflect new implementation
             if (success) {
-                console.log("Success to create Profile(C): ", profileName, description, profileType );
                 return true;
             } else {
-                console.log("Failed to create Profile(C): ", profileName, description, profileType );
-
                 return false;
             }
         } catch (error) {
+            console.log("Error:", error);
             return false;
         }
     }
@@ -28,12 +26,8 @@ class UAViewUserProfileController {
         try {
             const userProfile = new UserProfile(); // Assuming constructor is still needed
             const profileData = await userProfile.viewUserProfile(profileName); // Change to viewUserProfile
-            console.log("display User Profile(C)(profileData): ", profileData);
             return profileData;
-
         } catch (error) {
-            console.log("display User Profile(C)(profileName): ", profileName);
-
             console.log("Error:", error);
             throw error;
         }

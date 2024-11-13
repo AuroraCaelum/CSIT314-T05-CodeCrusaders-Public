@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import "./UserProfileManagementUI.css";
+import "./UAUserProfileManagementUI.css";
 import { Util } from "../Util";
 import { UserLogoutController } from "../controller/UserAuthController";
 import { UAViewUserProfileController, UACreateUserProfileController, UAUpdateUserProfileController, UASearchUserProfileController, UASuspendUserProfileController } from "../controller/UAUserProfileController";
 
 import Swal from 'sweetalert2';
 
-function UserProfileManagementUI() {
+function UAUserProfileManagementUI() {
     const [username] = useState(Cookies.get("username"));
     const [searchProfileName, setSearchProfileName] = useState("");
-    const [userProfiles, setUserProfiles] = useState([
-        { profileName: "Loading...", description: "Loading...", profileType: "Loading..." }
-    ]);
+    const [userProfiles, setUserProfiles] = useState([]);
 
     const fetchUserProfiles = async () => {
         const snapshot = await Util.getUserProfiles();
@@ -75,15 +73,11 @@ function UserProfileManagementUI() {
                 const profileType = profileTypeInput.value;
 
                 if (!profileName || !description || !profileType) {
-                    Swal.showValidationMessage(`Please fill in all the fields`);
+                    Swal.showValidationMessage('Invalid input. Please try again.');
+                    return false;
                 }
-                else {
-                    Swal.fire("Profile Created!");
-                }
-
                 return { profileName, description, profileType };
             },
-
         }).then(async (result) => {
             if (result.isConfirmed) {
                 const { profileName, description, profileType } = result.value;
@@ -91,10 +85,10 @@ function UserProfileManagementUI() {
                 const isSuccess = await uaCreateUserProfileController.createUserProfile(profileName, description, profileType);
 
                 if (isSuccess) {
-                    console.log('New Account Details:', profileName, description, profileType);
+                    Swal.fire('Profile created!');
                     fetchUserProfiles();
                 } else {
-                    console.log("no", profileName, description, profileType);
+                    Swal.fire('Profile creation failed. Please try again.')
                 }
 
                 // Add logic here to handle account creation, like sending data to an API
@@ -128,21 +122,7 @@ function UserProfileManagementUI() {
                 if (result.isConfirmed) {
                     updateUserProfile(userProfile);
                 } else if (result.isDenied) {
-                    Swal.fire({
-                        title: 'Are you sure?',
-                        text: "You are about to suspend this user.",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'Yes, suspend it!',
-                        cancelButtonText: 'No, cancel'
-                    }).then(async (suspendResult) => {
-                        if (suspendResult.isConfirmed) {
-                            const uaSuspendUserProfileController = new UASuspendUserProfileController();
-                            await uaSuspendUserProfileController.suspendUserProfile(userProfile.profileName);
-                            console.log('User suspended:', userProfile.profileName);
-                            Swal.fire('Suspended!', 'The user has been suspended.', 'success');
-                        }
-                    });
+                    suspendUserProfile(profileName);
                 }
             });
             console.log(userProfile);
@@ -182,7 +162,7 @@ function UserProfileManagementUI() {
 
                 console.log("after input update value: ",profileName, description, profileType);
                 if (!profileName || !description || !profileType) {
-                    Swal.showValidationMessage(`Please fill in all fields`);
+                    Swal.showValidationMessage('Input must be filled. Please try again.');
                     return false;
                 }
                 return { profileName, description, profileType };
@@ -191,12 +171,72 @@ function UserProfileManagementUI() {
             if (updateResult.isConfirmed) {
                 const { profileName, description, profileType } = updateResult.value;
                 const uaUpdateUserProfileController = new UAUpdateUserProfileController();
-                await uaUpdateUserProfileController.updateUserProfile(profileName, description, profileType);
+                const isSuccess = await uaUpdateUserProfileController.updateUserProfile(profileName, description, profileType);
                 console.log('Updated Profile Details:', { profileName, description, profileType });
-                Swal.fire('Updated!', 'The user details have been updated.', 'success');
+
+                if (isSuccess) {
+                    Swal.fire('Updated!', 'Details updated!.', 'success');
+                } else {
+                    Swal.fire('Failed', 'Profile detail update failed. Please try again.', 'error');
+                }
                 fetchUserProfiles();
             }
         });
+    };
+
+    const suspendUserProfile = async (profileName) => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You are about to suspend this user profile.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, suspend it!',
+            cancelButtonText: 'No, cancel.'
+        }).then(async (suspendResult) => {
+            if (suspendResult.isConfirmed) {
+                const uaSuspendUserProfileController = new UASuspendUserProfileController();
+                const isSuspended = await uaSuspendUserProfileController.suspendUserProfile(profileName);
+                console.log('User suspended:', profileName);
+
+                if (isSuspended) {
+                    Swal.fire('Suspended!', 'The user profile has been suspended.', 'success');
+                } else {
+                    Swal.fire('Failed!', 'Error occurred while suspending the user profile! Please try again.', 'error');
+                }
+            }
+        });
+    }
+
+    const searchUserProfile = async () => {
+
+        const profileNameInput = document.getElementById('searchProfileName');
+
+        const filterCriteria = {
+            profileName: profileNameInput ? profileNameInput.value : ''
+        };
+
+        const uaSearchUserProfileController = new UASearchUserProfileController();
+        const searchResult = await uaSearchUserProfileController.searchUserProfile(filterCriteria.profileName);
+
+        console.log(searchResult)
+
+
+        if (searchResult === null) {
+            console.log("Search results:", searchResult);
+            Swal.fire({
+                title: 'No Results',
+                text: 'No user profile found matching the search criteria.',
+                icon: 'info',
+                confirmButtonText: 'OK'
+            });
+        } else {
+            const profileData = searchResult.map(doc => ({
+                profileName: doc.profileName,
+                description: doc.description,
+                profileType: doc.profileType
+            }));
+            setUserProfiles(profileData);
+        }
     };
 
     const handleLogout = async () => {
@@ -220,45 +260,6 @@ function UserProfileManagementUI() {
                 confirmButtonText: 'OK',
                 timer: 1500
             });
-        }
-    };
-
-    const searchUserProfile = async () => {
-
-        const profileNameInput = document.getElementById('searchProfileName');
-
-        const filterCriteria = {
-            profileName: profileNameInput ? profileNameInput.value : ''
-        };
-
-        const uaSearchUserProfileController = new UASearchUserProfileController();
-        const searchResult = await uaSearchUserProfileController.searchUserProfile(
-            filterCriteria.profileName
-        );
-
-        console.log(searchResult)
-
-
-        if (searchResult) {
-            console.log("Search results:", searchResult.data);
-            if (searchResult.success === false || searchResult.data.length === 0) {
-                Swal.fire({
-                    title: 'No Results',
-                    text: 'No user account found matching the search criteria.',
-                    icon: 'info',
-                    confirmButtonText: 'OK'
-                });
-                return;
-            } else {
-                const profileData = searchResult.data.map(doc => ({
-                    profileName: doc.profileName,
-                    description: doc.description,
-                    profileType: doc.profileType
-                }));
-                setUserProfiles(profileData);
-            }
-        } else {
-            console.error("Search failed:", searchResult.message);
         }
     };
 
@@ -317,4 +318,4 @@ function UserProfileManagementUI() {
     );
 }
 
-export default UserProfileManagementUI;
+export default UAUserProfileManagementUI;
