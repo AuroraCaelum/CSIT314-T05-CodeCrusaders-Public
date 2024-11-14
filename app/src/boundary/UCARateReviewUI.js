@@ -35,7 +35,7 @@ function UCARateReviewUI() {
         try {
             const rateReview = await ucaViewRateReviewController.viewRateReview(rateReviewId);
             console.log(rateReview)
-            if (rateReview) {
+            if (rateReview != null) {
                 Swal.fire({
                     title: 'View Rate and Review',
                     html: `
@@ -63,9 +63,9 @@ function UCARateReviewUI() {
                 });
             } else {
                 Swal.fire({
-                    title: 'No Reviews Found',
-                    text: 'There is no review for this Agent',
-                    icon: 'info',
+                    title: 'Error!',
+                    text: 'Failed to fetch review from the database.',
+                    icon: 'error',
                     confirmButtonText: 'Close'
                 })
             }

@@ -43,10 +43,10 @@ function UCAUsedCarListingUI() {
     }
 
     const clearUsedCar = async () => {
-        document.getElementById('car_name').value = '';
-        document.getElementById('vehicleType').value = '';
-        document.getElementById('priceRange').value = '';
-        document.getElementById('manufactureYear').value = '';
+        document.getElementById('car_name_search_input').value = '';
+        document.getElementById('carType_search_input').value = '';
+        document.getElementById('priceRange_search_input').value = '';
+        document.getElementById('manufactureYear_search_input').value = '';
 
         fetchCars();
     }
@@ -214,15 +214,24 @@ function UCAUsedCarListingUI() {
                 const ucaCreateUsedCarController = new UCACreateUsedCarController();
                 const isSuccess = await ucaCreateUsedCarController.createUsedCar(usedCarId, Cookies.get("username"), seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap);
 
-                if (isSuccess) {
+                console.log(isSuccess)
+                if (isSuccess === 0) {
                     Swal.fire('Created!', 'Used car has successfully registered.', 'success');
                     fetchCars();
-                } else {
+                } else if (isSuccess === 1) {
                     Swal.fire({
                         position: "center",
                         title: 'Failed!',
                         icon: 'error',
-                        html: 'Failed to create a used car.<br><br><small>Please check that you have entered a correct seller username. Else, it might be a server error. Please try a while later!</small>',
+                        html: 'Failed to create a used car.<br><br><small>Please check that you have entered a correct seller username.</small>',
+                        confirmButtonText: 'OK',
+                    });
+                } else if (isSuccess === 2) {
+                    Swal.fire({
+                        position: "center",
+                        title: 'Failed!',
+                        icon: 'error',
+                        html: 'Failed to create a used car.<br><br><small>It looks like a server error. Please try a while later!</small>',
                         confirmButtonText: 'OK',
                     });
                 }
@@ -237,7 +246,7 @@ function UCAUsedCarListingUI() {
         console.log("Used Car data received:", usedCar);
         console.log(usedCarId);
 
-        if (usedCar) {
+        if (usedCar != null) {
             Swal.fire({
                 title: 'View Used Car',
                 width: 800,
@@ -428,18 +437,26 @@ function UCAUsedCarListingUI() {
                 const ucaUpdateUsedCarController = new UCAUpdateUsedCarController();
                 const isSuccess = await ucaUpdateUsedCarController.updateUsedCar(usedCar.usedCarId, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap);
 
-                if (isSuccess) {
+                if (isSuccess === 0) {
                     console.log('Updated Used Car Details:', {
                         seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap
                     });
                     Swal.fire('Updated!', 'Used car detail has successfully updated.', 'success');
                     fetchCars();
-                } else {
+                } else if (isSuccess === 1) {
                     Swal.fire({
                         position: "center",
                         title: 'Failed!',
                         icon: 'error',
-                        html: 'Failed to update used car details.<br><br><small>Please check that you have entered a correct seller username. Else, it might be a server error. Please try a while later!</small>',
+                        html: 'Failed to update a used car.<br><br><small>Please check that you have entered a correct seller username.</small>',
+                        confirmButtonText: 'OK',
+                    });
+                } else if (isSuccess === 2) {
+                    Swal.fire({
+                        position: "center",
+                        title: 'Failed!',
+                        icon: 'error',
+                        html: 'Failed to update a used car.<br><br><small>It looks like a server error. Please try a while later!</small>',
                         confirmButtonText: 'OK',
                     });
                 }
@@ -473,10 +490,10 @@ function UCAUsedCarListingUI() {
     }
 
     const searchUsedCar = async () => {
-        const carNameInput = document.getElementById('car_name');
-        const carTypeInput = document.getElementById('vehicleType');
-        const priceRangeInput = document.getElementById('priceRange');
-        const manufactureYearInput = document.getElementById('manufactureYear');
+        const carNameInput = document.getElementById('car_name_search_input');
+        const carTypeInput = document.getElementById('carType_search_input');
+        const priceRangeInput = document.getElementById('priceRange_search_input');
+        const manufactureYearInput = document.getElementById('manufactureYear_search_input');
 
         let priceRange = priceRangeInput.value.toString().split("-");
 
@@ -697,9 +714,9 @@ function UCAUsedCarListingUI() {
 
             <div className="uclSearch-bar">
                 <span>
-                    <input id="car_name" className="swal2-input custom-select" placeholder="Car Name(Hyundai)"></input>
+                    <input id="car_name_search_input" className="swal2-input custom-select" placeholder="Car Name(Hyundai)"></input>
 
-                    <select id="vehicleType" className="swal2-input custom-select">
+                    <select id="carType_search_input" className="swal2-input custom-select">
                         <option value="">Select Vehicle Type</option>
                         <option value="Sedan">Sedan</option>
                         <option value="SUV">SUV</option>
@@ -713,7 +730,7 @@ function UCAUsedCarListingUI() {
                         <option value="Sports Car">Sports Car</option>
                     </select>
 
-                    <select id="priceRange" className="swal2-input custom-select">
+                    <select id="priceRange_search_input" className="swal2-input custom-select">
                         <option value="">Select price range</option>
                         <option value="0-10000">$0 - $10,000</option>
                         <option value="10001-20000">$10,001 - $20,000</option>
@@ -745,7 +762,7 @@ function UCAUsedCarListingUI() {
                         <option value="280001-290000">$280,001 - $290,000</option>
                     </select>
 
-                    <select id="manufactureYear" className="swal2-input custom-select">
+                    <select id="manufactureYear_search_input" className="swal2-input custom-select">
                         <option value="">Select manufacture year</option>
                         <option value="2024">2024</option>
                         <option value="2023">2023</option>

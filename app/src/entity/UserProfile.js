@@ -103,7 +103,7 @@ class UserProfile {
             }
         } catch (error) {
             console.error("Error searching for user:", error);
-            throw error;
+            return null;
         }
     }
 
