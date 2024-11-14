@@ -73,11 +73,6 @@ class UsedCar {
     // Update an existing used car entry by usedCarId
     async updateUsedCar(usedCarId, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap) {
         try {
-            //  Check if a new image file is provided and upload if necessary
-            // let imageUrl = null;
-            // if (usedCarId.car_image) {
-            //     imageUrl = await this.firebaseService.uploadFile(usedCarId.car_image, 'car_image');
-            //}
             const firebaseService = new FirebaseService();
 
             var carData = {
@@ -87,11 +82,13 @@ class UsedCar {
                 car_manufacturer: car_manufacturer,
                 description: description,
                 features: features,
-                price: price,
-                mileage: mileage,
-                manufacture_year: manufacture_year,
-                engine_cap: engine_cap
+                price: Number(price),
+                mileage: Number(mileage),
+                manufacture_year: Number(manufacture_year),
+                engine_cap: Number(engine_cap)
             };
+
+            console.log(carData)
 
             if (car_image != null) {
                 const imageUrl = await firebaseService.uploadFile(car_image, 'car_images');
@@ -111,14 +108,16 @@ class UsedCar {
             } else {
                 console.log("Car image is not updated.");
             }
-
+            
+            console.log(carData)
+            console.log(this.usedCarId)
             // Update the car document in Firestore
-            await this.firebaseService.updateDocument('UsedCar', this.usedCarId, carData);
+            await this.firebaseService.updateDocument('UsedCar', usedCarId, carData);
             console.log("Used car entry updated successfully");
             return true;
         } catch (error) {
             console.error("Error updating car entry:", error);
-            return { success: false, message: error.message };
+            return false;
         }
     }
 
@@ -130,7 +129,7 @@ class UsedCar {
             return true;
         } catch (error) {
             console.error("Error suspending car entry:", error);
-            return { success: false, message: error.message };
+            return false;
         }
     }
 
@@ -193,7 +192,7 @@ class UsedCar {
             }
         } catch (error) {
             console.error("Error searching for cars:", error);
-            return { success: false, message: error.message };
+            return null;
         }
     }
 

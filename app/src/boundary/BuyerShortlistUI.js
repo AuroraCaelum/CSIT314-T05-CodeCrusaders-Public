@@ -40,19 +40,19 @@ function BuyerShortlistUI() {
     }, []);
 
     const clearSearch = async () => {
-        document.getElementById('car_name').value = '';
-        document.getElementById('carType').value = '';
-        document.getElementById('priceRange').value = '';
-        document.getElementById('manufactureYear').value = '';
+        document.getElementById('car_name_search_input').value = '';
+        document.getElementById('carType_search_input').value = '';
+        document.getElementById('priceRange_search_input').value = '';
+        document.getElementById('manufactureYear_search_input').value = '';
 
         fetchCars();
     };
 
     const searchShortlist = async () => {
-        const carNameInput = document.getElementById('car_name');
-        const carTypeInput = document.getElementById('carType');
-        const priceRangeInput = document.getElementById('priceRange');
-        const manufactureYearInput = document.getElementById('manufactureYear');
+        const carNameInput = document.getElementById('car_name_search_input');
+        const carTypeInput = document.getElementById('carType_search_input');
+        const priceRangeInput = document.getElementById('priceRange_search_input');
+        const manufactureYearInput = document.getElementById('manufactureYear_search_input');
 
         let priceRange = priceRangeInput.value.toString().split("-");
 
@@ -361,9 +361,9 @@ function BuyerShortlistUI() {
 
             <div className="bsSearch-bar">
                 <span>
-                    <input id="car_name" className="swal2-input custom-select" placeholder="Car Name(Hyundai)"></input>
+                    <input id="car_name_search_input" className="swal2-input custom-select" placeholder="Car Name(Hyundai)"></input>
 
-                    <select id="carType" className="swal2-input custom-select">
+                    <select id="carType_search_input" className="swal2-input custom-select">
                         <option value="">Select Vehicle Type</option>
                         <option value="Sedan">Sedan</option>
                         <option value="SUV">SUV</option>
@@ -377,7 +377,7 @@ function BuyerShortlistUI() {
                         <option value="Sports Car">Sports Car</option>
                     </select>
 
-                    <select id="priceRange" className="swal2-input custom-select">
+                    <select id="priceRange_search_input" className="swal2-input custom-select">
                         <option value="">Select price range</option>
                         <option value="0-10000">$0 - $10,000</option>
                         <option value="10001-20000">$10,001 - $20,000</option>
@@ -409,7 +409,7 @@ function BuyerShortlistUI() {
                         <option value="280001-290000">$280,001 - $290,000</option>
                     </select>
 
-                    <select id="manufactureYear" className="swal2-input custom-select">
+                    <select id="manufactureYear_search_input" className="swal2-input custom-select">
                         <option value="">Select manufacture year</option>
                         <option value="2024">2024</option>
                         <option value="2023">2023</option>

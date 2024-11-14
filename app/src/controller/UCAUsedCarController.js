@@ -14,17 +14,16 @@ class UCACreateUsedCarController {
             // Validate if the seller exists
             const isValidSeller = await UserAccount.validateSeller(seller_username);
             if (!isValidSeller) {
-                return false;
+                return 1;
             }
 
             const usedCar = new UsedCar();
             await usedCar.createUsedCar(usedCarId, agent_username, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap);
             console.log("Used car Creatd successfully");
-            return true;
-
+            return 0;
         } catch (error) {
             console.error('Error creating used car:', error);
-            return { success: false, message: error.message };
+            return 2;
         }
     }
 }
@@ -41,7 +40,7 @@ class UCAViewUsedCarController {
             return carData;
         } catch (error) {
             console.error('Error viewing used car:', error);
-            return error;
+            return null;
         }
     }
 }
@@ -54,18 +53,18 @@ class UCAUpdateUsedCarController {
             // Validate if the seller exists
             const isValidSeller = await UserAccount.validateSeller(seller_username);
             if (!isValidSeller) {
-                return false;
+                return 1;
             }
 
             const usedCar = new UsedCar();
             await usedCar.updateUsedCar(usedCarId, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap);
 
             console.log("Used car updated successfully: ", usedCarId);
-            return true;
+            return 0;
 
         } catch (error) {
             console.error('Error updating used car:', error);
-            return false;
+            return 2;
         }
     }
 }
@@ -77,15 +76,10 @@ class UCADeleteUsedCarController {
         try {
             const usedCar = new UsedCar();
             const success = await usedCar.deleteUsedCar(usedCarId);
-            if (success) {
-                console.log(usedCarId);
-                return true;
-            } else {
-                return false;
-            }
+            return success;
         } catch (error) {
             console.error('Error suspending used car:', error);
-            return { success: false, message: error.message };
+            return false;
         }
     }
 }

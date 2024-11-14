@@ -9,7 +9,7 @@ class UCAViewRateReviewController {
             return result;
         } catch (error) {
             console.error('Error fetching reviews for agent:', error);
-            return { success: false, message: error.message };
+            return null;
         }
     }
 }

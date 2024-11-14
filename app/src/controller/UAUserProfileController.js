@@ -74,7 +74,7 @@ class UASearchUserProfileController {
             const profile = await userProfile.searchUserProfile(profileName); // Adjusted to correct method
             return profile;
         } catch (error) {
-            throw error;
+            return null;
         }
     }
 }
