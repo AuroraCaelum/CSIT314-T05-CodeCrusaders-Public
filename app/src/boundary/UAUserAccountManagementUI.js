@@ -57,16 +57,40 @@ function UAUserAccountManagementUI() {
         // console.log(profiles);
         Swal.fire({
             title: 'Create Account',
+            width: 800,
             html: `
-                <input type="text" id="fName" class="swal2-input" placeholder="First Name">
-                <input type="text" id="lName" class="swal2-input" placeholder="Last Name">
-                <input type="text" id="username" class="swal2-input" placeholder="Username">
-                <input type="password" id="password" class="swal2-input" placeholder="Password">
-                <input type="text" id="phoneNum" class="swal2-input" placeholder="Phone Number">
-                <input type="email" id="email" class="swal2-input" placeholder="Email">
-                <select id="userProfile" class="swal2-input">
-                    <option value="">Select User Profile</option>
-                </select>
+                <div class="uam-wrapper" style="grid-template-columns: 1fr 1fr;">
+                    <div class="item">
+                        <label>First Name</label>
+                        <input type="text" id="fName" class="swal2-input" placeholder="First Name">
+                    </div>
+                    <div class="item">
+                        <label>Lase Name</label>
+                        <input type="text" id="lName" class="swal2-input" placeholder="Last Name">
+                    </div>
+                    <div class="item">
+                        <label>Username</label>
+                        <input type="text" id="username" class="swal2-input" placeholder="Username">
+                    </div>
+                    <div class="item">
+                        <label>Password</label>
+                        <input type="password" id="password" class="swal2-input" placeholder="Password">
+                    </div>
+                    <div class="item">
+                        <label>Phone Number</label>
+                        <input type="text" id="phoneNum" class="swal2-input" placeholder="Phone Number">
+                    </div>
+                    <div class="item">
+                        <label>Email</label>
+                        <input type="email" id="email" class="swal2-input" placeholder="Email">
+                    </div>
+                    <div class="item" style="grid-column: span 2">
+                        <label>User Profile</label>
+                        <select id="userProfile" class="swal2-input">
+                           <option value="">Select User Profile</option>
+                        </select>
+                    </div>
+                </div>
             `,
             confirmButtonText: 'Create Account',
             focusConfirm: false,
@@ -145,7 +169,7 @@ function UAUserAccountManagementUI() {
             Swal.fire({
                 title: 'View User Account',
                 html: `
-                    <div style="text-align: left;">
+                    <div style="text-align: left; line-height: 1.5em;">
                         <strong>First Name:</strong> ${userAccount.fName}<br>
                         <strong>Last Name:</strong> ${userAccount.lName}<br>
                         <strong>Username:</strong> ${userAccount.username}<br>
@@ -184,16 +208,40 @@ function UAUserAccountManagementUI() {
 
         Swal.fire({
             title: 'Update User Account',
+            width: 800,
             html: `
-                <input type="text" id="fName" class="swal2-input" placeholder="First Name" value="${userAccount.fName}">
-                <input type="text" id="lName" class="swal2-input" placeholder="Last Name" value="${userAccount.lName}">
-                <input type="text" id="username" class="swal2-input" placeholder="Username" value="${userAccount.username}" disabled>
-                <input type="password" id="password" class="swal2-input" placeholder="Password" value="${userAccount.password}">
-                <input type="text" id="phoneNum" class="swal2-input" placeholder="Phone Number" value="${userAccount.phoneNum || ''}">
-                <input type="email" id="email" class="swal2-input" placeholder="Email" value="${userAccount.email || ''}">
-                <select id="userProfile" class="swal2-input">
-                    <option value="">Select User Profile</option>
-                </select>
+                <div class="uam-wrapper" style="grid-template-columns: 1fr 1fr;">
+                    <div class="item">
+                        <label>First Name</label>
+                        <input type="text" id="fName" class="swal2-input" placeholder="First Name" value="${userAccount.fName}">
+                    </div>
+                    <div class="item">
+                        <label>Lase Name</label>
+                        <input type="text" id="lName" class="swal2-input" placeholder="Last Name" value="${userAccount.lName}">
+                    </div>
+                    <div class="item">
+                        <label>Username</label>
+                        <input type="text" id="username" class="swal2-input" placeholder="Username" value="${userAccount.username}" disabled>
+                    </div>
+                    <div class="item">
+                        <label>Password</label>
+                        <input type="password" id="password" class="swal2-input" placeholder="Password" value="${userAccount.password}">
+                    </div>
+                    <div class="item">
+                        <label>Phone Number</label>
+                        <input type="text" id="phoneNum" class="swal2-input" placeholder="Phone Number" value="${userAccount.phoneNum || ''}">
+                    </div>
+                    <div class="item">
+                        <label>Email</label>
+                        <input type="email" id="email" class="swal2-input" placeholder="Email" value="${userAccount.email || ''}">
+                    </div>
+                    <div class="item" style="grid-column: span 2">
+                        <label>User Profile</label>
+                        <select id="userProfile" class="swal2-input">
+                           <option value="">Select User Profile</option>
+                        </select>
+                    </div>
+                </div>
             `,
             confirmButtonText: 'Update',
             focusConfirm: false,

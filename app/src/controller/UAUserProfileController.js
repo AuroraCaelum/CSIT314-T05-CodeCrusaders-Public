@@ -7,11 +7,7 @@ class UACreateUserProfileController {
         try {
             const profile = new UserProfile();
             const success = await profile.createUserProfile(profileName, description, profileType); // Changed method call to reflect new implementation
-            if (success) {
-                return true;
-            } else {
-                return false;
-            }
+            return success;
         } catch (error) {
             console.log("Error:", error);
             return false;
