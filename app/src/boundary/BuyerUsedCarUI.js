@@ -104,7 +104,7 @@ function BuyerUsedCarUI() {
 
     const viewUsedCar = async (usedCarId) => {
         console.log('Fetching used Car for:', usedCarId);
-        
+
         const updatedCars = cars.map(car => {
             if (car.usedCarId === usedCarId) {
                 car.view_count += 1;
@@ -285,6 +285,11 @@ function BuyerUsedCarUI() {
 
                     if ( !priceInput || !interestRateInput || !loanTermInput) {
                         Swal.showValidationMessage('Please fill all fields.');
+                        return;
+                    }
+
+                    if (priceInput < 0 || interestRateInput < 0 || loanTermInput < 0) {
+                        Swal.showValidationMessage('Values cannot be negative');
                         return;
                     }
 

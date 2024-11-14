@@ -142,6 +142,8 @@ class UsedCar {
             let priceMin = priceRange[0];
             let priceMax = priceRange[1];
 
+            console.log(carName);
+            console.log(carType);
             console.log(priceMin);
             console.log(priceMax);
 
@@ -177,12 +179,14 @@ class UsedCar {
             }
 
             const finalQuery = query(carQuery, ...conditions);
+            console.log(finalQuery)
 
             // Execute the query and retrieve matching documents
             const snapshot = await getDocs(finalQuery)
             const cars = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
             if (cars.length > 0) {
+                console.log(cars)
                 return cars;
             } else {
                 return null;
