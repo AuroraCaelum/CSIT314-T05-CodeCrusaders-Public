@@ -41,7 +41,7 @@ class SellerTrackViewCountController {
             return viewCountHistory; // Returns true if successful, false otherwise
         } catch (error) {
             console.error("Controller Error tracking view count:", error);
-            return false; // Or handle as needed
+            return null; // Or handle as needed
         }
     }
 }
