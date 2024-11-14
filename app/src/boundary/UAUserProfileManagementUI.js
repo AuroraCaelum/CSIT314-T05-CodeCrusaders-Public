@@ -37,15 +37,26 @@ function UAUserProfileManagementUI() {
         Swal.fire({
             title: 'Create Profile',
             html: `
-                <input type="text" id="profileName" class="swal2-input" placeholder="Profile Name">
-                <input type="text" id="description" class="swal2-input" placeholder="Description">
-                <select id="profileType" class="swal2-select">
-                    <option value="">Select Profile Type</option>
-                    <option value="UserAdmin">User Admin</option>
-                    <option value="UsedCarAgent">Used Car Agent</option>
-                    <option value="Buyer">Buyer</option>
-                    <option value="Seller">Seller</option>
-                </select>
+                <div class="upm-wrapper">
+                    <div class="item">
+                        <label>Profile Name</label>
+                        <input type="text" id="profileName" class="swal2-input" placeholder="Profile Name">
+                    </div>
+                    <div class="item">
+                        <label>Description</label>
+                        <input type="text" id="description" class="swal2-input" placeholder="Description">
+                    </div>
+                    <div class="item">
+                        <label>Profile Type</label>
+                        <select id="profileType" class="swal2-select">
+                            <option value="">Select Profile Type</option>
+                            <option value="UserAdmin">User Admin</option>
+                            <option value="UsedCarAgent">Used Car Agent</option>
+                            <option value="Buyer">Buyer</option>
+                            <option value="Seller">Seller</option>
+                        </select>
+                    </div>
+                </div>
             `,
             confirmButtonText: 'Create Profile',
             focusConfirm: false,
@@ -106,7 +117,7 @@ function UAUserProfileManagementUI() {
             Swal.fire({
                 title: 'View User Profile',
                 html: `
-                    <div style="text-align: left;">
+                    <div style="text-align: left; line-height: 1.5em;">
                         <strong>Profile Name:</strong> ${userProfile.profileName}<br>
                         <strong>Description:</strong> ${userProfile.description}<br>
                         <strong>Type:</strong> ${userProfile.profileType}<br>
@@ -142,15 +153,26 @@ function UAUserProfileManagementUI() {
         Swal.fire({
             title: 'Update User Profile',
             html: `
-                <input type="text" id="profileName" class="swal2-input" placeholder="Profile Name" value="${userProfile.profileName}" disabled>
-                <input type="text" id="description" class="swal2-input" placeholder="Description" value="${userProfile.description}">
-                <select id="profileType" class="swal2-select">
-                    <option value="">Select Profile Type</option>
-                    <option value="Buyer" ${userProfile.profileType === "Buyer" ? "selected" : ""}>Buyer</option>
-                    <option value="Seller" ${userProfile.profileType === "Seller" ? "selected" : ""}>Seller</option>
-                    <option value="UsedCarAgent" ${userProfile.profileType === "UsedCarAgent" ? "selected" : ""}>Used Car Agent</option>
-                    <option value="UserAdmin" ${userProfile.profileType === "UserAdmin" ? "selected" : ""}>User Admin</option>
-                </select>
+                <div class="upm-wrapper">
+                    <div class="item">
+                        <label>Profile Name</label>
+                        <input type="text" id="profileName" class="swal2-input" placeholder="Profile Name" value="${userProfile.profileName}" disabled>
+                    </div>
+                    <div class="item">
+                        <label>Description</label>
+                        <input type="text" id="description" class="swal2-input" placeholder="Description" value="${userProfile.description}">
+                    </div>
+                    <div class="item">
+                        <label>Profile Type</label>
+                        <select id="profileType" class="swal2-select">
+                            <option value="">Select Profile Type</option>
+                            <option value="Buyer" ${userProfile.profileType === "Buyer" ? "selected" : ""}>Buyer</option>
+                            <option value="Seller" ${userProfile.profileType === "Seller" ? "selected" : ""}>Seller</option>
+                            <option value="UsedCarAgent" ${userProfile.profileType === "UsedCarAgent" ? "selected" : ""}>Used Car Agent</option>
+                            <option value="UserAdmin" ${userProfile.profileType === "UserAdmin" ? "selected" : ""}>User Admin</option>
+                        </select>
+                    </div>
+                </div>
             `,
             confirmButtonText: 'Update',
             focusConfirm: false,

@@ -117,14 +117,14 @@
     margin-left: auto;
 }
 
-.wrapper {
+.upm-wrapper {
     display: grid;
-    grid-template-columns: 1fr 1fr;
 
     .item {
         display: grid;
         gap: 10px;
         padding: 5px;
+        margin-top: 1em;
 
         label {
             font-weight: bold;
@@ -137,14 +137,10 @@
         }
 
         select {
-            margin: 0em 2em 3px;
+            margin: 0em 2em 5px;
             border: 1px solid #ccc;
             border-radius: 5px;
-            color: #ccc;
-        }
-
-        img {
-            margin: 0em 2em 3px;
+            color: #000;
         }
     }
 }
@@ -155,3 +151,4 @@
     border-radius: 5px;
     color: #ccc;
 }
+
