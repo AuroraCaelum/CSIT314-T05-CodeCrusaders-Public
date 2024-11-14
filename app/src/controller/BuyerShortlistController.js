@@ -43,7 +43,7 @@ class BuyerSearchShortlistController {
             return shortlistResult;
         } catch (error) {
             console.error('Error searching in shortlist:', error);
-            return { success: false, message: error.message };
+            return null;
         }
     }
 }

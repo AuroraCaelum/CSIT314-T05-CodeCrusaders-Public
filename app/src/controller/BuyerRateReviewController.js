@@ -10,7 +10,7 @@ class BuyerLeaveRateReviewController {
             return result;
         } catch (error) {
             console.error('Error creating rate and review:', error);
-            return { success: false, message: error.message };
+            return false;
         }
     }
 }

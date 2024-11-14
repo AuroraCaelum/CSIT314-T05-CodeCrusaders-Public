@@ -16,12 +16,10 @@ class UCACreateUsedCarController {
             if (!isValidSeller) {
                 return false;
             }
-            console.log("New Car Details(C):", usedCarId, agent_username, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap)
 
             const usedCar = new UsedCar();
             await usedCar.createUsedCar(usedCarId, agent_username, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap);
             console.log("Used car Creatd successfully");
-            console.log("New Car Details(C22):", usedCarId, agent_username, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap)
             return true;
 
         } catch (error) {
@@ -38,7 +36,8 @@ class UCAViewUsedCarController {
         try {
             const usedCar = new UsedCar();
             const carData = await usedCar.viewUsedCar(usedCarId);
-            console.log("Car Data(C):", carData);
+
+            console.log("Success viewing Used car: ", usedCarId);
             return carData;
         } catch (error) {
             console.error('Error viewing used car:', error);
@@ -58,10 +57,10 @@ class UCAUpdateUsedCarController {
                 return false;
             }
 
-            const usedCar = new UsedCar(usedCarId, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap);
+            const usedCar = new UsedCar();
             await usedCar.updateUsedCar(usedCarId, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap);
 
-            console.log("Used car updated successfully");
+            console.log("Used car updated successfully: ", usedCarId);
             return true;
 
         } catch (error) {

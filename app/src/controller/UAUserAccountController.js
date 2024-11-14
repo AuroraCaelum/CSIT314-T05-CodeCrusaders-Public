@@ -24,7 +24,6 @@ class UAViewUserAccountController {
             const userAccount = new UserAccount();
             const userData = await userAccount.viewUserAccount(username); // Fetch user data by username
             console.log("Fetched user account:", userData);
-            console.log("connected with data base at(c):", username)
             return userData;
         } catch (error) {
             console.error("Error fetching user account:", error);
@@ -53,10 +52,8 @@ class UASuspendUserAccountController {
             const userAccount = new UserAccount(username);
 
             await userAccount.suspendUserAccount(username); // Call the suspension method
-            console.log("Success to Suspend User(Controller)");
             return true;
         } catch (error) {
-            console.log("failed to Suspend User(Controller)");
             return false;
         }
     }

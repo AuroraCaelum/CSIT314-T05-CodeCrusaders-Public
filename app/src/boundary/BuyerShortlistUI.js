@@ -84,10 +84,9 @@ function BuyerShortlistUI() {
                 icon: 'info',
                 confirmButtonText: 'OK'
             });
-            return;
         } else {
             console.log(searchResult);
-            const carData = searchResult.map(doc => ({
+            const shortlistData = searchResult.map(doc => ({
                 usedCarId: doc.usedCarId,
                 car_name: doc.car_name,
                 car_type: doc.car_type,
@@ -97,11 +96,11 @@ function BuyerShortlistUI() {
                 price: doc.price,
                 car_image: doc.car_image
             }));
-            setShortlist(carData);
+            setShortlist(shortlistData);
         }
     };
 
-    const viewUsedCar = async (usedCarId) => { //not done
+    const viewUsedCar = async (usedCarId) => {
         console.log('Fetching used Car for:', usedCarId);
         const buyerViewShortlistController = new BuyerViewShortlistController();
         Util.increaseCount(usedCarId, "view");

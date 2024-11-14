@@ -173,7 +173,7 @@ class UsedCar {
 
             // Apply `manufactureYear` filter if provided
             if (manufactureYear) {
-                conditions.push(where("manufacture_year", "==", manufactureYear));
+                conditions.push(where("manufacture_year", "==", Number(manufactureYear)));
             }
 
             const finalQuery = query(carQuery, ...conditions);
