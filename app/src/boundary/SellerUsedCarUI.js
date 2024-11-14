@@ -514,7 +514,7 @@ function SellerUsedCarUI() {
                         </button>
                         <span>
                             <div className="counter-display">
-                                <span onClick={() => trackViewCount(car.usedCarId)} title="Click to track view count"><img src={"viewIcon.png"} alt="Inspect" className="uclInspect-png-image" />{car.view_count}</span>  {/* Display inspect count with an icon */}
+                                <span onClick={() => trackViewCount(car.usedCarId)} title="Click to track view count"><img src={"viewIcon.png"} data-testid="viewIcon" alt="Inspect" className="uclInspect-png-image" />{car.view_count}</span>  {/* Display inspect count with an icon */}
                                 <span onClick={() => trackShortlistCount(car.usedCarId)} title="Click to track shortlist count"><img src={"saveShortlistIcon.png"} alt="Shortlist" className="uclShortlist-png-image" />{car.shortlist_count}</span>  {/* Display shortlist count with an icon */}
                             </div>
                         </span>
