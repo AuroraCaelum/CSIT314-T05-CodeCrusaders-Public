@@ -1,4 +1,6 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import React from 'react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { act } from 'react';
 import App from './App';
 import Swal from 'sweetalert2';
 import LoginUI from './boundary/LoginUI';
@@ -39,7 +41,9 @@ jest.mock('sweetalert2', () => ({
 describe('UI Render Test', () => {
   describe('Login UI', () => {
     test('LoginUI renders without crashing', async () => {
-      render(<LoginUI />);
+      await act(async () => {
+        render(<LoginUI />);
+      });
       expect(screen.getByText('Login')).toBeInTheDocument();
     });
   });
@@ -111,56 +115,190 @@ describe('UI Render Test', () => {
   });
 });
 
-// describe('Unit Test', () => {
-//   beforeEach(() => {
-//     Swal.fire.mockClear();
-//   });
 
-//   describe('TC-1', () => {
-//     test('TC1-1: Launch Website', async () => {
-//       render(<LoginUI />);
-//       expect(screen.getByPlaceholderText(/Enter your user ID/i)).toBeInTheDocument();
-//     });
 
-//     describe('TC1-2: Invalid username/password', () => {
-//       beforeEach(() => {
-//         console.Console = jest.fn();
-//       });
 
-//       test('All input is missing', async () => {
-//         // const mockUserProfileListLoad = jest.fn().mockResolvedValue(mockUserProfileList);
-//         // Input invalid username and password
-//         render(<LoginUI />);
-//         fireEvent.click(screen.getByText("Login"));
 
-//         expect(Swal.fire).toHaveBeenCalledWith({
-//           position: "center",
-//           title: 'Invalid Input',
-//           icon: 'error',
-//           text: 'Please select user profile.',
-//           confirmButtonText: 'OK',
-//           timer: 1500
-//         });
-//       });
 
-//       test('Missing username and password', async () => {
-//         render(<LoginUI />);
 
-//         // Select a profile
-//         fireEvent.change(screen.getByTestId("loginAs"), { target: { value: 'UserAdmin' } });
 
-//         // Trigger login with empty username and password
-//         fireEvent.click(screen.getByText("Login"));
 
-//         expect(Swal.fire).toHaveBeenCalledWith({
-//           position: "center",
-//           title: 'Invalid Input',
-//           icon: 'error',
-//           text: 'Please fill up username/password.',
-//           confirmButtonText: 'OK',
-//           timer: 1500
-//         });
-//       });
-//     });
-//   });
-// });
+describe('Unit Test', () => {
+  beforeEach(() => {
+    //Swal.fire.mockClear();
+    Swal.fire = jest.fn().mockResolvedValue(true);  
+  });
+
+  describe('TC 30: Login', () => {
+
+    describe('TC 30-1: Launch Website', () => {
+
+      test('Launch Website', async () => {
+        render(<LoginUI />);
+        expect(screen.getByPlaceholderText(/Enter your user ID/i)).toBeInTheDocument();
+      });
+
+    });
+
+    describe('TC 30-2: Invalid choice of UserProfile', () => {
+
+      test('Missing user profile', async () => {
+        render(<LoginUI />);
+
+        fireEvent.change(screen.getByTestId("loginAs"), { target: { value: '' } });
+        fireEvent.click(screen.getByText("Login"));
+
+        expect(Swal.fire).toHaveBeenCalledWith({
+            position: "center",
+            title: 'Invalid Input',
+            icon: 'error',
+            text: 'Please select user profile.',
+            confirmButtonText: 'OK',
+            timer: 1500
+        });
+      });
+    });
+
+    describe('TC 30-3: Invalid username/password', () => {
+
+      test('Missing username and password', async () => {
+        render(<LoginUI />);
+        
+        fireEvent.change(screen.getByTestId("loginAs"), { target: { value: 'Seller' } });
+
+        fireEvent.change(screen.getByPlaceholderText(/Enter your user ID/i), { target: { value: '' } });
+        fireEvent.change(screen.getByLabelText(/Password:/), { target: { value: '' } });
+        
+        fireEvent.click(screen.getByText("Login"));
+    
+        expect(Swal.fire).toHaveBeenCalledWith({
+          position: "center",
+          title: 'Invalid Input',
+          icon: 'error',
+          text: 'Please fill up username/password.',
+          confirmButtonText: 'OK',
+          timer: 1500
+        });
+      });
+    });
+
+  });
+
+  describe('TC 31: Logout', () => {
+
+    test('Logout', async () => {
+      render(<SellerUsedCarUI />);
+
+      Object.defineProperty(document, 'cookie', {
+        writable: true,
+        value: 'username=seller'
+      });
+
+      fireEvent.click(screen.getByText("Logout"));
+
+      await waitFor(() => {
+        expect(Swal.fire).toHaveBeenCalledWith({
+          position: "center",
+          title: 'Logout Successful',
+          icon: 'success',
+          confirmButtonText: 'Back to login',
+          timer: 1500
+        });
+      });
+      
+    });
+  });
+
+
+  // describe('TC 32: Track Number of Views of Used Cars for Seller', () => {
+
+  //   test('Track View Count', async () => {
+  //     render(<SellerUsedCarUI />);
+
+  //     // Object.defineProperty(document, 'cookie', {
+  //     //   writable: true,
+  //     //   value: 'username=seller'
+  //     // });
+  //     fireEvent.click(screen.getByTestId("viewIcon"));
+  //     expect(
+  //       screen.getByText('View Count History Data Not Found!')).toBeInTheDocument();
+        
+
+    
+
+      
+      
+  //   });
+  // });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+});
+
+
+
+ // describe('TC1-2: Invalid username/password', () => {
+    //   beforeEach(() => {
+    //     console.Console = jest.fn();
+    //   });
+
+    //   test('All input is missing', async () => {
+    //     // const mockUserProfileListLoad = jest.fn().mockResolvedValue(mockUserProfileList);
+    //     // Input invalid username and password
+    //     render(<LoginUI />);
+    //     fireEvent.click(screen.getByText("Login"));
+
+    //     expect(Swal.fire).toHaveBeenCalledWith({
+    //       position: "center",
+    //       title: 'Invalid Input',
+    //       icon: 'error',
+    //       text: 'Please select user profile.',
+    //       confirmButtonText: 'OK',
+    //       timer: 1500
+    //     });
+    //   });
+
+    //   test('Missing username and password', async () => {
+    //     render(<LoginUI />);
+
+    //     // Select a profile
+    //     fireEvent.change(screen.getByTestId("loginAs"), { target: { value: 'UserAdmin' } });
+
+    //     // Trigger login with empty username and password
+    //     fireEvent.click(screen.getByText("Login"));
+
+    //     expect(Swal.fire).toHaveBeenCalledWith({
+    //       position: "center",
+    //       title: 'Invalid Input',
+    //       icon: 'error',
+    //       text: 'Please fill up username/password.',
+    //       confirmButtonText: 'OK',
+    //       timer: 1500
+    //     });
+    //   });
+    // });

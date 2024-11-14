@@ -10,7 +10,6 @@ function LoginUI() {
     const [userProfile, setUserProfile] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [userProfiles, setUserProfiles] = useState([]);
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -74,6 +73,7 @@ function LoginUI() {
                     value={userProfile}
                     onChange={(e) => setUserProfile(e.target.value)}
                     className="input"
+                    data-testid="loginAs"
                 >
                     <option value="">Select</option>
                     <option value="UsedCarAgent">Used Car Agent</option>
@@ -86,6 +86,7 @@ function LoginUI() {
                     type="text"
                     id="username"
                     value={username}
+                    data-testid="username"
                     onChange={(e) => setUsername(e.target.value)}
                     className="input"
                     placeholder="Enter your user ID"
@@ -95,6 +96,7 @@ function LoginUI() {
                     type="password"
                     id="password"
                     value={password}
+                    data-testid="password"
                     onChange={(e) => setPassword(e.target.value)}
                     className="input"
                     placeholder="Enter your password"
