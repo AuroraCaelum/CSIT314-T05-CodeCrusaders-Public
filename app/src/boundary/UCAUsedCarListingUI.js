@@ -180,10 +180,15 @@ function UCAUsedCarListingUI() {
                 } else if (mileage < 0 || price < 0 || manufacture_year < 0 || engine_cap < 0) {
                     Swal.showValidationMessage(`Number fields cannot be negative`);
                     return false;
+                } else {
+                    Swal.fire({
+                        position: "center",
+                        title: 'Saving...',
+                        icon: 'info',
+                        html: 'Saving used car to database, please wait.',
+                        showConfirmButton: false
+                    });
                 }
-                // else {
-                //     Swal.fire("Product Created!");
-                // }
 
                 return { usedCarId, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap };
             },
@@ -405,7 +410,16 @@ function UCAUsedCarListingUI() {
                 } else if (mileage < 0 || price < 0 || manufacture_year < 0 || engine_cap < 0) {
                     Swal.showValidationMessage(`Number fields cannot be negative`);
                     return false;
+                } else {
+                    Swal.fire({
+                        position: "center",
+                        title: 'Updating...',
+                        icon: 'info',
+                        html: 'Updating used car to database, please wait.',
+                        showConfirmButton: false
+                    });
                 }
+
                 return { seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap };
             }
         }).then(async (updateResult) => {
@@ -447,7 +461,7 @@ function UCAUsedCarListingUI() {
                 const isDeleted = await ucaDeleteUsedCarController.deleteUsedCar(usedCarId);
 
                 if (isDeleted) {
-                    Swal.fire('Deleted!', 'Used car has been successfully deleted.', 'success');
+                    Swal.fire('Deleted!', 'Used car successfully deleted.', 'success');
                 } else {
                     Swal.fire('Failed!', 'Error occurred while deleting used car from the database. Please try again.', 'error');
                 }

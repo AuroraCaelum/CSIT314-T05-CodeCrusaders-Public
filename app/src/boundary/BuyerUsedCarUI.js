@@ -177,7 +177,6 @@ function BuyerUsedCarUI() {
             console.log(usedCar);
             console.log("display success in UI for: ", usedCarId);
         } else {
-            console.error("Failed to load car information:", usedCar.body.price);
             Swal.fire({
                 title: 'Error',
                 text: 'An error has occurred. Please try again.',

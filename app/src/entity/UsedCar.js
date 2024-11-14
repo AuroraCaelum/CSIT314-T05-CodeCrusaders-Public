@@ -260,7 +260,7 @@ class UsedCar {
             if (carData && carData.view_history !== undefined) {
                 return carData.view_history; // Return only the count as an integer
             } else {
-                throw new Error("View count not found for the provided used car ID");
+                return null;
             }
         } catch (error) {
             console.error("Error tracking view count:", error);
@@ -276,7 +276,7 @@ class UsedCar {
             if (carData && carData.shortlist_history !== undefined) {
                 return carData.shortlist_history; // Return only the count as an integer
             } else {
-                throw new Error("View count not found for the provided used car ID");
+                return null;
             }
         } catch (error) {
             console.error("Error tracking view count:", error);
