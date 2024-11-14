@@ -53,7 +53,7 @@ class SellerTrackShortlistCountController {
             return shortlistCountHistory; // Returns true if successful, false otherwise
         } catch (error) {
             console.error("Controller Error tracking shortlist count:", error);
-            return false; // Or handle as needed
+            return null; // Or handle as needed
         }
     }
 }

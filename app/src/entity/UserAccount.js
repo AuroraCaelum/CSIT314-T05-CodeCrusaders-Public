@@ -67,11 +67,11 @@ class UserAccount {
             } else {
                 console.log("User Data Load fail at: ", userData)
                 console.log("did not connected with data base at:", username)
-                throw new Error("User not found");
+                return null;
             }
         } catch (error) {
             console.error("Error fetching user data:", error);
-            throw error;
+            return null;
         }
     }
 
@@ -104,8 +104,10 @@ class UserAccount {
         try {
             await this.firebaseService.updateDocument('UserAccount', username, { suspended: true });
             console.log("User account suspended successfully");
+            return true;
         } catch (error) {
             console.error("Error suspending user account:", error);
+            return false;
         }
     }
 

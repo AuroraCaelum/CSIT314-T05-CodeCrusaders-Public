@@ -19,10 +19,10 @@ class RateReview {
 
             await RateReview.firebaseService.addDocument('RateReview', documentId, reviewData);
             console.log("Rate and review saved successfully");
-            return { success: true, message: "Rate and review saved successfully" };
+            return true;
         } catch (error) {
             console.error("Error saving rate and review:", error);
-            return { success: false, message: error.message };
+            return false;
         }
     }
     

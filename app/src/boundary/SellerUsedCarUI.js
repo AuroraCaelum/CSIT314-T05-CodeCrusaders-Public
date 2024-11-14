@@ -341,28 +341,28 @@ function SellerUsedCarUI() {
                 reviewInput = document.getElementById('review').value;
 
                 if (!ratingInput || !reviewInput) {
-                    Swal.showValidationMessage(`Please provide both a rating and a review`);
+                    Swal.showValidationMessage(`Please fill up all inputs.`);
                     return false;
                 }
 
-                return { rating: ratingInput, review: reviewInput };
+                return { rate: ratingInput, review: reviewInput };
             }
         }).then(async (result) => {
             if (result.isConfirmed) {
-                const { rating, review } = result.value;
+                const { rate, review } = result.value;
 
                 const reviewer_username = Cookies.get('username');
                 const reviewer_type = Cookies.get('userProfile');
 
-                const sellerleaveRateReviewController = new SellerLeaveRateReviewController(agent_username, rating, review, reviewer_username, reviewer_type);
-                const isSuccess = await sellerleaveRateReviewController.leaveRateReview(agent_username, rating, review, reviewer_username, reviewer_type);
+                const sellerleaveRateReviewController = new SellerLeaveRateReviewController(agent_username, rate, review, reviewer_username, reviewer_type);
+                const isSuccess = await sellerleaveRateReviewController.leaveRateReview(agent_username, rate, review, reviewer_username, reviewer_type);
 
                 if (isSuccess) {
-                    console.log(`Rating submitted for agent ${agent_username}:`, { rating, review });
+                    console.log(`Rating submitted for agent ${agent_username}:`, { rate, review });
                     Swal.fire('Thank you!', 'Your rating and review have been submitted.', 'success');
                 } else {
                     console.log('Rating submission failed');
-                    Swal.fire('Error', 'Failed to submit your rating and review. Please try again later.', 'error');
+                    Swal.fire('Error', 'Error occurred while saving your rate and review. Please try again.', 'error');
                 }
             }
         });
