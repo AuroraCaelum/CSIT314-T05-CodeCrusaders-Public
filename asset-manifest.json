@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/CSIT314-T05-CodeCrusaders/static/css/main.2384dec2.css",
-    "main.js": "/CSIT314-T05-CodeCrusaders/static/js/main.b0eb9d71.js",
+    "main.js": "/CSIT314-T05-CodeCrusaders/static/js/main.3e1734cd.js",
     "static/js/453.a6a97343.chunk.js": "/CSIT314-T05-CodeCrusaders/static/js/453.a6a97343.chunk.js",
     "index.html": "/CSIT314-T05-CodeCrusaders/index.html",
     "main.2384dec2.css.map": "/CSIT314-T05-CodeCrusaders/static/css/main.2384dec2.css.map",
-    "main.b0eb9d71.js.map": "/CSIT314-T05-CodeCrusaders/static/js/main.b0eb9d71.js.map",
+    "main.3e1734cd.js.map": "/CSIT314-T05-CodeCrusaders/static/js/main.3e1734cd.js.map",
     "453.a6a97343.chunk.js.map": "/CSIT314-T05-CodeCrusaders/static/js/453.a6a97343.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.2384dec2.css",
-    "static/js/main.b0eb9d71.js"
+    "static/js/main.3e1734cd.js"
   ]
 }
