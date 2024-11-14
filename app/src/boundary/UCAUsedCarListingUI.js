@@ -4,8 +4,10 @@ import { Util } from "../Util";
 import Chart from 'chart.js/auto';
 import "./UCAUsedCarListingUI.css";
 import { UserLogoutController } from "../controller/UserAuthController";
-import { UCACreateUsedCarController, UCAViewUsedCarController, UCAUpdateUsedCarController, UCADeleteUsedCarController, UCASearchUsedCarController, 
-    UCATrackViewCountController, UCATrackShortlistCountController } from "../controller/UCAUsedCarController";
+import {
+    UCACreateUsedCarController, UCAViewUsedCarController, UCAUpdateUsedCarController, UCADeleteUsedCarController, UCASearchUsedCarController,
+    UCATrackViewCountController, UCATrackShortlistCountController
+} from "../controller/UCAUsedCarController";
 
 import Swal from 'sweetalert2';
 
@@ -91,19 +93,19 @@ function UCAUsedCarListingUI() {
                     </div>
                     <div class="item">
                         <label>Price ($)</label>
-                        <input type="number" id="price" class="swal2-input" placeholder="Ex) 150000">
+                        <input type="number" id="price" class="swal2-input" placeholder="Ex) 150000" min="0">
                     </div>
                     <div class="item">
                         <label>Manufacture Year</label>
-                        <input type="number" id="manufacture_year" class="swal2-input" placeholder="Ex) 2021">
+                        <input type="number" id="manufacture_year" class="swal2-input" placeholder="Ex) 2021" min="0">
                     </div>
                     <div class="item">
                         <label>Mileage (km)</label>
-                        <input type="number" id="mileage" class="swal2-input" placeholder="Ex) 100000">
+                        <input type="number" id="mileage" class="swal2-input" placeholder="Ex) 100000" min="0">
                     </div>
                     <div class="item">
                         <label>Engine Capacity (CC)</label>
-                        <input type="number" id="engine_cap" class="swal2-input" placeholder="Ex) 1500">
+                        <input type="number" id="engine_cap" class="swal2-input" placeholder="Ex) 1500" min="0">
                     </div>
                     <div class="item">
                         <label>Features</label>
@@ -175,10 +177,13 @@ function UCAUsedCarListingUI() {
                 if (!seller_username || !car_name || !car_type || !car_manufacturer || !car_image || !description || !features || !price || !mileage || !manufacture_year || !engine_cap) {
                     Swal.showValidationMessage(`Please fill in all fields`);
                     return false;
+                } else if (mileage < 0 || price < 0 || manufacture_year < 0 || engine_cap < 0) {
+                    Swal.showValidationMessage(`Number fields cannot be negative`);
+                    return false;
                 }
-                else {
-                    Swal.fire("Product Created!");
-                }
+                // else {
+                //     Swal.fire("Product Created!");
+                // }
 
                 return { usedCarId, seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap };
             },
@@ -324,7 +329,7 @@ function UCAUsedCarListingUI() {
                     </div>
                     <div class="item">
                         <label>Car Name</label>
-                        <input type="text" id="car_name" class="swal2-input" value="${usedCar.body.car_name}">
+                        <input type="text" id="car_name_input" class="swal2-input" value="${usedCar.body.car_name}">
                     </div>
                     <div class="item">
                         <label>Car Type</label>
@@ -343,19 +348,19 @@ function UCAUsedCarListingUI() {
                     </div>
                     <div class="item">
                         <label>Price ($)</label>
-                        <input type="number" id="price" class="swal2-input" value=${usedCar.body.price}>
+                        <input type="number" id="price" class="swal2-input" value=${usedCar.body.price} min="0">
                     </div>
                     <div class="item">
                         <label>Manufacture Year</label>
-                        <input type="number" id="manufacture_year" class="swal2-input" value=${usedCar.body.manufacture_year}>
+                        <input type="number" id="manufacture_year" class="swal2-input" value=${usedCar.body.manufacture_year} min="0">
                     </div>
                     <div class="item">
                         <label>Mileage (km)</label>
-                        <input type="number" id="mileage" class="swal2-input" value=${usedCar.body.mileage}>
+                        <input type="number" id="mileage" class="swal2-input" value=${usedCar.body.mileage} min="0">
                     </div>
                     <div class="item">
                         <label>Engine Capacity (cc)</label>
-                        <input type="number" id="engine_cap" class="swal2-input" value=${usedCar.body.engine_cap}>
+                        <input type="number" id="engine_cap" class="swal2-input" value=${usedCar.body.engine_cap} min="0">
                     </div>
                     <div class="item">
                         <label>Features</label>
@@ -371,7 +376,7 @@ function UCAUsedCarListingUI() {
             focusConfirm: false,
             preConfirm: () => {
                 const seller_username = document.getElementById('seller_username').value;
-                const car_name = document.getElementById('car_name').value;
+                const car_name = document.getElementById('car_name_input').value;
                 const car_type = document.getElementById('car_type').value;
                 const car_manufacturer = document.getElementById('car_manufacturer').value;
                 const car_image = document.getElementById('car_image').files[0];
@@ -382,8 +387,23 @@ function UCAUsedCarListingUI() {
                 const manufacture_year = document.getElementById('manufacture_year').value;
                 const engine_cap = document.getElementById('engine_cap').value;
 
+                console.log(seller_username)
+                console.log(car_name)
+                console.log(car_type)
+                console.log(car_manufacturer)
+                console.log(car_image)
+                console.log(description)
+                console.log(features)
+                console.log(price)
+                console.log(mileage)
+                console.log(manufacture_year)
+                console.log(engine_cap)
+
                 if (!seller_username || !car_name || !car_type || !car_manufacturer || !description || !features || !price || !mileage || !manufacture_year || !engine_cap) {
                     Swal.showValidationMessage(`Please fill in all fields`);
+                    return false;
+                } else if (mileage < 0 || price < 0 || manufacture_year < 0 || engine_cap < 0) {
+                    Swal.showValidationMessage(`Number fields cannot be negative`);
                     return false;
                 }
                 return { seller_username, car_name, car_type, car_manufacturer, car_image, description, features, price, mileage, manufacture_year, engine_cap };
@@ -472,6 +492,7 @@ function UCAUsedCarListingUI() {
             });
             return;
         } else {
+            console.log(searchResult);
             const carData = searchResult.map(doc => ({
                 usedCarId: doc.id,
                 car_name: doc.car_name,

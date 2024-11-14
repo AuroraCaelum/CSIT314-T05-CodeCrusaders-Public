@@ -104,7 +104,7 @@ function BuyerUsedCarUI() {
 
     const viewUsedCar = async (usedCarId) => {
         console.log('Fetching used Car for:', usedCarId);
-        
+
         const updatedCars = cars.map(car => {
             if (car.usedCarId === usedCarId) {
                 car.view_count += 1;
@@ -283,8 +283,13 @@ function BuyerUsedCarUI() {
                     interestRateInput = document.getElementById('interestRate').value;
                     loanTermInput = document.getElementById('loanTerm').value;
 
-                    if ( !priceInput || !interestRateInput || !loanTermInput) {
+                    if (!priceInput || !interestRateInput || !loanTermInput) {
                         Swal.showValidationMessage(`Please provide both an interest rate and a loan term`);
+                        return;
+                    }
+
+                    if (priceInput < 0 || interestRateInput < 0 || loanTermInput < 0) {
+                        Swal.showValidationMessage('Values cannot be negative');
                         return;
                     }
 
