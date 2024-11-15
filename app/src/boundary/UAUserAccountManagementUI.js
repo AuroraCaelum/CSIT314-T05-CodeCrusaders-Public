@@ -29,7 +29,7 @@ function UAUserAccountManagementUI() {
             setUsers(userData);
         }
     };
-    
+
     const fetchUserProfiles = async () => {
         const snapshot = await Util.getUserProfiles();
         if (snapshot !== null) {
@@ -145,7 +145,7 @@ function UAUserAccountManagementUI() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 const { username, fName, lName, password, phoneNum, email, userProfile } = result.value;
-                console.log('New Account Details:', {fName,lName,username,password,phoneNum,email,userProfile});
+                console.log('New Account Details:', { fName, lName, username, password, phoneNum, email, userProfile });
                 // logic for handle account creation (call Controller)
                 const uaCreateUserAccountController = new UACreateUserAccountController();
                 const isSuccess = await uaCreateUserAccountController.createUserAccount(username, fName, lName, password, phoneNum, email, userProfile);
@@ -311,7 +311,7 @@ function UAUserAccountManagementUI() {
             }
         });
     }
-    
+
     const searchUserAccount = async () => {
         const usernameInput = document.getElementById('searchUsername');
 
@@ -375,9 +375,6 @@ function UAUserAccountManagementUI() {
     const handleBack = () => {
         window.history.back();
     };
-    // <input type="text" placeholder="Search by username" value={username} onChange={(e) => setSearchUsername(e.target.value)}
-    //                 //className="search-input"
-    //                 />
 
     return (
         <div className="uamContainer">
@@ -399,9 +396,9 @@ function UAUserAccountManagementUI() {
 
             <div className="uamSearch-bar">
                 <span>
-                    <input id="searchUsername" className="uamSearch-input" placeholder="Search by username"/>
+                    <input id="searchUsername" className="uamSearch-input" placeholder="Search by username" />
                     <button onClick={searchUserAccount} className="uamSearch-button">
-                            Search
+                        Search
                     </button>
                 </span>
 

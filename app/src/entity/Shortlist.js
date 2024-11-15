@@ -49,13 +49,6 @@ class Shortlist {
             let priceMin = priceRange[0];
             let priceMax = priceRange[1];
 
-            console.log(priceMin);
-            console.log(priceMax);
-            console.log(username);
-            console.log(carName);
-            console.log(carType);
-            console.log(manufactureYear);
-
             const conditions = [];
 
             conditions.push(where("username", "==", username));

@@ -73,7 +73,6 @@ function BuyerUsedCarUI() {
             filterCriteria.car_type,
             filterCriteria.priceRange,
             filterCriteria.manufactureYear,
-            // Cookies.get('username')
         );
 
 
@@ -282,7 +281,7 @@ function BuyerUsedCarUI() {
                     interestRateInput = document.getElementById('interestRate').value;
                     loanTermInput = document.getElementById('loanTerm').value;
 
-                    if ( !priceInput || !interestRateInput || !loanTermInput) {
+                    if (!priceInput || !interestRateInput || !loanTermInput) {
                         Swal.showValidationMessage('Please fill all fields.');
                         return;
                     }
