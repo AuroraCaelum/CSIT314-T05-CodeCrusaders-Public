@@ -136,10 +136,6 @@ function UCAUsedCarListingUI() {
 
                 console.log({ seller_username_input, car_name_input, car_type_input, car_manufacturer_input, car_image_input, description_input, features_input, price_input, mileage_input, manufacture_year_input, engine_cap_input });
 
-                // if (!seller_username_input || !car_name_input || !car_type_input || !car_manufacturer_input) {
-                //     console.error("One or more inputs are not found.");
-                // }
-
                 const handleEnterKey = (event) => {
                     if (event.key === 'Enter') {
                         Swal.clickConfirm();
@@ -400,18 +396,6 @@ function UCAUsedCarListingUI() {
                 const mileage = document.getElementById('mileage').value;
                 const manufacture_year = document.getElementById('manufacture_year').value;
                 const engine_cap = document.getElementById('engine_cap').value;
-
-                console.log(seller_username)
-                console.log(car_name)
-                console.log(car_type)
-                console.log(car_manufacturer)
-                console.log(car_image)
-                console.log(description)
-                console.log(features)
-                console.log(price)
-                console.log(mileage)
-                console.log(manufacture_year)
-                console.log(engine_cap)
 
                 if (!seller_username || !car_name || !car_type || !car_manufacturer || !description || !features || !price || !mileage || !manufacture_year || !engine_cap) {
                     Swal.showValidationMessage(`Please fill in all fields`);

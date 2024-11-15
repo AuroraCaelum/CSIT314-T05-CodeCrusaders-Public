@@ -8,8 +8,7 @@ class BuyerViewShortlistController {
         try {
             const usedCar = new UsedCar();
             const carData = await usedCar.viewUsedCar(usedCarId);
-            console.log("Car Data(C):", carData);
-            return carData ;
+            return carData;
         } catch (error) {
             console.error('Error viewing used car:', error);
             return error;

@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+// import React, { useEffect, useState } from "react";
+import React from "react";
 import Cookies from "js-cookie";
 import Chart from 'chart.js/auto';
 import "./SellerUsedCarUI.css";
@@ -10,8 +11,8 @@ import { SellerLeaveRateReviewController } from "../controller/SellerRateReviewC
 import Swal from 'sweetalert2';
 
 function SellerUsedCarUI() {
-    const [username] = useState(Cookies.get("username"));
-    const [cars, setCars] = useState([]);
+    const [username] = React.useState(Cookies.get("username"));
+    const [cars, setCars] = React.useState([]);
 
     const fetchCars = async () => {
         const snapshot = await Util.getUsedCarListByUsername('seller', username);
@@ -36,7 +37,7 @@ function SellerUsedCarUI() {
         }
     };
 
-    useEffect(() => {
+    React.useEffect(() => {
         fetchCars();
     }, []);
 
@@ -509,13 +510,13 @@ function SellerUsedCarUI() {
                         <span>{car.manufacture_year}</span>
                         <span>{car.mileage.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</span>
                         <span>${car.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</span>
-                        <button onClick={() => viewUsedCar(car.usedCarId)} className="sucView-button">
+                        <button onClick={() => viewUsedCar(car.usedCarId)} className="sucView-button" data-testid="view-used-car-test">
                             View
                         </button>
                         <span>
                             <div className="counter-display">
                                 <span onClick={() => trackViewCount(car.usedCarId)} title="Click to track view count"><img src={"viewIcon.png"} data-testid="viewIcon" alt="Inspect" className="uclInspect-png-image" />{car.view_count}</span>  {/* Display inspect count with an icon */}
-                                <span onClick={() => trackShortlistCount(car.usedCarId)} title="Click to track shortlist count"><img src={"saveShortlistIcon.png"} alt="Shortlist" className="uclShortlist-png-image" />{car.shortlist_count}</span>  {/* Display shortlist count with an icon */}
+                                <span onClick={() => trackShortlistCount(car.usedCarId)} title="Click to track shortlist count"><img src={"saveShortlistIcon.png"} data-testid="shortlistIcon" alt="Shortlist" className="uclShortlist-png-image" />{car.shortlist_count}</span>  {/* Display shortlist count with an icon */}
                             </div>
                         </span>
                     </div>

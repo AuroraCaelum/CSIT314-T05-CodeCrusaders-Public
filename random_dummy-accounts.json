@@ -1,0 +1,1002 @@
+[
+    {
+        "email": "usedcaragent@example.com",
+        "fName": "Douglas",
+        "lName": "Walker",
+        "password": "usedcaragentpw",
+        "phoneNum": "3456 7890",
+        "suspended": false,
+        "userProfile": "UsedCarAgent",
+        "username": "usedcaragent"
+    },
+    {
+        "email": "buyer@example.com",
+        "fName": "Patrick",
+        "lName": "Allen",
+        "password": "buyerpw",
+        "phoneNum": "4567 8901",
+        "suspended": false,
+        "userProfile": "Buyer",
+        "username": "buyer"
+    },
+    {
+        "email": "seller@example.com",
+        "fName": "Rebecca",
+        "lName": "Martin",
+        "password": "sellerpw",
+        "phoneNum": "8901 3456",
+        "suspended": true,
+        "userProfile": "Seller",
+        "username": "seller"
+    },
+    {
+        "email": "useradmin@example.com",
+        "fName": "Katherine",
+        "lName": "Wilson",
+        "password": "useradminpw",
+        "phoneNum": "8901 4567",
+        "suspended": false,
+        "userProfile": "UserAdmin",
+        "username": "useradmin"
+    },
+    {
+        "email": "ryanadams@example.com",
+        "fName": "Ryan",
+        "lName": "Adams",
+        "password": "mypassword5",
+        "phoneNum": "9012 3456",
+        "suspended": false,
+        "userProfile": "OnlineBuyer",
+        "username": "ryan_adams"
+    },
+    {
+        "email": "marymartin@example.com",
+        "fName": "Mary",
+        "lName": "Martin",
+        "password": "loginme123",
+        "phoneNum": "1234 5678",
+        "suspended": true,
+        "userProfile": "OnlineBuyer",
+        "username": "mary_martin"
+    },
+    {
+        "email": "phildavis@example.com",
+        "fName": "Phil",
+        "lName": "Davis",
+        "password": "mypassword3",
+        "phoneNum": "6789 0123",
+        "suspended": true,
+        "userProfile": "UserAdmin",
+        "username": "phil_davis"
+    },
+    {
+        "email": "jamesmorgan@example.com",
+        "fName": "James",
+        "lName": "Morgan",
+        "password": "password1",
+        "phoneNum": "6789 2345",
+        "suspended": false,
+        "userProfile": "AuctionLuxurySeller",
+        "username": "james_morgan"
+    },
+    {
+        "email": "bettyhill@example.com",
+        "fName": "Betty",
+        "lName": "Hill",
+        "password": "login1234",
+        "phoneNum": "1234 5678",
+        "suspended": false,
+        "userProfile": "PolicyManager",
+        "username": "betty_hill"
+    },
+    {
+        "email": "melissaking@example.com",
+        "fName": "Melissa",
+        "lName": "King",
+        "password": "hellothere",
+        "phoneNum": "9012 6789",
+        "suspended": false,
+        "userProfile": "DigitalAutoAgent",
+        "username": "melissa_king"
+    },
+    {
+        "email": "karenperez@example.com",
+        "fName": "Karen",
+        "lName": "Perez",
+        "password": "easyaccess",
+        "phoneNum": "1234 5678",
+        "suspended": false,
+        "userProfile": "PolicyManager",
+        "username": "karen_perez"
+    },
+    {
+        "email": "garyjohnson@example.com",
+        "fName": "Gary",
+        "lName": "Johnson",
+        "password": "openme",
+        "phoneNum": "4567 8901",
+        "suspended": false,
+        "userProfile": "PolicyManager",
+        "username": "gary_johnson"
+    },
+    {
+        "email": "briancarter@example.com",
+        "fName": "Brian",
+        "lName": "Carter",
+        "password": "letmeinnow",
+        "phoneNum": "6789 0123",
+        "suspended": false,
+        "userProfile": "AuctionLuxurySeller",
+        "username": "brian_carter"
+    },
+    {
+        "email": "edwardgreen@example.com",
+        "fName": "Edward",
+        "lName": "Green",
+        "password": "letmein123",
+        "phoneNum": "9012 4567",
+        "suspended": false,
+        "userProfile": "UserAdmin",
+        "username": "edward_green"
+    },
+    {
+        "email": "carolynmoore@example.com",
+        "fName": "Carolyn",
+        "lName": "Moore",
+        "password": "mypassword2",
+        "phoneNum": "9012 3456",
+        "suspended": false,
+        "userProfile": "PolicyManager",
+        "username": "carolyn_moore"
+    },
+    {
+        "email": "jeremymiller@example.com",
+        "fName": "Jeremy",
+        "lName": "Miller",
+        "password": "simpleword",
+        "phoneNum": "8901 2345",
+        "suspended": false,
+        "userProfile": "OnlineBuyer",
+        "username": "jeremy_miller"
+    },
+    {
+        "email": "angelaperkins@example.com",
+        "fName": "Angela",
+        "lName": "Perkins",
+        "password": "loginme",
+        "phoneNum": "2345 6789",
+        "suspended": false,
+        "userProfile": "BMWCarBuyer",
+        "username": "angela_perkins"
+    },
+    {
+        "email": "judybutler@example.com",
+        "fName": "Judy",
+        "lName": "Butler",
+        "password": "secure123",
+        "phoneNum": "3456 7890",
+        "suspended": false,
+        "userProfile": "SUVSpecialist",
+        "username": "judy_butler"
+    },
+    {
+        "email": "steveharris@example.com",
+        "fName": "Steve",
+        "lName": "Harris",
+        "password": "mypassword2",
+        "phoneNum": "6789 0123",
+        "suspended": true,
+        "userProfile": "AuctionLuxurySeller",
+        "username": "steve_harris"
+    },
+    {
+        "email": "kevinadams@example.com",
+        "fName": "Kevin",
+        "lName": "Adams",
+        "password": "passphrase1",
+        "phoneNum": "4567 7890",
+        "suspended": false,
+        "userProfile": "SUVSpecialist",
+        "username": "kevin_adams"
+    },
+    {
+        "email": "georgeclark@example.com",
+        "fName": "George",
+        "lName": "Clark",
+        "password": "entryword",
+        "phoneNum": "8901 1234",
+        "suspended": false,
+        "userProfile": "OnlineBuyer",
+        "username": "george_clark"
+    },
+    {
+        "email": "amandathomas@example.com",
+        "fName": "Amanda",
+        "lName": "Thomas",
+        "password": "open123",
+        "phoneNum": "9012 3456",
+        "suspended": true,
+        "userProfile": "PolicyManager",
+        "username": "amanda_thomas"
+    },
+    {
+        "email": "lauraharris@example.com",
+        "fName": "Laura",
+        "lName": "Harris",
+        "password": "accesskey",
+        "phoneNum": "3456 9012",
+        "suspended": false,
+        "userProfile": "BMWCarBuyer",
+        "username": "laura_harris"
+    },
+    {
+        "email": "stevenmiller@example.com",
+        "fName": "Steven",
+        "lName": "Miller",
+        "password": "simplepass",
+        "phoneNum": "4567 8901",
+        "suspended": false,
+        "userProfile": "Seller",
+        "username": "steven_miller"
+    },
+    {
+        "email": "nancyrobinson@example.com",
+        "fName": "Nancy",
+        "lName": "Robinson",
+        "password": "mysecret",
+        "phoneNum": "7890 4567",
+        "suspended": false,
+        "userProfile": "UserAdmin",
+        "username": "nancy_robinson"
+    },
+    {
+        "email": "kylemitchell@example.com",
+        "fName": "Kyle",
+        "lName": "Mitchell",
+        "password": "letmein123",
+        "phoneNum": "2345 6789",
+        "suspended": true,
+        "userProfile": "UsedCarAgent",
+        "username": "kyle_mitchell"
+    },
+    {
+        "email": "bradleymartin@example.com",
+        "fName": "Bradley",
+        "lName": "Martin",
+        "password": "login123",
+        "phoneNum": "8901 4567",
+        "suspended": false,
+        "userProfile": "OnlineBuyer",
+        "username": "bradley_martin"
+    },
+    {
+        "email": "ericjohnson@example.com",
+        "fName": "Eric",
+        "lName": "Johnson",
+        "password": "letmein",
+        "phoneNum": "2345 6789",
+        "suspended": false,
+        "userProfile": "UsedCarAgent",
+        "username": "eric_johnson"
+    },
+    {
+        "email": "adambaker@example.com",
+        "fName": "Adam",
+        "lName": "Baker",
+        "password": "easyaccess",
+        "phoneNum": "1234 5678",
+        "suspended": false,
+        "userProfile": "SUVSpecialist",
+        "username": "adam_baker"
+    },
+    {
+        "email": "nancytaylor@example.com",
+        "fName": "Nancy",
+        "lName": "Taylor",
+        "password": "passentry",
+        "phoneNum": "3456 7890",
+        "suspended": false,
+        "userProfile": "OnlineBuyer",
+        "username": "nancy_taylor"
+    },
+    {
+        "email": "karenmorris@example.com",
+        "fName": "Karen",
+        "lName": "Morris",
+        "password": "accessopen",
+        "phoneNum": "0123 4567",
+        "suspended": false,
+        "userProfile": "UserAdmin",
+        "username": "karen_morris"
+    },
+    {
+        "email": "lindabrown@example.com",
+        "fName": "Linda",
+        "lName": "Brown",
+        "password": "mypassword",
+        "phoneNum": "3456 7890",
+        "suspended": false,
+        "userProfile": "Buyer",
+        "username": "linda_brown"
+    },
+    {
+        "email": "ronaldscott@example.com",
+        "fName": "Ronald",
+        "lName": "Scott",
+        "password": "openup123",
+        "phoneNum": "2345 6789",
+        "suspended": false,
+        "userProfile": "PolicyManager",
+        "username": "ronald_scott"
+    },
+    {
+        "email": "amberclark@example.com",
+        "fName": "Amber",
+        "lName": "Clark",
+        "password": "mykeypass",
+        "phoneNum": "9012 3456",
+        "suspended": false,
+        "userProfile": "Seller",
+        "username": "amber_clark"
+    },
+    {
+        "email": "frankyoung@example.com",
+        "fName": "Frank",
+        "lName": "Young",
+        "password": "entrypass",
+        "phoneNum": "6789 1234",
+        "suspended": false,
+        "userProfile": "BMWCarBuyer",
+        "username": "frank_young"
+    },
+    {
+        "email": "henrywhite@example.com",
+        "fName": "Henry",
+        "lName": "White",
+        "password": "securepass",
+        "phoneNum": "2345 6789",
+        "suspended": false,
+        "userProfile": "SUVSpecialist",
+        "username": "henry_white"
+    },
+    {
+        "email": "meganmorris@example.com",
+        "fName": "Megan",
+        "lName": "Morris",
+        "password": "simplepass",
+        "phoneNum": "3456 7890",
+        "suspended": false,
+        "userProfile": "Buyer",
+        "username": "megan_morris"
+    },
+    {
+        "email": "lisajones@example.com",
+        "fName": "Lisa",
+        "lName": "Jones",
+        "password": "easyword",
+        "phoneNum": "3456 7890",
+        "suspended": false,
+        "userProfile": "UserAdmin",
+        "username": "lisa_jones"
+    },
+    {
+        "email": "emilyrobinson@example.com",
+        "fName": "Emily",
+        "lName": "Robinson",
+        "password": "simplepass1",
+        "phoneNum": "5678 9012",
+        "suspended": false,
+        "userProfile": "UsedCarAgent",
+        "username": "emily_robinson"
+    },
+    {
+        "email": "thomasanderson@example.com",
+        "fName": "Thomas",
+        "lName": "Anderson",
+        "password": "unlockit",
+        "phoneNum": "5678 1234",
+        "suspended": false,
+        "userProfile": "UsedCarAgent",
+        "username": "thomas_anderson"
+    },
+    {
+        "email": "danielmiller@example.com",
+        "fName": "Daniel",
+        "lName": "Miller",
+        "password": "mysecure",
+        "phoneNum": "7890 3456",
+        "suspended": true,
+        "userProfile": "Seller",
+        "username": "daniel_miller"
+    },
+    {
+        "email": "charlesmurphy@example.com",
+        "fName": "Charles",
+        "lName": "Murphy",
+        "password": "unlockkey",
+        "phoneNum": "9012 3456",
+        "suspended": false,
+        "userProfile": "DigitalAutoAgent",
+        "username": "charles_murphy"
+    },
+    {
+        "email": "rachelwilson@example.com",
+        "fName": "Rachel",
+        "lName": "Wilson",
+        "password": "easyaccess",
+        "phoneNum": "7890 1234",
+        "suspended": false,
+        "userProfile": "PolicyManager",
+        "username": "rachel_wilson"
+    },
+    {
+        "email": "jasonclark@example.com",
+        "fName": "Jason",
+        "lName": "Clark",
+        "password": "mypassword1",
+        "phoneNum": "5678 9012",
+        "suspended": false,
+        "userProfile": "Seller",
+        "username": "jason_clark"
+    },
+    {
+        "email": "dorothyjohnson@example.com",
+        "fName": "Dorothy",
+        "lName": "Johnson",
+        "password": "entryway",
+        "phoneNum": "7890 1234",
+        "suspended": true,
+        "userProfile": "Seller",
+        "username": "dorothy_johnson"
+    },
+    {
+        "email": "jenniferwilson@example.com",
+        "fName": "Jennifer",
+        "lName": "Wilson",
+        "password": "mypass123",
+        "phoneNum": "7890 1234",
+        "suspended": false,
+        "userProfile": "DigitalAutoAgent",
+        "username": "jennifer_wilson"
+    },
+    {
+        "email": "debbietaylor@example.com",
+        "fName": "Debbie",
+        "lName": "Taylor",
+        "password": "unlockme",
+        "phoneNum": "5678 9012",
+        "suspended": false,
+        "userProfile": "UserAdmin",
+        "username": "debbie_taylor"
+    },
+    {
+        "email": "michaelcarter@example.com",
+        "fName": "Michael",
+        "lName": "Carter",
+        "password": "openpass",
+        "phoneNum": "7890 1234",
+        "suspended": true,
+        "userProfile": "UserAdmin",
+        "username": "michael_carter"
+    },
+    {
+        "email": "richardthomas@example.com",
+        "fName": "Richard",
+        "lName": "Thomas",
+        "password": "easylog",
+        "phoneNum": "2345 8901",
+        "suspended": false,
+        "userProfile": "Seller",
+        "username": "richard_thomas"
+    },
+    {
+        "email": "andrewwright@example.com",
+        "fName": "Andrew",
+        "lName": "Wright",
+        "password": "simple123",
+        "phoneNum": "4567 9012",
+        "suspended": true,
+        "userProfile": "SUVSpecialist",
+        "username": "andrew_wright"
+    },
+    {
+        "email": "nicholasking@example.com",
+        "fName": "Nicholas",
+        "lName": "King",
+        "password": "securepass",
+        "phoneNum": "1234 5678",
+        "suspended": false,
+        "userProfile": "SUVSpecialist",
+        "username": "nicholas_king"
+    },
+    {
+        "email": "martinjames@example.com",
+        "fName": "Martin",
+        "lName": "James",
+        "password": "openmeup",
+        "phoneNum": "1234 5678",
+        "suspended": false,
+        "userProfile": "PolicyManager",
+        "username": "martin_james"
+    },
+    {
+        "email": "chrisrobinson@example.com",
+        "fName": "Chris",
+        "lName": "Robinson",
+        "password": "accessopen",
+        "phoneNum": "7890 1234",
+        "suspended": false,
+        "userProfile": "AuctionLuxurySeller",
+        "username": "chris_robinson"
+    },
+    {
+        "email": "paulmartin@example.com",
+        "fName": "Paul",
+        "lName": "Martin",
+        "password": "accessnow",
+        "phoneNum": "5678 2345",
+        "suspended": false,
+        "userProfile": "AuctionLuxurySeller",
+        "username": "paul_martin"
+    },
+    {
+        "email": "charlesgreen@example.com",
+        "fName": "Charles",
+        "lName": "Green",
+        "password": "mypassword1",
+        "phoneNum": "6789 0123",
+        "suspended": false,
+        "userProfile": "OnlineBuyer",
+        "username": "charles_green"
+    },
+    {
+        "email": "kevinreed@example.com",
+        "fName": "Kevin",
+        "lName": "Reed",
+        "password": "logmein",
+        "phoneNum": "3456 7890",
+        "suspended": true,
+        "userProfile": "BMWCarBuyer",
+        "username": "kevin_reed"
+    },
+    {
+        "email": "tiffanymartin@example.com",
+        "fName": "Tiffany",
+        "lName": "Martin",
+        "password": "passphrase",
+        "phoneNum": "4567 8901",
+        "suspended": false,
+        "userProfile": "Buyer",
+        "username": "tiffany_martin"
+    },
+    {
+        "email": "nathanrogers@example.com",
+        "fName": "Nathan",
+        "lName": "Rogers",
+        "password": "entryword",
+        "phoneNum": "8901 2345",
+        "suspended": false,
+        "userProfile": "DigitalAutoAgent",
+        "username": "nathan_rogers"
+    },
+    {
+        "email": "georgewood@example.com",
+        "fName": "George",
+        "lName": "Wood",
+        "password": "entry123",
+        "phoneNum": "5678 9012",
+        "suspended": false,
+        "userProfile": "Buyer",
+        "username": "george_wood"
+    },
+    {
+        "email": "paulmartinez@example.com",
+        "fName": "Paul",
+        "lName": "Martinez",
+        "password": "mypassword5",
+        "phoneNum": "6789 0123",
+        "suspended": false,
+        "userProfile": "Buyer",
+        "username": "paul_martinez"
+    },
+    {
+        "email": "laurafoster@example.com",
+        "fName": "Laura",
+        "lName": "Foster",
+        "password": "simpleword",
+        "phoneNum": "4567 8901",
+        "suspended": false,
+        "userProfile": "UsedCarAgent",
+        "username": "laura_foster"
+    },
+    {
+        "email": "johndoe@example.com",
+        "fName": "John",
+        "lName": "Doe",
+        "password": "simplepass",
+        "phoneNum": "1234 5678",
+        "suspended": false,
+        "userProfile": "UsedCarAgent",
+        "username": "john_doe"
+    },
+    {
+        "email": "brandonclark@example.com",
+        "fName": "Brandon",
+        "lName": "Clark",
+        "password": "easylogin",
+        "phoneNum": "8901 2345",
+        "suspended": false,
+        "userProfile": "OnlineBuyer",
+        "username": "brandon_clark"
+    },
+    {
+        "email": "alexanderwhite@example.com",
+        "fName": "Alexander",
+        "lName": "White",
+        "password": "secureword",
+        "phoneNum": "0123 4567",
+        "suspended": false,
+        "userProfile": "UsedCarAgent",
+        "username": "alexander_white"
+    },
+    {
+        "email": "patriciarobinson@example.com",
+        "fName": "Patricia",
+        "lName": "Robinson",
+        "password": "helloall",
+        "phoneNum": "3456 7890",
+        "suspended": true,
+        "userProfile": "PolicyManager",
+        "username": "patricia_robinson"
+    },
+    {
+        "email": "alyssadavis@example.com",
+        "fName": "Alyssa",
+        "lName": "Davis",
+        "password": "simplekey",
+        "phoneNum": "2345 6789",
+        "suspended": false,
+        "userProfile": "BMWCarBuyer",
+        "username": "alyssa_davis"
+    },
+    {
+        "email": "carolking@example.com",
+        "fName": "Carol",
+        "lName": "King",
+        "password": "helloagain",
+        "phoneNum": "5678 0123",
+        "suspended": false,
+        "userProfile": "BMWCarBuyer",
+        "username": "carol_king"
+    },
+    {
+        "email": "dennismorris@example.com",
+        "fName": "Dennis",
+        "lName": "Morris",
+        "password": "open123",
+        "phoneNum": "7890 2345",
+        "suspended": false,
+        "userProfile": "Buyer",
+        "username": "dennis_morris"
+    },
+    {
+        "email": "samanthaclark@example.com",
+        "fName": "Samantha",
+        "lName": "Clark",
+        "password": "mypassword2",
+        "phoneNum": "3456 8901",
+        "suspended": false,
+        "userProfile": "PolicyManager",
+        "username": "samantha_clark"
+    },
+    {
+        "email": "janepatterson@example.com",
+        "fName": "Jane",
+        "lName": "Patterson",
+        "password": "password1234",
+        "phoneNum": "8901 2345",
+        "suspended": false,
+        "userProfile": "AuctionLuxurySeller",
+        "username": "jane_patterson"
+    },
+    {
+        "email": "sandraharris@example.com",
+        "fName": "Sandra",
+        "lName": "Harris",
+        "password": "welcome123",
+        "phoneNum": "5678 9012",
+        "suspended": false,
+        "userProfile": "UserAdmin",
+        "username": "sandra_harris"
+    },
+    {
+        "email": "carolmorris@example.com",
+        "fName": "Carol",
+        "lName": "Morris",
+        "password": "simplelog",
+        "phoneNum": "5678 9012",
+        "suspended": false,
+        "userProfile": "Seller",
+        "username": "carol_morris"
+    },
+    {
+        "email": "amytaylor@example.com",
+        "fName": "Amy",
+        "lName": "Taylor",
+        "password": "letmein123",
+        "phoneNum": "8901 2345",
+        "suspended": false,
+        "userProfile": "DigitalAutoAgent",
+        "username": "amy_taylor"
+    },
+    {
+        "email": "ronaldadams@example.com",
+        "fName": "Ronald",
+        "lName": "Adams",
+        "password": "myentry",
+        "phoneNum": "8901 2345",
+        "suspended": true,
+        "userProfile": "Buyer",
+        "username": "ronald_adams"
+    },
+    {
+        "email": "dianaroberts@example.com",
+        "fName": "Diana",
+        "lName": "Roberts",
+        "password": "mypassword3",
+        "phoneNum": "1234 5678",
+        "suspended": false,
+        "userProfile": "AuctionLuxurySeller",
+        "username": "diana_roberts"
+    },
+    {
+        "email": "craighall@example.com",
+        "fName": "Craig",
+        "lName": "Hall",
+        "password": "unlockme",
+        "phoneNum": "6789 0123",
+        "suspended": false,
+        "userProfile": "BMWCarBuyer",
+        "username": "craig_hall"
+    },
+    {
+        "email": "donaldhall@example.com",
+        "fName": "Donald",
+        "lName": "Hall",
+        "password": "simplekey",
+        "phoneNum": "2345 7890",
+        "suspended": false,
+        "userProfile": "OnlineBuyer",
+        "username": "donald_hall"
+    },
+    {
+        "email": "michelleclark@example.com",
+        "fName": "Michelle",
+        "lName": "Clark",
+        "password": "accesskey",
+        "phoneNum": "7890 1234",
+        "suspended": false,
+        "userProfile": "DigitalAutoAgent",
+        "username": "michelle_clark"
+    },
+    {
+        "email": "laurabrown@example.com",
+        "fName": "Laura",
+        "lName": "Brown",
+        "password": "easylogin",
+        "phoneNum": "7890 1234",
+        "suspended": false,
+        "userProfile": "UsedCarAgent",
+        "username": "laura_brown"
+    },
+    {
+        "email": "susanwalker@example.com",
+        "fName": "Susan",
+        "lName": "Walker",
+        "password": "letmein",
+        "phoneNum": "1234 6789",
+        "suspended": true,
+        "userProfile": "DigitalAutoAgent",
+        "username": "susan_walker"
+    },
+    {
+        "email": "sarahprice@example.com",
+        "fName": "Sarah",
+        "lName": "Price",
+        "password": "simple1234",
+        "phoneNum": "2345 6789",
+        "suspended": false,
+        "userProfile": "SUVSpecialist",
+        "username": "sarah_price"
+    },
+    {
+        "email": "jenniferlopez@example.com",
+        "fName": "Jennifer",
+        "lName": "Lopez",
+        "password": "simplepass",
+        "phoneNum": "6789 2345",
+        "suspended": false,
+        "userProfile": "Buyer",
+        "username": "jennifer_lopez"
+    },
+    {
+        "email": "stephencarter@example.com",
+        "fName": "Stephen",
+        "lName": "Carter",
+        "password": "mypassword",
+        "phoneNum": "9012 5678",
+        "suspended": false,
+        "userProfile": "AuctionLuxurySeller",
+        "username": "stephen_carter"
+    },
+    {
+        "email": "sandrakim@example.com",
+        "fName": "Sandra",
+        "lName": "Kim",
+        "password": "welcome123",
+        "phoneNum": "5678 9012",
+        "suspended": false,
+        "userProfile": "DigitalAutoAgent",
+        "username": "sandra_kim"
+    },
+    {
+        "email": "bryanroberts@example.com",
+        "fName": "Bryan",
+        "lName": "Roberts",
+        "password": "mypassword4",
+        "phoneNum": "4567 8901",
+        "suspended": true,
+        "userProfile": "BMWCarBuyer",
+        "username": "bryan_roberts"
+    },
+    {
+        "email": "keithjones@example.com",
+        "fName": "Keith",
+        "lName": "Jones",
+        "password": "simpleword",
+        "phoneNum": "2345 6789",
+        "suspended": true,
+        "userProfile": "DigitalAutoAgent",
+        "username": "keith_jones"
+    },
+    {
+        "email": "michaelbrown@example.com",
+        "fName": "Michael",
+        "lName": "Brown",
+        "password": "password123",
+        "phoneNum": "2345 6789",
+        "suspended": false,
+        "userProfile": "Seller",
+        "username": "michael_brown"
+    },
+    {
+        "email": "deniseyoung@example.com",
+        "fName": "Denise",
+        "lName": "Young",
+        "password": "helloworld",
+        "phoneNum": "7890 1234",
+        "suspended": false,
+        "userProfile": "AuctionLuxurySeller",
+        "username": "denise_young"
+    },
+    {
+        "email": "rebeccahill@example.com",
+        "fName": "Rebecca",
+        "lName": "Hill",
+        "password": "accesspass",
+        "phoneNum": "6789 0123",
+        "suspended": false,
+        "userProfile": "Seller",
+        "username": "rebecca_hill"
+    },
+    {
+        "email": "davidlee@example.com",
+        "fName": "David",
+        "lName": "Lee",
+        "password": "passphrase",
+        "phoneNum": "4567 8901",
+        "suspended": false,
+        "userProfile": "AuctionLuxurySeller",
+        "username": "david_lee"
+    },
+    {
+        "email": "janegreen@example.com",
+        "fName": "Jane",
+        "lName": "Green",
+        "password": "opendoor",
+        "phoneNum": "5678 1234",
+        "suspended": true,
+        "userProfile": "DigitalAutoAgent",
+        "username": "jane_green"
+    },
+    {
+        "email": "monicabrown@example.com",
+        "fName": "Monica",
+        "lName": "Brown",
+        "password": "openentry",
+        "phoneNum": "6789 0123",
+        "suspended": false,
+        "userProfile": "UserAdmin",
+        "username": "monica_brown"
+    },
+    {
+        "email": "rachelmoore@example.com",
+        "fName": "Rachel",
+        "lName": "Moore",
+        "password": "mypass123",
+        "phoneNum": "3456 7890",
+        "suspended": true,
+        "userProfile": "UsedCarAgent",
+        "username": "rachel_moore"
+    },
+    {
+        "email": "deborahparker@example.com",
+        "fName": "Deborah",
+        "lName": "Parker",
+        "password": "accessnow",
+        "phoneNum": "9012 3456",
+        "suspended": true,
+        "userProfile": "OnlineBuyer",
+        "username": "deborah_parker"
+    },
+    {
+        "email": "annasmith@example.com",
+        "fName": "Anna",
+        "lName": "Smith",
+        "password": "mypassword",
+        "phoneNum": "8765 4321",
+        "suspended": false,
+        "userProfile": "BMWCarBuyer",
+        "username": "anna_smith"
+    },
+    {
+        "email": "gregorybrown@example.com",
+        "fName": "Gregory",
+        "lName": "Brown",
+        "password": "mypassword",
+        "phoneNum": "4567 8901",
+        "suspended": false,
+        "userProfile": "SUVSpecialist",
+        "username": "gregory_brown"
+    },
+    {
+        "email": "sophiawong@example.com",
+        "fName": "Sophia",
+        "lName": "Wong",
+        "password": "loginpass",
+        "phoneNum": "9012 3456",
+        "suspended": false,
+        "userProfile": "BMWCarBuyer",
+        "username": "sophia_wong"
+    },
+    {
+        "email": "maryjohnson@example.com",
+        "fName": "Mary",
+        "lName": "Johnson",
+        "password": "simplekey",
+        "phoneNum": "6789 4321",
+        "suspended": false,
+        "userProfile": "Buyer",
+        "username": "mary_johnson"
+    },
+    {
+        "email": "brianwalker@example.com",
+        "fName": "Brian",
+        "lName": "Walker",
+        "password": "openentry",
+        "phoneNum": "8901 2345",
+        "suspended": false,
+        "userProfile": "SUVSpecialist",
+        "username": "brian_walker"
+    },
+    {
+        "email": "sharonmiller@example.com",
+        "fName": "Sharon",
+        "lName": "Miller",
+        "password": "secretkey",
+        "phoneNum": "5678 9012",
+        "suspended": true,
+        "userProfile": "SUVSpecialist",
+        "username": "sharon_miller"
+    }
+]

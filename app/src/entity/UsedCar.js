@@ -99,16 +99,13 @@ class UsedCar {
                 }
             }
 
-            console.log(usedCarId);
-            console.log(carData);
-            console.log(car_image);
             if (car_image != null) {
                 console.log(car_image.name);
                 console.log(car_image.type);
             } else {
                 console.log("Car image is not updated.");
             }
-            
+
             console.log(carData)
             console.log(this.usedCarId)
             // Update the car document in Firestore
@@ -140,11 +137,6 @@ class UsedCar {
             let carQuery = collection(db, 'UsedCar');
             let priceMin = priceRange[0];
             let priceMax = priceRange[1];
-
-            console.log(carName);
-            console.log(carType);
-            console.log(priceMin);
-            console.log(priceMax);
 
             const conditions = [];
 
@@ -322,9 +314,6 @@ class UsedCar {
     static async getUsedCarListByUsername(usertype, username) {
         try {
             const firebaseService = new FirebaseService();
-            // const searchQuery = {
-            //     usertype: username
-            // }
             if (usertype === 'seller') {
                 const usedCar = await firebaseService.searchByFields('UsedCar', { seller_username: username });
                 console.log(usedCar);

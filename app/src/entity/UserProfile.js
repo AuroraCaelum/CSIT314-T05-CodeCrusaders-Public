@@ -53,13 +53,10 @@ class UserProfile {
             // Use this.type as the document ID
             const firebaseService = new FirebaseService();
             await firebaseService.updateDocument("UserProfile", profileName, newProfileData);
-            //Object.assign(this, newProfileData); // Update current instance with new data
             console.log("UserProfile updated successfully");
-            console.log("Success update user profile(E): ", profileName, description, profileType);
 
             return true;
         } catch (error) {
-            console.log("Failed update user profile(E): ", profileName, description, profileType);
             console.error("Error updating user profile:", error);
             return false;
         }
@@ -96,7 +93,7 @@ class UserProfile {
 
             console.log(userProfile)
 
-            if(userProfile.length > 0) {
+            if (userProfile.length > 0) {
                 return userProfile;
             } else {
                 return null;
@@ -124,8 +121,6 @@ class UserProfile {
             // Search for the user by username in Firestore
             const profileData = await this.firebaseService.getDocument('UserProfile', profileName);
             console.log("Profile data:", profileData);
-            // console.log("Params:", username, password);
-            // const userProfile = userData.userProfile;
 
             if (profileData && profileData.profileName === profileName) {
 
