@@ -1,0 +1,42 @@
+[
+    {
+        "email": "vshaffer@hotmail.com",
+        "fName": "Kimberly",
+        "lName": "Howard",
+        "password": "mypassword",
+        "phoneNum": "4065 5114",
+        "suspended": false,
+        "userProfile": "UserAdmin",
+        "username": "david44"
+    },
+    {
+        "email": "lbrandt@hill-rose.net",
+        "fName": "Alicia",
+        "lName": "Nelson",
+        "password": "letmein",
+        "phoneNum": "6524 6228",
+        "suspended": true,
+        "userProfile": "Buyer",
+        "username": "parkererik"
+    },
+    {
+        "email": "taylorjessica@cain-smith.biz",
+        "fName": "Joshua",
+        "lName": "Miller",
+        "password": "simple123",
+        "phoneNum": "8947 6894",
+        "suspended": true,
+        "userProfile": "UsedCarAgent",
+        "username": "brianberg"
+    },
+    {
+        "email": "smorales@hotmail.com",
+        "fName": "Steven",
+        "lName": "Davis",
+        "password": "letmein",
+        "phoneNum": "7293 6858",
+        "suspended": true,
+        "userProfile": "Seller",
+        "username": "rebeccaraymond"
+    }
+]

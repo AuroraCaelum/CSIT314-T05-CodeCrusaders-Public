@@ -1,0 +1,602 @@
+[
+  {
+    "description": "Professional car dealer specializing in luxury vehicles",
+    "profileName": "LuxuryCarDealer",
+    "profileType": "UsedCarAgent",
+    "suspended": false
+  },
+  {
+    "description": "Vintage and classic car specialist",
+    "profileName": "ClassicCarExpert",
+    "profileType": "UsedCarAgent",
+    "suspended": false
+  },
+  {
+    "description": "European car import specialist",
+    "profileName": "EuroCarPro",
+    "profileType": "UsedCarAgent",
+    "suspended": false
+  },
+  {
+    "description": "Online used car marketplace agent",
+    "profileName": "DigitalAutoAgent",
+    "profileType": "UsedCarAgent",
+    "suspended": false
+  },
+  {
+    "description": "Wholesale car dealer for businesses",
+    "profileName": "WholesaleCarPro",
+    "profileType": "UsedCarAgent",
+    "suspended": false
+  },
+  {
+    "description": "Sports car specialist dealer",
+    "profileName": "SportCarDealer",
+    "profileType": "UsedCarAgent",
+    "suspended": false
+  },
+  {
+    "description": "Trusted dealer for family vehicles",
+    "profileName": "FamilyCarExpert",
+    "profileType": "UsedCarAgent",
+    "suspended": false
+  },
+  {
+    "description": "Premium car resale specialist",
+    "profileName": "PremiumAutoTrader",
+    "profileType": "UsedCarAgent",
+    "suspended": false
+  },
+  {
+    "description": "Local community car dealer",
+    "profileName": "LocalAutoExpert",
+    "profileType": "UsedCarAgent",
+    "suspended": false
+  },
+  {
+    "description": "Corporate fleet vehicle specialist",
+    "profileName": "FleetCarPro",
+    "profileType": "UsedCarAgent",
+    "suspended": false
+  },
+  {
+    "description": "High-end vehicle broker",
+    "profileName": "EliteCarBroker",
+    "profileType": "UsedCarAgent",
+    "suspended": false
+  },
+  {
+    "description": "Eco-friendly vehicle specialist",
+    "profileName": "GreenCarDealer",
+    "profileType": "UsedCarAgent",
+    "suspended": false
+  },
+  {
+    "description": "Nationwide used car network agent",
+    "profileName": "NationwideAuto",
+    "profileType": "UsedCarAgent",
+    "suspended": false
+  },
+  {
+    "description": "Exclusive luxury car broker",
+    "profileName": "ExclusiveAutos",
+    "profileType": "UsedCarAgent",
+    "suspended": false
+  },
+  {
+    "description": "Multi-brand car dealership",
+    "profileName": "MultiBrandDealer",
+    "profileType": "UsedCarAgent",
+    "suspended": false
+  },
+  {
+    "description": "International car import specialist",
+    "profileName": "GlobalAutoTrader",
+    "profileType": "UsedCarAgent",
+    "suspended": false
+  },
+  {
+    "description": "Authorized BMW vehicle appraiser",
+    "profileName": "BMWCarBuyer",
+    "profileType": "Buyer",
+    "suspended": false
+  },
+  {
+    "description": "Cash buyer for Japanese cars",
+    "profileName": "JapaneseCarBuyer",
+    "profileType": "Buyer",
+    "suspended": false
+  },
+  {
+    "description": "Quick cash offers for used cars",
+    "profileName": "FastCashBuyer",
+    "profileType": "Buyer",
+    "suspended": false
+  },
+  {
+    "description": "Luxury vehicle collector",
+    "profileName": "LuxuryCollector",
+    "profileType": "Buyer",
+    "suspended": false
+  },
+  {
+    "description": "Classic car enthusiast buyer",
+    "profileName": "VintageCarBuyer",
+    "profileType": "Buyer",
+    "suspended": false
+  },
+  {
+    "description": "Commercial vehicle purchaser",
+    "profileName": "FleetBuyer",
+    "profileType": "Buyer",
+    "suspended": false
+  },
+  {
+    "description": "Eco-friendly car buyer",
+    "profileName": "GreenCarBuyer",
+    "profileType": "Buyer",
+    "suspended": false
+  },
+  {
+    "description": "Sports car specialist buyer",
+    "profileName": "SportCarBuyer",
+    "profileType": "Buyer",
+    "suspended": false
+  },
+  {
+    "description": "European car specialist buyer",
+    "profileName": "EuroCarBuyer",
+    "profileType": "Buyer",
+    "suspended": false
+  },
+  {
+    "description": "Certified pre-owned buyer",
+    "profileName": "CertifiedBuyer",
+    "profileType": "Buyer",
+    "suspended": false
+  },
+  {
+    "description": "Auction car buyer",
+    "profileName": "AuctionBuyer",
+    "profileType": "Buyer",
+    "suspended": false
+  },
+  {
+    "description": "Rare car collector",
+    "profileName": "RareCarBuyer",
+    "profileType": "Buyer",
+    "suspended": false
+  },
+  {
+    "description": "Online car auction buyer",
+    "profileName": "OnlineBuyer",
+    "profileType": "Buyer",
+    "suspended": false
+  },
+  {
+    "description": "Professional car appraiser",
+    "profileName": "CarAppraiser",
+    "profileType": "Buyer",
+    "suspended": false
+  },
+  {
+    "description": "First-time car buyer",
+    "profileName": "NewBuyer",
+    "profileType": "Buyer",
+    "suspended": false
+  },
+  {
+    "description": "Corporate fleet buyer",
+    "profileName": "CorporateBuyer",
+    "profileType": "Buyer",
+    "suspended": false
+  },
+  {
+    "description": "Technical support administrator",
+    "profileName": "SupportAdmin",
+    "profileType": "UserAdmin",
+    "suspended": false
+  },
+  {
+    "description": "Account security specialist",
+    "profileName": "AccountAdmin",
+    "profileType": "UserAdmin",
+    "suspended": false
+  },
+  {
+    "description": "System maintenance administrator",
+    "profileName": "SystemAdmin",
+    "profileType": "UserAdmin",
+    "suspended": false
+  },
+  {
+    "description": "Dealer verification admin",
+    "profileName": "DealerAdmin",
+    "profileType": "UserAdmin",
+    "suspended": false
+  },
+  {
+    "description": "User support coordinator",
+    "profileName": "SupportCoordinator",
+    "profileType": "UserAdmin",
+    "suspended": false
+  },
+  {
+    "description": "Platform compliance officer",
+    "profileName": "ComplianceAdmin",
+    "profileType": "UserAdmin",
+    "suspended": false
+  },
+  {
+    "description": "Quality control administrator",
+    "profileName": "QualityAdmin",
+    "profileType": "UserAdmin",
+    "suspended": true
+  },
+  {
+    "description": "User access manager",
+    "profileName": "AccessAdmin",
+    "profileType": "UserAdmin",
+    "suspended": false
+  },
+  {
+    "description": "Analytics administrator",
+    "profileName": "AnalyticsAdmin",
+    "profileType": "UserAdmin",
+    "suspended": true
+  },
+  {
+    "description": "Platform operations admin",
+    "profileName": "OperationsAdmin",
+    "profileType": "UserAdmin",
+    "suspended": false
+  },
+  {
+    "description": "Training administrator",
+    "profileName": "TrainingAdmin",
+    "profileType": "UserAdmin",
+    "suspended": false
+  },
+  {
+    "description": "Documentation admin",
+    "profileName": "DocsAdmin",
+    "profileType": "UserAdmin",
+    "suspended": true
+  },
+  {
+    "description": "Family car reseller",
+    "profileName": "FamilyCarSeller",
+    "profileType": "Seller",
+    "suspended": false
+  },
+  {
+    "description": "Sports car specialist seller",
+    "profileName": "SportsSeller",
+    "profileType": "Seller",
+    "suspended": true
+  },
+  {
+    "description": "Commercial vehicle seller",
+    "profileName": "CommercialSeller",
+    "profileType": "Seller",
+    "suspended": false
+  },
+  {
+    "description": "European car specialist",
+    "profileName": "EuroCarSeller",
+    "profileType": "Seller",
+    "suspended": false
+  },
+  {
+    "description": "Budget car dealer",
+    "profileName": "BudgetSeller",
+    "profileType": "Seller",
+    "suspended": true
+  },
+  {
+    "description": "Vintage car collector selling rare pieces",
+    "profileName": "VintageSeller",
+    "profileType": "Seller",
+    "suspended": true
+  },
+  {
+    "description": "Fleet vehicle reseller",
+    "profileName": "FleetSeller",
+    "profileType": "Seller",
+    "suspended": false
+  },
+  {
+    "description": "Premium car consignment",
+    "profileName": "ConsignmentSeller",
+    "profileType": "Seller",
+    "suspended": false
+  },
+  {
+    "description": "Eco-friendly vehicle specialist",
+    "profileName": "GreenSeller",
+    "profileType": "Seller",
+    "suspended": true
+  },
+  {
+    "description": "Auction car reseller",
+    "profileName": "AuctionSeller",
+    "profileType": "Seller",
+    "suspended": false
+  },
+  {
+    "description": "Import car specialist",
+    "profileName": "ImportSeller",
+    "profileType": "Seller",
+    "suspended": false
+  },
+  {
+    "description": "Local community car seller",
+    "profileName": "LocalSeller",
+    "profileType": "Seller",
+    "suspended": true
+  },
+  {
+    "description": "Dealership network seller",
+    "profileName": "NetworkSeller",
+    "profileType": "Seller",
+    "suspended": false
+  },
+  {
+    "description": "Corporate vehicle seller",
+    "profileName": "CorporateSeller",
+    "profileType": "Seller",
+    "suspended": false
+  },
+  {
+    "description": "Specializes in hybrid and electric cars",
+    "profileName": "EcoCarDealer",
+    "profileType": "UsedCarAgent",
+    "suspended": false
+  },
+  {
+    "description": "Dealer of premium imported SUVs",
+    "profileName": "SUVSpecialist",
+    "profileType": "UsedCarAgent",
+    "suspended": false
+  },
+  {
+    "description": "Known for quick and easy transactions",
+    "profileName": "QuickCarAgent",
+    "profileType": "UsedCarAgent",
+    "suspended": true
+  },
+  {
+    "description": "Focuses on small family vehicles",
+    "profileName": "FamilyAutoDealer",
+    "profileType": "UsedCarAgent",
+    "suspended": false
+  },
+  {
+    "description": "Expert in luxury convertibles",
+    "profileName": "ConvertiblePro",
+    "profileType": "UsedCarAgent",
+    "suspended": false
+  },
+  {
+    "description": "Specializes in classic American vehicles",
+    "profileName": "AmericanClassicBuyer",
+    "profileType": "Buyer",
+    "suspended": false
+  },
+  {
+    "description": "Administrator managing dealer accounts",
+    "profileName": "DealerAccountAdmin",
+    "profileType": "UserAdmin",
+    "suspended": false
+  },
+  {
+    "description": "Oversees user interaction policies",
+    "profileName": "PolicyManager",
+    "profileType": "UserAdmin",
+    "suspended": true
+  },
+  {
+    "description": "Responsible for troubleshooting user issues",
+    "profileName": "TroubleshootAdmin",
+    "profileType": "UserAdmin",
+    "suspended": false
+  },
+  {
+    "description": "Handles system software updates",
+    "profileName": "SoftwareAdmin",
+    "profileType": "UserAdmin",
+    "suspended": false
+  },
+  {
+    "description": "In charge of platform user data integrity",
+    "profileName": "DataIntegrityAdmin",
+    "profileType": "UserAdmin",
+    "suspended": true
+  },
+  {
+    "description": "Online platform seller of budget cars",
+    "profileName": "BudgetOnlineSeller",
+    "profileType": "Seller",
+    "suspended": false
+  },
+  {
+    "description": "Dealer for commercial fleet vehicles",
+    "profileName": "FleetVehicleSeller",
+    "profileType": "Seller",
+    "suspended": true
+  },
+  {
+    "description": "Luxury cars auctioneer",
+    "profileName": "AuctionLuxurySeller",
+    "profileType": "Seller",
+    "suspended": false
+  },
+  {
+    "description": "Online marketplace car reseller",
+    "profileName": "MarketplaceSeller",
+    "profileType": "Seller",
+    "suspended": false
+  },
+  {
+    "description": "Japanese car reseller",
+    "profileName": "JapaneseReseller",
+    "profileType": "Seller",
+    "suspended": true
+  },
+  {
+    "description": "Specializes in SUVs and off-road vehicles",
+    "profileName": "SUVandOffroadDealer",
+    "profileType": "UsedCarAgent",
+    "suspended": false
+  },
+  {
+    "description": "Luxury sedans specialist",
+    "profileName": "LuxurySedanDealer",
+    "profileType": "UsedCarAgent",
+    "suspended": false
+  },
+  {
+    "description": "Handles economy and budget cars",
+    "profileName": "BudgetCarAgent",
+    "profileType": "UsedCarAgent",
+    "suspended": true
+  },
+  {
+    "description": "Dedicated to Japanese car imports",
+    "profileName": "JapaneseImportDealer",
+    "profileType": "UsedCarAgent",
+    "suspended": false
+  },
+  {
+    "description": "Buys family-oriented cars",
+    "profileName": "FamilyFriendlyBuyer",
+    "profileType": "Buyer",
+    "suspended": false
+  },
+  {
+    "description": "Seeks classic cars",
+    "profileName": "ClassicCarSeeker",
+    "profileType": "Buyer",
+    "suspended": false
+  },
+  {
+    "description": "Focuses on affordable pre-owned cars",
+    "profileName": "AffordableBuyer",
+    "profileType": "Buyer",
+    "suspended": true
+  },
+  {
+    "description": "Luxury car investor",
+    "profileName": "LuxuryInvestor",
+    "profileType": "Buyer",
+    "suspended": false
+  },
+  {
+    "description": "E-commerce buyer for cars",
+    "profileName": "EcomCarBuyer",
+    "profileType": "Buyer",
+    "suspended": true
+  },
+  {
+    "description": "IT systems administrator",
+    "profileName": "ITSysAdmin",
+    "profileType": "UserAdmin",
+    "suspended": false
+  },
+  {
+    "description": "Manages network security",
+    "profileName": "NetSecurityAdmin",
+    "profileType": "UserAdmin",
+    "suspended": false
+  },
+  {
+    "description": "Platform UI design coordinator",
+    "profileName": "UIDesignAdmin",
+    "profileType": "UserAdmin",
+    "suspended": true
+  },
+  {
+    "description": "Analytics and reporting administrator",
+    "profileName": "ReportAdmin",
+    "profileType": "UserAdmin",
+    "suspended": false
+  },
+  {
+    "description": "Community engagement admin",
+    "profileName": "CommunityAdmin",
+    "profileType": "UserAdmin",
+    "suspended": false
+  },
+  {
+    "description": "Certified car consignment agent",
+    "profileName": "CertifiedConsignment",
+    "profileType": "Seller",
+    "suspended": true
+  },
+  {
+    "description": "Deals in premium imports",
+    "profileName": "PremiumImportSeller",
+    "profileType": "Seller",
+    "suspended": false
+  },
+  {
+    "description": "General car dealer",
+    "profileName": "GeneralSeller",
+    "profileType": "Seller",
+    "suspended": false
+  },
+  {
+    "description": "Broker of high-end auctioned vehicles",
+    "profileName": "AuctionBroker",
+    "profileType": "Seller",
+    "suspended": true
+  },
+  {
+    "description": "Specializes in trucks and SUVs",
+    "profileName": "TruckSUVSeller",
+    "profileType": "Seller",
+    "suspended": false
+  },
+  {
+    "description": "Handles eco-friendly vehicle sales",
+    "profileName": "EcoCarSeller",
+    "profileType": "Seller",
+    "suspended": false
+  },
+  {
+    "description": "Collector of rare, vintage autos",
+    "profileName": "VintageCollector",
+    "profileType": "Buyer",
+    "suspended": false
+  },
+  {
+    "description": "Luxury dealership manager",
+    "profileName": "LuxuryDealerManager",
+    "profileType": "UserAdmin",
+    "suspended": false
+  },
+  {
+    "description": "Commercial vehicle acquisition",
+    "profileName": "CommercialVehicleBuyer",
+    "profileType": "Buyer",
+    "suspended": false
+  },
+  {
+    "description": "Platform security monitoring",
+    "profileName": "SecurityMonitorAdmin",
+    "profileType": "UserAdmin",
+    "suspended": true
+  },
+  {
+    "description": "Auction participant buyer",
+    "profileName": "AuctionParticipant",
+    "profileType": "Buyer",
+    "suspended": false
+  },
+  {
+    "description": "Online car retail manager",
+    "profileName": "OnlineRetailAdmin",
+    "profileType": "UserAdmin",
+    "suspended": false
+  }
+]

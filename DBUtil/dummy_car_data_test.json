@@ -1,0 +1,28 @@
+[
+    {
+        "agent_username": "kevinpatterson",
+        "car_manufacturer": "Ford",
+        "car_name": "Ford 3 Series 320i",
+        "car_type": "Coupe",
+        "description": "Organization matter event conference add between dinner politics wish crime performance fund represent result black western natural would.",
+        "engine_cap": 3046,
+        "features": "Electric powertrain, auto-pilot, panoramic sunroof, heated and ventilated seats",
+        "manufacture_year": 2012,
+        "mileage": 123488,
+        "price": 78408,
+        "seller_username": "kimberly78"
+    },
+    {
+        "agent_username": "burnsjames",
+        "car_manufacturer": "Mazda",
+        "car_name": "BMW Camry LE",
+        "car_type": "Pickup Truck",
+        "description": "Run name seven another each seem sense first charge agency stand.",
+        "engine_cap": 1914,
+        "features": "1.4L turbo, 6-speed auto, rear-view camera, Apple CarPlay, dual-zone climate control",
+        "manufacture_year": 2003,
+        "mileage": 118258,
+        "price": 79044,
+        "seller_username": "ewright"
+    }
+]

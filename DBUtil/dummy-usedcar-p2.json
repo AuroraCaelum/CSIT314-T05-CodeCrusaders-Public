@@ -1,0 +1,226 @@
+[
+    {
+        "agent_username": "usedcaragent",
+        "car_manufacturer": "Audi",
+        "car_image": "https://dealerimages.dealereprocess.com/image/upload/w_1000/1513477.jpg",
+        "car_name": "Audi Passat",
+        "car_type": "Hatchback",
+        "description": "High ARF value! Premium condition. No major repairs needed.",
+        "engine_cap": 3755,
+        "features": "2.0L turbo engine, 6-speed automatic, keyless entry, LED lights, leather seats.",
+        "manufacture_year": 2019,
+        "mileage": 29296,
+        "price": 61429,
+        "seller_username": "amber_clark",
+        "shortlist_count": 42,
+        "shortlist_history": {
+            "2024-06": 6,
+            "2024-07": 8,
+            "2024-08": 4,
+            "2024-09": 7,
+            "2024-10": 6,
+            "2024-11": 11
+        },
+        "view_count": 226,
+        "view_history": {
+            "2024-06": 31,
+            "2024-07": 34,
+            "2024-08": 45,
+            "2024-09": 33,
+            "2024-10": 42,
+            "2024-11": 41
+        }
+    },
+    {
+        "agent_username": "eric_johnson",
+        "car_manufacturer": "Hyundai",
+        "car_image": "https://i.i-sgcm.com/new_cars/cars/21656/21656_m.jpg",
+        "car_name": "Hyundai Ioniq 5",
+        "car_type": "Hatchback",
+        "description": "Low mileage! Accident-free, fully serviced. Call for a test drive.",
+        "engine_cap": 2090,
+        "features": "Electric engine, 250-mile range, automatic, heated seats, panoramic sunroof.",
+        "manufacture_year": 2022,
+        "mileage": 97854,
+        "price": 195349,
+        "seller_username": "seller",
+        "shortlist_count": 44,
+        "shortlist_history": {
+            "2024-06": 10,
+            "2024-07": 12,
+            "2024-08": 2,
+            "2024-09": 6,
+            "2024-10": 7,
+            "2024-11": 7
+        },
+        "view_count": 385,
+        "view_history": {
+            "2024-06": 62,
+            "2024-07": 53,
+            "2024-08": 66,
+            "2024-09": 67,
+            "2024-10": 84,
+            "2024-11": 53
+        }
+    },
+    {
+        "agent_username": "emily_robinson",
+        "car_manufacturer": "Honda",
+        "car_image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7ZtnrUWZyT4Lkg0APJUgan-4lpBDiMsheXA&s",
+        "car_name": "Honda Camry",
+        "car_type": "Wagon",
+        "description": "1 Owner, well-maintained! Pristine condition. Call now for a viewing!",
+        "engine_cap": 1289,
+        "features": "Electric engine, 250-mile range, automatic, heated seats, panoramic sunroof.",
+        "manufacture_year": 2022,
+        "mileage": 63958,
+        "price": 237593,
+        "seller_username": "steven_miller",
+        "shortlist_count": 39,
+        "shortlist_history": {
+            "2024-06": 6,
+            "2024-07": 3,
+            "2024-08": 8,
+            "2024-09": 8,
+            "2024-10": 5,
+            "2024-11": 9
+        },
+        "view_count": 201,
+        "view_history": {
+            "2024-06": 29,
+            "2024-07": 35,
+            "2024-08": 37,
+            "2024-09": 31,
+            "2024-10": 34,
+            "2024-11": 35
+        }
+    },
+    {
+        "agent_username": "usedcaragent",
+        "car_manufacturer": "Ford",
+        "car_image": "https://www.bristolstreet.co.uk/used-hi/s/sc17tgf-1%5E400x267%5E.jpg",
+        "car_name": "Ford 3 Series 320i",
+        "car_type": "Sedan",
+        "description": "High ARF value! Premium condition. No major repairs needed.",
+        "engine_cap": 2227,
+        "features": "Electric engine, 250-mile range, automatic, heated seats, panoramic sunroof.",
+        "manufacture_year": 2022,
+        "mileage": 149525,
+        "price": 119228,
+        "seller_username": "amber_clark",
+        "shortlist_count": 33,
+        "shortlist_history": {
+            "2024-06": 5,
+            "2024-07": 8,
+            "2024-08": 3,
+            "2024-09": 11,
+            "2024-10": 4,
+            "2024-11": 2
+        },
+        "view_count": 113,
+        "view_history": {
+            "2024-06": 19,
+            "2024-07": 13,
+            "2024-08": 21,
+            "2024-09": 25,
+            "2024-10": 19,
+            "2024-11": 16
+        }
+    },
+    {
+        "agent_username": "kyle_mitchell",
+        "car_manufacturer": "Hyundai",
+        "car_image": "https://hips.hearstapps.com/hmg-prod/images/2025-hyundai-kona-electric-103-66c4f0e6731e3.jpg?crop=0.623xw:0.526xh;0.194xw,0.363xh&resize=2048:*",
+        "car_name": "Hyundai Kona",
+        "car_type": "Wagon",
+        "description": "Low mileage! Accident-free, fully serviced. Call for a test drive.",
+        "engine_cap": 1822,
+        "features": "2.0L turbo engine, 6-speed automatic, keyless entry, LED lights, leather seats.",
+        "manufacture_year": 2017,
+        "mileage": 190630,
+        "price": 63222,
+        "seller_username": "daniel_miller",
+        "shortlist_count": 17,
+        "shortlist_history": {
+            "2024-06": 2,
+            "2024-07": 1,
+            "2024-08": 3,
+            "2024-09": 3,
+            "2024-10": 5,
+            "2024-11": 3
+        },
+        "view_count": 339,
+        "view_history": {
+            "2024-06": 59,
+            "2024-07": 46,
+            "2024-08": 39,
+            "2024-09": 71,
+            "2024-10": 64,
+            "2024-11": 60
+        }
+    },
+    {
+        "agent_username": "kyle_mitchell",
+        "car_manufacturer": "Chevrolet",
+        "car_image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStJfwG5qNxO2evulcxCjhtBBcUlyHa1L6-jQ&s",
+        "car_name": "Chevrolet Impala",
+        "car_type": "Wagon",
+        "description": "Luxury features, reliable performance. Ready for immediate viewing.",
+        "engine_cap": 1388,
+        "features": "Electric engine, 250-mile range, automatic, heated seats, panoramic sunroof.",
+        "manufacture_year": 2020,
+        "mileage": 129776,
+        "price": 121812,
+        "seller_username": "amber_clark",
+        "shortlist_count": 46,
+        "shortlist_history": {
+            "2024-06": 8,
+            "2024-07": 8,
+            "2024-08": 6,
+            "2024-09": 6,
+            "2024-10": 4,
+            "2024-11": 14
+        },
+        "view_count": 400,
+        "view_history": {
+            "2024-06": 54,
+            "2024-07": 66,
+            "2024-08": 64,
+            "2024-09": 76,
+            "2024-10": 64,
+            "2024-11": 76
+        }
+    },
+    {
+        "agent_username": "eric_johnson",
+        "car_manufacturer": "Volkswagen",
+        "car_image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Volkswagen_Golf_VIII_Facelift_IMG_0375.jpg/640px-Volkswagen_Golf_VIII_Facelift_IMG_0375.jpg",
+        "car_name": "Volkswagen Golf",
+        "car_type": "Sedan",
+        "description": "High ARF value! Premium condition. No major repairs needed.",
+        "engine_cap": 3514,
+        "features": "Electric engine, 250-mile range, automatic, heated seats, panoramic sunroof.",
+        "manufacture_year": 2020,
+        "mileage": 61669,
+        "price": 66127,
+        "seller_username": "daniel_miller",
+        "shortlist_count": 22,
+        "shortlist_history": {
+            "2024-06": 5,
+            "2024-07": 4,
+            "2024-08": 3,
+            "2024-09": 1,
+            "2024-10": 3,
+            "2024-11": 6
+        },
+        "view_count": 154,
+        "view_history": {
+            "2024-06": 29,
+            "2024-07": 26,
+            "2024-08": 24,
+            "2024-09": 24,
+            "2024-10": 28,
+            "2024-11": 23
+        }
+    }
+]

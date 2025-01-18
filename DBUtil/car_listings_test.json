@@ -1,0 +1,46 @@
+[
+    {
+        "agent_username": "mjohnson",
+        "car_manufacturer": "Honda",
+        "car_name": "Honda Silverado Sport",
+        "car_type": "Sports Car",
+        "description": "3 owner(s) only! Great condition sports car with low mileage and luxurious features. Ideal for city or highway driving, ready for a new owner.",
+        "engine_cap": 1597,
+        "features": "1.5L engine, automatic transmission, keyless entry, leather seats.",
+        "manufacture_year": 2015,
+        "mileage": 140973,
+        "price": 59719,
+        "seller_username": "dlee",
+        "shortlist_count": 32,
+        "view_count": 907,
+        "view_history": {
+            "2024-05": 72,
+            "2024-06": 98,
+            "2024-07": 132,
+            "2024-08": 153,
+            "2024-09": 178
+        }
+    },
+    {
+        "agent_username": "dthomas",
+        "car_manufacturer": "Chevrolet",
+        "car_name": "Chevrolet Accord Sport",
+        "car_type": "Convertible",
+        "description": "3 owner(s) only! Great condition convertible with low mileage and luxurious features. Ideal for city or highway driving, ready for a new owner.",
+        "engine_cap": 1991,
+        "features": "2.0L engine, manual transmission, keyless entry, leather seats.",
+        "manufacture_year": 2016,
+        "mileage": 124193,
+        "price": 35379,
+        "seller_username": "kt",
+        "shortlist_count": 13,
+        "view_count": 456,
+        "view_history": {
+            "2024-05": 66,
+            "2024-06": 114,
+            "2024-07": 124,
+            "2024-08": 141,
+            "2024-09": 172
+        }
+    }
+]

@@ -1,0 +1,48 @@
+[
+    {
+      "agent_username": "jsmith",
+      "car_manufacturer": "Mercedes-Benz",
+      "car_name": "Mercedes-Benz E-Class E250 AMG Edition E Sunroof",
+      "car_type": "Sedan",
+      "description": "2 Owner only! High ARF $69049! White paintwork w/ black leather interior! Immaculate condition. No repairs needed. Full service history available. Local dealer maintained.",
+      "engine_cap": 1991,
+      "features": "2.0L turbo charged engine producing 207bhp, 7G-tronic auto transmission, keyless entry/start, auto LED lights, rain sensor, electric tailgate, panoramic sunroof, AMG sport package",
+      "manufacture_year": 2015,
+      "mileage": 184200,
+      "price": 59800,
+      "seller_username": "kt_motors",
+      "shortlist_count": 20,
+      "view_count": 200,
+      "view_history": {
+        "2024-05": 15,
+        "2024-06": 42,
+        "2024-07": 95,
+        "2024-08": 114,
+        "2024-09": 150,
+        "2024-10": 200
+      }
+    },
+    {
+      "agent_username": "mike_a",
+      "car_manufacturer": "BMW",
+      "car_name": "BMW X5 xDrive40i M Sport",
+      "car_type": "SUV",
+      "description": "Single owner, pristine condition! Full BMW service history. Mineral White with cognac leather interior. Recently serviced with new tires. Premium package included!",
+      "engine_cap": 2998,
+      "features": "3.0L twin-turbo inline-6, 8-speed automatic, M Sport package, adaptive LED headlights, panoramic roof, 20-inch M wheels, wireless charging, Apple CarPlay",
+      "manufacture_year": 2020,
+      "mileage": 45600,
+      "price": 188800,
+      "seller_username": "premium_motors",
+      "shortlist_count": 35,
+      "view_count": 280,
+      "view_history": {
+        "2024-05": 25,
+        "2024-06": 48,
+        "2024-07": 65,
+        "2024-08": 89,
+        "2024-09": 180,
+        "2024-10": 280
+      }
+    }
+]
